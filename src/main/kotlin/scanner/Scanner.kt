@@ -37,10 +37,6 @@ class Scanner {
         val equal_equals = Token("equal_equals", patternString = "==")
         val STRINGLIT = Token(name = "literal", patternString = "\".*?\"")
 
-
-
-
-
         return DefaultTokenizer(
             listOf(
                 ws, lpar, rpar, print, trueToken, falseToken, functionToken

@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2190da6f-7605-43c5-9bb6-2dc95664f20e" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/kotlin/ScannerTest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/scanner/Scanner.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/scanner/Scanner.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/scanner/ScannerKt.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/scanner/ScannerKt.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/scanner/Token0.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/scanner/Token0.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/scanner/TokenType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/scanner/TokenType.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/scanner/Scanner.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/scanner/Scanner.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/scanner/Tokens.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/scanner/Tokens.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -67,11 +59,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Scanner.kt" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Scanner.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/scanner/Scanner.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="98">
-              <caret line="15" column="12" lean-forward="true" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
+            <state relative-caret-position="-676">
+              <caret line="10" column="56" lean-forward="true" selection-start-line="10" selection-start-column="56" selection-end-line="10" selection-end-column="56" />
               <folding>
                 <element signature="e#17#179#0" expanded="true" />
               </folding>
@@ -79,11 +71,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ScannerTest.kt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ScannerTest.kt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/kotlin/ScannerTest.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="52">
-              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+            <state relative-caret-position="182">
+              <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -100,8 +92,8 @@
       <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="17" selection-start-line="17" selection-end-line="17" />
+            <state relative-caret-position="338">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
             </state>
           </provider>
         </entry>
@@ -110,7 +102,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/kotlin/scanner/Tokens.kt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
-              <caret line="23" column="19" lean-forward="true" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
+              <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -331,9 +323,9 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="7760053538000" />
+        <entry key="$PROJECT_DIR$" value="7760108882000" />
         <entry key="$PROJECT_DIR$/.gradle" value="0" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="3620046697" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="3718962355" />
         <entry key="$PROJECT_DIR$/gradle.properties" value="3650535818" />
         <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" value="1741342742" />
         <entry key="$PROJECT_DIR$/settings.gradle" value="708274276" />
@@ -495,9 +487,9 @@
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_12.kts" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/main/kotlin/scanner/Tokens.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/scanner/Scanner.kt" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/test/kotlin/ScannerTest.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/scanner/Scanner.kt" />
       </list>
     </option>
   </component>
@@ -754,6 +746,14 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="ScannerTestKt - 2019.03.08 at 17h 53m 34s.xml">
+      <configuration name="ScannerTestKt" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="ScannerTest - 2019.03.08 at 17h 54m 28s.xml">
+      <configuration name="ScannerTest" configurationId="AndroidJUnit" />
+    </history-entry>
+  </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
@@ -774,13 +774,13 @@
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32910052" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32910052" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Scratch Output" weight="0.32910052" />
       <window_info anchor="bottom" id="CheckStyle" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49973017" weight="0.32910052" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.49973017" visible="true" weight="0.32910052" />
       <window_info anchor="bottom" id="Run with VisualVM" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24986508" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24986508" />
       <window_info anchor="bottom" id="JProfiler" order="7" />
       <window_info anchor="bottom" id="SonarLint" order="7" />
       <window_info anchor="right" id="Gradle" order="3" weight="0.32973558" />
@@ -823,34 +823,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/scanner/Tokens.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
-          <caret line="23" column="19" lean-forward="true" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/scanner/Scanner.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="15" column="12" lean-forward="true" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
-          <folding>
-            <element signature="e#17#179#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
+          <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/kotlin/ScannerTest.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        <state relative-caret-position="182">
+          <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/scanner/Scanner.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-676">
+          <caret line="10" column="56" lean-forward="true" selection-start-line="10" selection-start-column="56" selection-end-line="10" selection-end-column="56" />
+          <folding>
+            <element signature="e#17#179#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -931,7 +931,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited />
+          <last-edited>Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.3.11</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
