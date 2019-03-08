@@ -2,3 +2,5 @@
 /out/
 /build/
 /.idea/
+/.gradle/
+/src/test/.gradle/
