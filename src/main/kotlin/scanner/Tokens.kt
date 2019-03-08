@@ -1,4 +1,6 @@
-package scanner/*
+package scanner
+
+/*
 A scanner.Token is block
  */
 
