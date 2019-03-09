@@ -4,14 +4,7 @@ package scanner
 A scanner.Token is block
  */
 
-data class Tok(val type: TokenType, var literal: Any, val line: Int = 0) {
-    init {
-        when (type) {
-            TokenType.STRING -> literal = literal as String
-            TokenType.NUMBER -> literal = literal as Double
-        }
-    }
-}
+data class Tok(val type: TokenType, var literal: Any, val line: Int = 0)
 
 //All tokenetypes are ordered by precedence
 
@@ -28,11 +21,19 @@ enum class TokenType(val regex: Regex) {
     WHITESPACE("\\s+".toRegex()),
 
     // One or two character tokens.
-    BANG("!".toRegex()),
     BANG_EQUAL("!=".toRegex()),
-    EQUAL("=".toRegex()), EQUAL_EQUAL("==".toRegex()),
-    GREATER(">".toRegex()), GREATER_EQUAL(">=".toRegex()),
-    LESS("<".toRegex()), LESS_EQUAL("<=".toRegex()), COLON(";".toRegex()),
+    BANG("!".toRegex()),
+
+    EQUAL_EQUAL("==".toRegex()),
+    LESS_EQUAL("<=".toRegex()),
+    EQUAL("=".toRegex()),
+    GREATER_EQUAL(">=".toRegex()),
+
+    GREATER(">".toRegex()),
+    LESS("<".toRegex()),
+
+
+    COLON(";".toRegex()),
 
 
     // Literals.
@@ -41,9 +42,10 @@ enum class TokenType(val regex: Regex) {
 
     // Keywords.
     AND("&&".toRegex()),
-    CLASS("class".toRegex()), ELSE("else".toRegex()), FALSE("false".toRegex()), FN("fn".toRegex()), FOR("for".toRegex()), IF(
-        "if".toRegex()
-    ),
+    CLASS("class".toRegex()), ELSE("else".toRegex()),
+    FN("fn".toRegex()),
+    FOR("for".toRegex()),
+    IF("if".toRegex()),
 
     NIL("nil".toRegex()),
     TRUE("true".toRegex()),
@@ -54,8 +56,4 @@ enum class TokenType(val regex: Regex) {
 
     EOF("[\r\n]+".toRegex()),
     IDENTIFIER("\\w+".toRegex()),
-}
-
-fun main(args: Array<String>) {
-    TokenType.LEFT_PAREN.also { println(it) }
 }

@@ -34,16 +34,16 @@ class Scanner {
     fun wrapToNativeToken(tokenMatch: TokenMatch): Tok {
         for (tokType in TokenType.values()) {
             if (tokenMatch.type.name == tokType.toString()) {
-                return Tok(tokType, tokenMatch.text)
+                return Tok(tokType, tokenMatch.text, tokenMatch.row)
             }
         }
-        throw RuntimeException("${tokenMatch.type} not found")
+        throw RuntimeException("${tokenMatch.text} is not a valid token")
     }
 }
 
 
 fun main(args: Array<String>) {
     val s = Scanner()
-    val toks = s.tokenize("var x = false ")
+    val toks = s.tokenize("X==5")
     toks.forEach { println(it) }
 }
