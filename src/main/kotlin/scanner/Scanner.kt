@@ -15,11 +15,11 @@ class Scanner {
         private val tokenizer = buildTokenizer()
         private fun buildTokenizer(): DefaultTokenizer {
             val tokens = mutableListOf<Token>()
-            for (tokType in TokenType.values()) {
+            for (nativeTokType in TokenType.values()) {
                 tokens.add(
                     Token(
-                        tokType.toString(), patternString = tokType.regex.toString(),
-                        ignored = tokType == TokenType.WHITESPACE
+                        nativeTokType.toString(), patternString = nativeTokType.regex.toString(),
+                        ignored = nativeTokType == TokenType.WHITESPACE
                     )
                 )
             }
@@ -28,13 +28,24 @@ class Scanner {
 
     }
 
-    /*
-    @throws Runt
-     */
+
     fun wrapToNativeToken(tokenMatch: TokenMatch): Tok {
-        for (tokType in TokenType.values()) {
-            if (tokenMatch.type.name == tokType.toString()) {
-                return Tok(tokType, tokenMatch.text, tokenMatch.row)
+        for (nativeTokType in TokenType.values()) {
+            if (tokenMatch.type.name == nativeTokType.toString()) {
+                return when (nativeTokType) {
+                    TokenType.NUMBER -> Tok(
+                        nativeTokType,
+                        tokenMatch.text,
+                        tokenMatch.text.toDouble(),
+                        tokenMatch.row
+                    )
+                    TokenType.STRING -> Tok(
+                        nativeTokType,
+                        tokenMatch.text,
+                        tokenMatch.text.substring(1, tokenMatch.text.length - 1), tokenMatch.row
+                    )
+                    else -> Tok(nativeTokType, tokenMatch.text, tokenMatch.text, tokenMatch.row)
+                }
             }
         }
         throw RuntimeException("${tokenMatch.text} is not a valid token")
@@ -44,6 +55,6 @@ class Scanner {
 
 fun main(args: Array<String>) {
     val s = Scanner()
-    val toks = s.tokenize("X==5")
+    val toks = s.tokenize("X==\"hello\" ")
     toks.forEach { println(it) }
 }

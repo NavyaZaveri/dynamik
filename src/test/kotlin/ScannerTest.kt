@@ -1,3 +1,4 @@
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import scanner.Scanner
@@ -9,7 +10,7 @@ class ScannerTest {
 
 
     @Test
-    fun testTruthyTokenIdentification() {
+    fun testTruthTokenIdentification() {
         val code = "val x = true;"
         val tokens = s.tokenize(code)
         assertTrue(tokens[tokens.size - 2].type == TokenType.TRUE)
@@ -20,9 +21,17 @@ class ScannerTest {
         val codeWithDoubleEquals = "x == 3"
         var tokens = s.tokenize(codeWithDoubleEquals)
         assertTrue(tokens[tokens.size - 2].type == TokenType.EQUAL_EQUAL)
-        val codeWithsingleEquals = "x =3 "
-        tokens = s.tokenize(codeWithsingleEquals)
+        val codeWithSingleEquals = "x =3 "
+        tokens = s.tokenize(codeWithSingleEquals)
         assertTrue(tokens[tokens.size - 2].type == TokenType.EQUAL)
     }
 
+    @Test
+    fun testStringExtraction() {
+        val code = "print \"hello world\""
+        val tokens = s.tokenize(code)
+        val expected = "hello world"
+        val actual = tokens[tokens.size - 1].literal
+        assertTrue("actual = $actual, expected = $expected", actual == expected)
+    }
 }

@@ -4,7 +4,7 @@ package scanner
 A scanner.Token is block
  */
 
-data class Tok(val type: TokenType, var literal: Any, val line: Int = 0)
+data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0)
 
 //All tokenetypes are ordered by precedence
 
