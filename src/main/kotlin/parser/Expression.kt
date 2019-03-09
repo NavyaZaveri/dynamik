@@ -6,7 +6,6 @@ import scanner.TokenType
 
 abstract class Expr {
     abstract fun <T> accept(visitor: Visitor<T>): T
-
 }
 
 class BinaryExpr(val left: Expr, val token: Tok, val right: Expr) : Expr() {
@@ -19,16 +18,13 @@ class BinaryExpr(val left: Expr, val token: Tok, val right: Expr) : Expr() {
     }
 
     class Builder {
-
         lateinit var left: Expr
         lateinit var right: Expr
         lateinit var token: Tok
         fun build() = BinaryExpr(left, token, right)
 
     }
-
 }
-
 
 class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
 
@@ -65,15 +61,16 @@ class LiteralExpr(val token: Tok) : Expr() {
 
 fun main(args: Array<String>) {
     val b = BinaryExpr.create {
-        left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "3", "3", 1) }
-
+        left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "3", "3") }
         token = Tok(TokenType.MINUS, "-", "-", 1)
-
-
         right = BinaryExpr.create {
-            left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "5", 5, 0) }
-            token = Tok(TokenType.MINUS, "*", "*", 1)
-            right = LiteralExpr.create { token = Tok(TokenType.NUMBER, "5", 5, 0) }
+            left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "5", 5.0) }
+            token = Tok(TokenType.MINUS, "*", "*")
+            right = BinaryExpr.create {
+                left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "100", 100.0, 0) }
+                token = Tok(TokenType.MINUS, "-", "-")
+                right = LiteralExpr.create { token = Tok(TokenType.NUMBER, "200", 200.0, 0) }
+            }
         }
     }
     b.accept(Rpn()).also { println(it) }

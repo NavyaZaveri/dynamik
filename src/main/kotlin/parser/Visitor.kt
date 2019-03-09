@@ -1,8 +1,5 @@
 package parser
 
-import scanner.Tok
-import scanner.TokenType
-
 interface Visitor<T> {
     fun visitBinaryExpression(expr: BinaryExpr): T
     fun visitUnaryExpression(expr: UnaryExpr): T
