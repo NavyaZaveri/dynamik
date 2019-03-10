@@ -32,4 +32,8 @@ class Rpn : Visitor<String> {
         }
         return res.trim() + ")"
     }
+
+    fun prettyPrint(expr: Expr): String {
+        return expr.accept(this)
+    }
 }
