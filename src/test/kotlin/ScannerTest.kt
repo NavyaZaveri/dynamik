@@ -18,11 +18,8 @@ class ScannerTest {
     @Test
     fun testEqualsPrecedence() {
         val codeWithDoubleEquals = "x == 3"
-        var tokens = s.tokenize(codeWithDoubleEquals)
+        val tokens = s.tokenize(codeWithDoubleEquals)
         assertTrue(tokens[tokens.size - 2].type == TokenType.EQUAL_EQUAL)
-        val codeWithSingleEquals = "x =3 "
-        tokens = s.tokenize(codeWithSingleEquals)
-        assertTrue(tokens[tokens.size - 2].type == TokenType.EQUAL)
     }
 
     @Test

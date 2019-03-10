@@ -22,7 +22,7 @@ class Rpn : Visitor<String> {
     }
 
     override fun visitBinaryExpression(expr: BinaryExpr): String {
-        return wrap(expr.token.lexeme, expr.left, expr.right)
+        return wrap(expr.operand.lexeme, expr.left, expr.right)
     }
 
     private fun wrap(name: String, vararg exprs: Expr): String {
@@ -30,7 +30,7 @@ class Rpn : Visitor<String> {
         for (expr in exprs) {
             res += " " + expr.accept(this)
         }
-        return res.trim() + ")"
+        return "$res)"
     }
 
     fun prettyPrint(expr: Expr): String {

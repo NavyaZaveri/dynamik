@@ -10,7 +10,7 @@ abstract class Expr {
     abstract fun <T> accept(visitor: Visitor<T>): T
 }
 
-class BinaryExpr(val left: Expr, val token: Tok, val right: Expr) : Expr() {
+class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
     override fun <T> accept(visitor: Visitor<T>): T {
         return visitor.visitBinaryExpression(this)
     }
@@ -22,8 +22,8 @@ class BinaryExpr(val left: Expr, val token: Tok, val right: Expr) : Expr() {
     class Builder {
         lateinit var left: Expr
         lateinit var right: Expr
-        lateinit var token: Tok
-        fun build() = BinaryExpr(left, token, right)
+        lateinit var operand: Tok
+        fun build() = BinaryExpr(left, operand, right)
 
     }
 }
@@ -63,13 +63,13 @@ class LiteralExpr(val token: Tok) : Expr() {
 fun main(args: Array<String>) {
     val b = BinaryExpr.create {
         left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "3", "3") }
-        token = Tok(TokenType.MINUS, "-", "-", 1)
+        operand = Tok(TokenType.MINUS, "-", "-", 1)
         right = BinaryExpr.create {
             left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "5", 5.0) }
-            token = Tok(TokenType.MINUS, "*", "*")
+            operand = Tok(TokenType.MINUS, "*", "*")
             right = BinaryExpr.create {
                 left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "100", 100.0, 0) }
-                token = Tok(TokenType.MINUS, "-", "-")
+                operand = Tok(TokenType.MINUS, "-", "-")
                 right = LiteralExpr.create { token = Tok(TokenType.NUMBER, "200", 200.0, 0) }
             }
         }
