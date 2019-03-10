@@ -55,7 +55,7 @@ class ExprParser(val tokens: List<Tok>) {
 
 
     //matches against tbe single token and then advances
-    fun primary(): Expr {
+    private fun primary(): Expr {
         return when (tokens[current].type) {
             TokenType.NUMBER -> LiteralExpr(token = tokens[current])
             TokenType.STRING -> LiteralExpr(token = tokens[current])
@@ -64,11 +64,11 @@ class ExprParser(val tokens: List<Tok>) {
         }.also { advance() }
     }
 
-    fun advance(): Tok = tokens[current].also { current += 1 }
+    private fun advance(): Tok = tokens[current].also { current += 1 }
 
     fun consume(tokType: TokenType) {
         if (tokens[current].type != tokType) {
-            throw RuntimeException("expecting ${tokType}, found ${tokens[current].type} instead")
+            throw RuntimeException("expecting $tokType, found ${tokens[current].type} instead")
         }
         current += 1
     }
@@ -79,7 +79,7 @@ class ExprParser(val tokens: List<Tok>) {
     fun match(vararg tokenTypes: TokenType): Boolean =
         tokenTypes.any { !allTokensConsumed() && it == tokens[current].type }
 
-    fun addition(): Expr {
+    private fun addition(): Expr {
         var expr = multiplication()
         while (match(TokenType.PLUS, TokenType.MINUS)) {
             val operator = advance()

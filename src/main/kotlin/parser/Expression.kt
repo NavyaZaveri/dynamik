@@ -10,6 +10,7 @@ abstract class Expr {
     abstract fun <T> accept(visitor: Visitor<T>): T
 }
 
+
 class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
     override fun <T> accept(visitor: Visitor<T>): T {
         return visitor.visitBinaryExpression(this)
@@ -24,7 +25,6 @@ class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
         lateinit var right: Expr
         lateinit var operand: Tok
         fun build() = BinaryExpr(left, operand, right)
-
     }
 }
 

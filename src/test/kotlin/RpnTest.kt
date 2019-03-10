@@ -24,7 +24,7 @@ class PrettyPrinterTest {
             operand = Tok(TokenType.PLUS, "+", "+")
             right = LiteralExpr.create { token = Tok(TokenType.NUMBER, "6", 6.0) }
         }
-        val expected = "(+ 5.0 6.0)"
+        val expected = "5.0 6.0 +"
         val actual = rpn.prettyPrint(expr)
         assertTrue("expected = $expected, actual = $actual", expected == actual)
     }

@@ -6,7 +6,7 @@ import com.github.h0tk3y.betterParse.lexer.TokenMatch
 import java.lang.RuntimeException
 
 
-class  Scanner {
+class Scanner {
     fun tokenize(sourceCode: String): List<Tok> {
         return tokenizer.tokenize(sourceCode).filter { !it.type.ignored }.map { wrapToNativeToken(it) }.toList()
     }
