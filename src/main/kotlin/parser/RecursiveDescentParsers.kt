@@ -27,10 +27,30 @@ primary        → "true" | "false" | "nil" | "this"
 
 
 class ExprParser(val tokens: List<Tok>) {
-    var current = 0
+    private var current = 0
 
     fun parse(): Expr {
-        return addition()
+        return equality()
+    }
+
+    fun equality(): Expr {
+        var expr = comparison()
+        while (match(TokenType.EQUAL_EQUAL, TokenType.BANG_EQUAL)) {
+            val operand = advance()
+            val right = comparison()
+            expr = BinaryExpr(expr, operand, right)
+        }
+        return expr
+    }
+
+    fun comparison(): Expr {
+        var expr = addition()
+        while (match(TokenType.LESS_EQUAL, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.GREATER)) {
+            val operand = advance()
+            val right = comparison()
+            expr = BinaryExpr(expr, operand, right)
+        }
+        return expr
     }
 
 
@@ -44,11 +64,15 @@ class ExprParser(val tokens: List<Tok>) {
         }.also { advance() }
     }
 
-    fun consume(): Tok = tokens[current].also { current += 1 }
+    fun advance(): Tok = tokens[current].also { current += 1 }
 
-    fun advance() {
+    fun consume(tokType: TokenType) {
+        if (tokens[current].type != tokType) {
+            throw RuntimeException("expecting ${tokType}, found ${tokens[current].type} instead")
+        }
         current += 1
     }
+
 
     fun allTokensConsumed(): Boolean = current >= tokens.size
 
@@ -58,7 +82,7 @@ class ExprParser(val tokens: List<Tok>) {
     fun addition(): Expr {
         var expr = multiplication()
         while (match(TokenType.PLUS, TokenType.MINUS)) {
-            val operator = consume()
+            val operator = advance()
             val right = multiplication()
             expr = BinaryExpr(expr, operator, right)
         }
@@ -69,7 +93,7 @@ class ExprParser(val tokens: List<Tok>) {
     fun multiplication(): Expr {
         var expr = unary()
         while (match(TokenType.STAR, TokenType.SLASH)) {
-            val operator = consume()
+            val operator = advance()
             val right = unary()
             expr = BinaryExpr(expr, operator, right)
         }
@@ -79,13 +103,13 @@ class ExprParser(val tokens: List<Tok>) {
     fun unary(): Expr {
         val expr = primary()
         if (match(TokenType.BANG)) {
-            return UnaryExpr(consume(), expr)
+            return UnaryExpr(advance(), expr)
         }
         return expr
     }
 }
 
 fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("20+30 * 50")
+    val toks = Scanner().tokenize("3 +5 ==5")
     ExprParser(toks).parse().also { Rpn().prettyPrint(it).also { println(it) } }
 }
