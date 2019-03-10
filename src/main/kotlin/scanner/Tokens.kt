@@ -12,6 +12,7 @@ enum class TokenType(val regex: Regex) {
 
     // Single-character tokens.
     LEFT_PAREN("\\(".toRegex()),
+    NUMBER("-?\\d+".toRegex()),
     RIGHT_PAREN("\\)".toRegex()), LEFT_BRACE("\\{".toRegex()), RIGHT_BRACE("}".toRegex()),
     COMMA(",".toRegex()), DOT("\\.".toRegex()), MINUS("-".toRegex()), PLUS("\\+".toRegex()), SEMICOLON(";".toRegex()), SLASH(
         "/".toRegex()
@@ -38,7 +39,6 @@ enum class TokenType(val regex: Regex) {
 
     // Literals.
     STRING("\".*?\"".toRegex()),
-    NUMBER("-?\\d+".toRegex()),
 
     // Keywords.
     AND("&&".toRegex()),
