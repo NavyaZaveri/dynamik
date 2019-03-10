@@ -1,4 +1,9 @@
-package parser
+package interpreter
+
+import parser.BinaryExpr
+import parser.Expr
+import parser.LiteralExpr
+import parser.UnaryExpr
 
 interface Visitor<T> {
     fun visitBinaryExpression(expr: BinaryExpr): T

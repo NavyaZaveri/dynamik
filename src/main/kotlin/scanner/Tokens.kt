@@ -6,7 +6,7 @@ A scanner.Token is block
 
 data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0)
 
-//All tokenetypes are ordered by precedence
+//The following tokentypes are ordered by precedence.
 
 enum class TokenType(val regex: Regex) {
 

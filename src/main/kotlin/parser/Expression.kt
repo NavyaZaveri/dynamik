@@ -1,5 +1,7 @@
 package parser
 
+import interpreter.Rpn
+import interpreter.Visitor
 import scanner.Tok
 import scanner.TokenType
 
@@ -47,7 +49,6 @@ class LiteralExpr(val token: Tok) : Expr() {
     override fun <T> accept(visitor: Visitor<T>): T {
         return visitor.visitLiteralExpression(this)
     }
-
 
     class Builder {
         lateinit var token: Tok
