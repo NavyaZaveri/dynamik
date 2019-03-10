@@ -50,8 +50,10 @@ class ExprParser(val tokens: List<Tok>) {
         current += 1
     }
 
+    fun allTokensConsumed(): Boolean = current >= tokens.size
+
     fun match(vararg tokenTypes: TokenType): Boolean =
-        tokenTypes.any { current < tokens.size && it == tokens[current].type }
+        tokenTypes.any { !allTokensConsumed() && it == tokens[current].type }
 
     fun addition(): Expr {
         var expr = multiplication()

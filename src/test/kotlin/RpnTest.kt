@@ -14,20 +14,18 @@ class PrettyPrinterTest {
         val expr = LiteralExpr.create { token = Tok(TokenType.NUMBER, "3", 3.0) }
         val expected = "3.0"
         val actual = rpn.prettyPrint(expr)
-        assertTrue("expected = ${expected}, actual = ${actual}", expected == actual)
+        assertTrue("expected = $expected, actual = $actual", expected == actual)
     }
 
     @Test
     fun testValidInterpretationForBinaryExprs() {
         val expr = BinaryExpr.create {
-            left = LiteralExpr.create {
-                token = Tok(TokenType.NUMBER, "5", 5.0)
-            }
+            left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "5", 5.0) }
             operand = Tok(TokenType.PLUS, "+", "+")
             right = LiteralExpr.create { token = Tok(TokenType.NUMBER, "6", 6.0) }
         }
         val expected = "(+ 5.0 6.0)"
         val actual = rpn.prettyPrint(expr)
-        assertTrue("expected = ${expected}, actual = ${actual}", expected == actual)
+        assertTrue("expected = $expected, actual = $actual", expected == actual)
     }
 }
