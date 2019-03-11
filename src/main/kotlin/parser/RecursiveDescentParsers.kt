@@ -1,5 +1,9 @@
 package parser
 
+import expressions.BinaryExpr
+import expressions.Expr
+import expressions.LiteralExpr
+import expressions.UnaryExpr
 import interpreter.Rpn
 import scanner.Scanner
 import scanner.Tok

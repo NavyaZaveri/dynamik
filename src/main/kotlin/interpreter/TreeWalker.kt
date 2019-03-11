@@ -1,5 +1,9 @@
 package interpreter
 
+import expressions.BinaryExpr
+import expressions.Expr
+import expressions.LiteralExpr
+import expressions.UnaryExpr
 import parser.*
 import scanner.Scanner
 import scanner.TokenType

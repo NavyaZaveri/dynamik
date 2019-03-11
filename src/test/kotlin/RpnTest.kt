@@ -1,11 +1,10 @@
 import interpreter.Rpn
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import parser.BinaryExpr
-import parser.LiteralExpr
+import expressions.BinaryExpr
+import expressions.LiteralExpr
 import scanner.Tok
 import scanner.TokenType
-import kotlin.math.exp
 
 class PrettyPrinterTest {
     val rpn = Rpn()

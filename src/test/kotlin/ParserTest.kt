@@ -1,7 +1,7 @@
 import interpreter.Rpn
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import parser.Expr
+import expressions.Expr
 import parser.ExprParser
 import scanner.Scanner
 import scanner.Tok

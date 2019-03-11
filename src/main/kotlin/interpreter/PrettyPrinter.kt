@@ -1,9 +1,9 @@
 package interpreter
 
-import parser.BinaryExpr
-import parser.Expr
-import parser.LiteralExpr
-import parser.UnaryExpr
+import expressions.BinaryExpr
+import expressions.Expr
+import expressions.LiteralExpr
+import expressions.UnaryExpr
 
 
 abstract class PrettyPrinter : Visitor<String> {
