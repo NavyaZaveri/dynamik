@@ -27,5 +27,5 @@ class VarStmt(val name: String, val expr: Expr) : Stmt() {
 interface StatementVisitor<out T> {
     fun visitPrintStmt(printStmt: PrintStmt): T
     fun visitVariableStmt(varStmt: VarStmt): T
-    fun visitValStmt(varStmt: ValStmt): T
+    fun visitValStmt(valStmt: ValStmt): T
 }

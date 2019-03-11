@@ -2,10 +2,36 @@ package interpreter
 
 import java.lang.RuntimeException
 
+enum class VariableStatus {
+    VAL,
+    VAR
+}
+
+data class Variable(val status: VariableStatus, var value: Any)
+
 class Environment {
-    val idenitifierToValue = mutableMapOf<String, Any>()
-    fun define(name: String, value: Any) {
-        idenitifierToValue[name] = value
+    val idenitifierToValue = mutableMapOf<String, Variable>()
+    fun define(name: String, value: Any, declaration: Boolean) {
+        if (declaration) {
+
+        } else {
+            if (!exists(name)) {
+                throw RuntimeException("$name does not exist in the current scope.")
+            }
+            if (status(name) == VariableStatus.VAL) {
+                throw RuntimeException("cannot reassign val")
+            }
+            idenitifierToValue[name]!!.value = value
+        }
+    }
+
+    fun exists(name: String): Boolean {
+        return idenitifierToValue.containsKey(name)
+    }
+
+    fun status(name: String): VariableStatus {
+        return idenitifierToValue[name]?.status
+            ?: throw RuntimeException("$name does not exist in the current scope")
     }
 
     fun get(name: String): Any {
