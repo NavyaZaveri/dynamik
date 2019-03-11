@@ -101,15 +101,26 @@ class ExprParser(val tokens: List<Tok>) {
     }
 
     fun unary(): Expr {
-        val expr = primary()
+        val expr = brackets()
         if (match(TokenType.BANG)) {
             return UnaryExpr(advance(), expr)
         }
         return expr
     }
+
+    fun brackets(): Expr {
+        return if (match(TokenType.LEFT_PAREN)) {
+            consume(TokenType.LEFT_PAREN)
+            val expr = equality()
+            consume(TokenType.RIGHT_PAREN)
+            expr
+        } else {
+            primary()
+        }
+    }
 }
 
 fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("3 +5 ==5")
+    val toks = Scanner().tokenize("(3 +5) ==5")
     ExprParser(toks).parse().also { Rpn().prettyPrint(it).also { println(it) } }
 }

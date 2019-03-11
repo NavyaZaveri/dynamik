@@ -36,7 +36,7 @@ class TreeWalker : Visitor<Any> {
 }
 
 fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("3+5*-73 ")
+    val toks = Scanner().tokenize("(3+5)*-73 ")
     val ast = ExprParser(toks).parse()
     TreeWalker().evalauate(ast).also { println(it) }
 }
