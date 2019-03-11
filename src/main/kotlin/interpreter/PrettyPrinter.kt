@@ -1,12 +1,9 @@
 package interpreter
 
-import expressions.BinaryExpr
-import expressions.Expr
-import expressions.LiteralExpr
-import expressions.UnaryExpr
+import expressions.*
 
 
-abstract class PrettyPrinter : Visitor<String> {
+abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<String> {
     fun prettyPrint(expr: Expr): String {
         return expr.accept(this)
     }
@@ -23,6 +20,18 @@ abstract class PrettyPrinter : Visitor<String> {
 
     override fun visitUnaryExpression(expr: UnaryExpr): String {
         return wrap(expr.token.lexeme, expr.left)
+    }
+
+    override fun visitPrintStmt(printStmt: PrintStmt): String {
+        return "print " + prettyPrint(printStmt.expr)
+    }
+
+    override fun visitValStmt(valStmt: ValStmt): String {
+        return "val ${valStmt.name} = " + prettyPrint(valStmt.expr)
+    }
+
+    override fun visitVariableStmt(varStmt: VarStmt): String {
+        return "var ${varStmt.name} = " + prettyPrint(varStmt.expr)
     }
 }
 

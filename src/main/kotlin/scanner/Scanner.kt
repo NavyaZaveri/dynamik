@@ -28,6 +28,7 @@ class Scanner {
     }
 
     private fun wrapToNativeToken(tokenMatch: TokenMatch): Tok {
+        println(tokenMatch)
         for (nativeTokType in TokenType.values()) {
             if (tokenMatch.type.name == nativeTokType.toString()) {
                 return when (nativeTokType) {
@@ -41,6 +42,17 @@ class Scanner {
                         nativeTokType,
                         tokenMatch.text,
                         tokenMatch.text.substring(1, tokenMatch.text.length - 1), tokenMatch.row
+                    )
+                    TokenType.TRUE -> Tok(
+                        nativeTokType,
+                        tokenMatch.text,
+                        true
+                    )
+
+                    TokenType.False -> Tok(
+                        nativeTokType,
+                        tokenMatch.text,
+                        false
                     )
                     else -> Tok(nativeTokType, tokenMatch.text, tokenMatch.text, tokenMatch.row)
                 }

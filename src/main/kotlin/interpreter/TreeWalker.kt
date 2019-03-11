@@ -9,25 +9,36 @@ import scanner.Scanner
 import scanner.TokenType
 import java.lang.RuntimeException
 
-class TreeWalker : Visitor<Any> {
-    fun evalauate(expr: Expr): Any {
+
+class TreeWalker : ExpressionVisitor<Any> {
+    fun evaluate(expr: Expr): Any {
         return expr.accept(this)
     }
 
+    private fun isBoolean(vararg things: Any) = things.all { it is Boolean }
 
-    override fun visitBinaryExpression(expr: BinaryExpr): Any {
-        val left = evalauate(expr.left)
-        val right = evalauate(expr.right)
+
+    override
+    fun visitBinaryExpression(expr: BinaryExpr): Any {
+        val left = evaluate(expr.left)
+        val right = evaluate(expr.right)
         when (expr.operand.type) {
             TokenType.PLUS -> return left as Double + right as Double
             TokenType.MINUS -> return left as Double - right as Double
             TokenType.STAR -> return left as Double * right as Double
+            TokenType.EQUAL_EQUAL -> return left == right
+            TokenType.AND -> if (isBoolean(
+                    left,
+                    right
+                )
+            ) return left as Boolean && right as Boolean else throw RuntimeException()
+
         }
         throw RuntimeException()
     }
 
     override fun visitUnaryExpression(expr: UnaryExpr): Any {
-        val l = evalauate(expr.left)
+        val l = evaluate(expr.left)
         when (expr.token.type) {
             TokenType.MINUS -> return -(l as Double)
         }
@@ -40,7 +51,7 @@ class TreeWalker : Visitor<Any> {
 }
 
 fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("(3+5)*-73 ")
+    val toks = Scanner().tokenize("9+10==19")
     val ast = ExprParser(toks).parse()
-    TreeWalker().evalauate(ast).also { println(it) }
+    TreeWalker().evaluate(ast).also { println(it) }
 }

@@ -1,18 +1,18 @@
 package expressions
 
 import interpreter.Rpn
-import interpreter.Visitor
+import interpreter.ExpressionVisitor
 import scanner.Tok
 import scanner.TokenType
 
 
 abstract class Expr {
-    abstract fun <T> accept(visitor: Visitor<T>): T
+    abstract fun <T> accept(visitor: ExpressionVisitor<T>): T
 }
 
 
 class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
-    override fun <T> accept(visitor: Visitor<T>): T {
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T {
         return visitor.visitBinaryExpression(this)
     }
 
@@ -30,7 +30,7 @@ class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
 
 class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
 
-    override fun <T> accept(visitor: Visitor<T>): T {
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T {
         return visitor.visitUnaryExpression(this)
     }
 
@@ -46,7 +46,7 @@ class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
 }
 
 class LiteralExpr(val token: Tok) : Expr() {
-    override fun <T> accept(visitor: Visitor<T>): T {
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T {
         return visitor.visitLiteralExpression(this)
     }
 

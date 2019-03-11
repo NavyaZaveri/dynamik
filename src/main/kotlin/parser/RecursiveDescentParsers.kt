@@ -64,6 +64,8 @@ class ExprParser(val tokens: List<Tok>) {
             TokenType.NUMBER -> LiteralExpr(token = tokens[current])
             TokenType.STRING -> LiteralExpr(token = tokens[current])
             TokenType.IDENTIFIER -> LiteralExpr(token = tokens[current])
+            TokenType.TRUE -> LiteralExpr(token = tokens[current])
+            TokenType.False -> LiteralExpr(token = tokens[current])
             else -> throw RuntimeException("could not recognize ${tokens[current]}")
         }.also { advance() }
     }
