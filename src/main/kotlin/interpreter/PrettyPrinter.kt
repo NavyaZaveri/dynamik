@@ -42,8 +42,6 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
         return prettyPrint(exprStmt.expr)
     }
 }
-
-
 //A reversed polish notation based pretty printer
 class Rpn : PrettyPrinter() {
     override fun wrap(operand: String, vararg exprs: Expr): String {

@@ -6,6 +6,7 @@ import scanner.Scanner
 import scanner.Tok
 import scanner.TokenType
 import java.lang.RuntimeException
+import java.util.function.Consumer
 import kotlin.math.exp
 
 /*
@@ -29,27 +30,36 @@ primary        → "true" | "false" | "nil" | "this"
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
-    fun parseStmt(): Stmt {
+    fun parseStmt(): List<Stmt> {
+        val stmt = mutableListOf<Stmt>()
+        while (!allTokensConsumed()) {
+            stmt.add(stmt())
+        }
+        return stmt
+    }
+
+    fun stmt(): Stmt {
         println(tokens[current].type)
         when (tokens[current].type) {
             TokenType.PRINT -> return printStmt()
             TokenType.VAR -> return varStmt()
             TokenType.VAL -> return valStmt()
+            TokenType.IDENTIFIER -> return assignStmt()
         }
-        throw RuntimeException()
+        return exprStmt()
     }
 
     fun printStmt(): Stmt {
         consume(TokenType.PRINT)
         val thingToPrint = expression()
-        return PrintStmt(thingToPrint)
+        return PrintStmt(thingToPrint).also { consume(TokenType.SEMICOLON) }
     }
 
     fun assignStmt(): Stmt {
         val id = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
         val valueAssined = expression()
-        return AssignStmt(id, valueAssined)
+        return AssignStmt(id, valueAssined).also { consume(TokenType.SEMICOLON) }
     }
 
     fun exprStmt(): Stmt {
@@ -60,7 +70,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         consume(TokenType.VAR)
         val name = consume(TokenType.IDENTIFIER)
         val valueAssigned = expression()
-        return VarStmt(name, valueAssigned)
+        return VarStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
     }
 
     fun valStmt(): Stmt {
@@ -68,7 +78,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         val name = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
         val valueAssigned = expression()
-        return ValStmt(name, valueAssigned)
+        return ValStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
 
     }
 }
@@ -120,6 +130,9 @@ open class ExprParser(val tokens: List<Tok>) {
     private fun advance(): Tok = tokens[current].also { current += 1 }
 
     fun consume(tokType: TokenType): Tok {
+        if (allTokensConsumed()) {
+            throw RuntimeException("expecting  $tokType after ${tokens[current - 1].lexeme}")
+        }
         if (tokens[current].type != tokType) {
             throw RuntimeException("expecting $tokType, found ${tokens[current].type} instead")
         }
@@ -174,10 +187,10 @@ open class ExprParser(val tokens: List<Tok>) {
 }
 
 fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("(3 +(5)) ==5")
+    val toks = Scanner().tokenize("(3 +(5)) ==8")
     ExprParser(toks).parse().also { Rpn().prettyPrint(it).also { println(it) } }
 
-    val ts = Scanner().tokenize("val x = 3+10")
+    val ts = Scanner().tokenize("val x = 3+10; print \"hello\"; ")
     val stm = StmtParser(ts).parseStmt()
-    stm.accept(Rpn()).also { println(it) }
+    stm.forEach { it.accept(Rpn()).also { println(it) } }
 }

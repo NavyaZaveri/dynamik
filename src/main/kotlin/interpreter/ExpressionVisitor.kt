@@ -9,3 +9,4 @@ interface ExpressionVisitor<out T> {
     fun visitUnaryExpression(expr: UnaryExpr): T
     fun visitLiteralExpression(expr: LiteralExpr): T
 }
+
