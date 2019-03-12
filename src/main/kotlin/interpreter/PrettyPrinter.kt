@@ -14,6 +14,10 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
         return wrap(expr.operand.lexeme, expr.left, expr.right)
     }
 
+    override fun visitAssignStmt(assignStmt: AssignStmt): String {
+        return "${assignStmt.token.lexeme} = " + prettyPrint(assignStmt.expr)
+    }
+
     override fun visitLiteralExpression(expr: LiteralExpr): String {
         return expr.token.literal.toString()
     }
@@ -27,11 +31,15 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
     }
 
     override fun visitValStmt(valStmt: ValStmt): String {
-        return "val ${valStmt.name} = " + prettyPrint(valStmt.expr)
+        return "val ${valStmt.name.lexeme} = " + prettyPrint(valStmt.expr)
     }
 
     override fun visitVariableStmt(varStmt: VarStmt): String {
-        return "var ${varStmt.name} = " + prettyPrint(varStmt.expr)
+        return "var ${varStmt.name.lexeme} = " + prettyPrint(varStmt.expr)
+    }
+
+    override fun visitExpressionsStatement(exprStmt: ExprStmt): String {
+        return prettyPrint(exprStmt.expr)
     }
 }
 

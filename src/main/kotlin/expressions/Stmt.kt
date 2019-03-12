@@ -19,14 +19,21 @@ class AssignStmt(val token: Tok, val expr: Expr) : Stmt() {
 }
 
 
-class ValStmt(val name: String, val expr: Expr) : Stmt() {
+class ValStmt(val name: Tok, val expr: Expr) : Stmt() {
     override fun <T> accept(visitor: StatementVisitor<T>): T {
         return visitor.visitValStmt(this)
     }
 }
 
+class ExprStmt(val expr: Expr) : Stmt() {
+    override fun <T> accept(visitor: StatementVisitor<T>): T {
+        return visitor.visitExpressionsStatement(this)
+    }
 
-class VarStmt(val name: String, val expr: Expr) : Stmt() {
+}
+
+
+class VarStmt(val name: Tok, val expr: Expr) : Stmt() {
     override fun <T> accept(visitor: StatementVisitor<T>): T {
         return visitor.visitVariableStmt(this)
     }
@@ -37,4 +44,5 @@ interface StatementVisitor<out T> {
     fun visitVariableStmt(varStmt: VarStmt): T
     fun visitValStmt(valStmt: ValStmt): T
     fun visitAssignStmt(assignStmt: AssignStmt): T
+    fun visitExpressionsStatement(exprStmt: ExprStmt): T
 }

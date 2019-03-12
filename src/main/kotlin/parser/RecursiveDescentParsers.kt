@@ -1,14 +1,12 @@
 package parser
 
-import expressions.BinaryExpr
-import expressions.Expr
-import expressions.LiteralExpr
-import expressions.UnaryExpr
+import expressions.*
 import interpreter.Rpn
 import scanner.Scanner
 import scanner.Tok
 import scanner.TokenType
 import java.lang.RuntimeException
+import kotlin.math.exp
 
 /*
 expression     → assignment ;
@@ -29,23 +27,60 @@ primary        → "true" | "false" | "nil" | "this"
 | NUMBER | STRING | IDENTIFIER | "(" expression ")"
 | "super" "." IDENTIFIER ;*/
 
+class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
-class ExprParser(val tokens: List<Tok>) {
-    private var current = 0
-
-    fun printStmt() {
-
+    fun parseStmt(): Stmt {
+        println(tokens[current].type)
+        when (tokens[current].type) {
+            TokenType.PRINT -> return printStmt()
+            TokenType.VAR -> return varStmt()
+            TokenType.VAL -> return valStmt()
+        }
+        throw RuntimeException()
     }
 
-    fun AssignStmt() {
-
+    fun printStmt(): Stmt {
+        consume(TokenType.PRINT)
+        val thingToPrint = expression()
+        return PrintStmt(thingToPrint)
     }
 
-    fun variableStmt() {
+    fun assignStmt(): Stmt {
+        val id = consume(TokenType.IDENTIFIER)
+        consume(TokenType.EQUAL)
+        val valueAssined = expression()
+        return AssignStmt(id, valueAssined)
+    }
+
+    fun exprStmt(): Stmt {
+        return ExprStmt(expression())
+    }
+
+    fun varStmt(): Stmt {
+        consume(TokenType.VAR)
+        val name = consume(TokenType.IDENTIFIER)
+        val valueAssigned = expression()
+        return VarStmt(name, valueAssigned)
+    }
+
+    fun valStmt(): Stmt {
+        consume(TokenType.VAL)
+        val name = consume(TokenType.IDENTIFIER)
+        consume(TokenType.EQUAL)
+        val valueAssigned = expression()
+        return ValStmt(name, valueAssigned)
 
     }
+}
+
+open class ExprParser(val tokens: List<Tok>) {
+    var current = 0
 
     fun parse(): Expr {
+        return expression()
+    }
+
+    fun expression(): Expr {
         return equality()
     }
 
@@ -84,11 +119,11 @@ class ExprParser(val tokens: List<Tok>) {
 
     private fun advance(): Tok = tokens[current].also { current += 1 }
 
-    fun consume(tokType: TokenType) {
+    fun consume(tokType: TokenType): Tok {
         if (tokens[current].type != tokType) {
             throw RuntimeException("expecting $tokType, found ${tokens[current].type} instead")
         }
-        current += 1
+        return tokens[current].also { current += 1 }
     }
 
 
@@ -129,7 +164,7 @@ class ExprParser(val tokens: List<Tok>) {
     fun brackets(): Expr {
         return if (match(TokenType.LEFT_PAREN)) {
             consume(TokenType.LEFT_PAREN)
-            val expr = equality()
+            val expr = expression()
             consume(TokenType.RIGHT_PAREN)
             expr
         } else {
@@ -139,6 +174,10 @@ class ExprParser(val tokens: List<Tok>) {
 }
 
 fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("(3 +5) ==5")
+    val toks = Scanner().tokenize("(3 +(5)) ==5")
     ExprParser(toks).parse().also { Rpn().prettyPrint(it).also { println(it) } }
+
+    val ts = Scanner().tokenize("val x = 3+10")
+    val stm = StmtParser(ts).parseStmt()
+    stm.accept(Rpn()).also { println(it) }
 }
