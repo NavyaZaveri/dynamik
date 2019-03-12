@@ -11,6 +11,16 @@ class ParserTest {
         return ExprParser(toks).parse()
     }
 
+    @Test
+    fun testMultiplicationPrecedence() {
+        val srcCode = "3*4+5"
+        val toks = Scanner().tokenize(srcCode)
+        val expr = parse(toks)
+        val expected = "3.0 4.0 * 5.0 +"
+        val actual = Rpn().prettyPrint(expr)
+        assertTrue("expected $expected, actual = $actual", expected == actual)
+    }
+
 
     @Test
     fun testBracketPrecedence() {

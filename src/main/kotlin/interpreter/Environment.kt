@@ -7,13 +7,21 @@ enum class VariableStatus {
     VAR
 }
 
+
 data class Variable(val status: VariableStatus, var value: Any)
 
 class Environment {
     val idenitifierToValue = mutableMapOf<String, Variable>()
     fun define(name: String, value: Any, declaration: Boolean) {
         if (declaration) {
-
+            if (exists(name)) {
+                throw RuntimeException("$name already exists, cannot redeclare it")
+            }
+            if (status(name) == VariableStatus.VAL) {
+                throw RuntimeException("cannot reassign val ")
+            }
+            //the variable exists for sure, and is a Var variable
+            idenitifierToValue[name]!!.value = name
         } else {
             if (!exists(name)) {
                 throw RuntimeException("$name does not exist in the current scope.")

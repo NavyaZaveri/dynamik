@@ -33,6 +33,18 @@ primary        → "true" | "false" | "nil" | "this"
 class ExprParser(val tokens: List<Tok>) {
     private var current = 0
 
+    fun printStmt() {
+
+    }
+
+    fun AssignStmt() {
+
+    }
+
+    fun variableStmt() {
+
+    }
+
     fun parse(): Expr {
         return equality()
     }

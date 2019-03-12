@@ -28,7 +28,6 @@ class Scanner {
     }
 
     private fun wrapToNativeToken(tokenMatch: TokenMatch): Tok {
-        println(tokenMatch)
         for (nativeTokType in TokenType.values()) {
             if (tokenMatch.type.name == nativeTokType.toString()) {
                 return when (nativeTokType) {
