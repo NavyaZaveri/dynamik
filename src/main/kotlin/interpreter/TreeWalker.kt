@@ -1,38 +1,41 @@
 package interpreter
 
 import expressions.*
-import parser.ExprParser
+import parser.StmtParser
+import parser.parseStmts
 import scanner.Scanner
 import scanner.TokenType
+import scanner.tokenize
 
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Unit> {
     val env = Environment()
 
+    fun evaluateStmts(stmts: List<Stmt>) {
+        for (s in stmts) {
+            s.accept(this)
+        }
+    }
 
-    override fun visitVariableStmt(varStmt: VarStmt) {
+    override fun visitVariableExpr(variableExpr: VariableExpr): Any = env.get(variableExpr.token.lexeme)
+
+    override fun visitVariableStmt(varStmt: VarStmt) =
         env.define(varStmt.name.lexeme, evaluate(varStmt.expr), VariableStatus.VAR)
-    }
 
-    override fun visitValStmt(valStmt: ValStmt) {
+    override fun visitValStmt(valStmt: ValStmt) =
         env.define(valStmt.name.lexeme, evaluate(valStmt.expr), VariableStatus.VAL)
-    }
 
-    override fun visitAssignStmt(assignStmt: AssignStmt) {
+    override fun visitAssignStmt(assignStmt: AssignStmt) =
         env.assign(assignStmt.token.lexeme, evaluate(assignStmt.expr))
-    }
 
     override fun visitExpressionsStatement(exprStmt: ExprStmt) {
         evaluate(exprStmt.expr)
     }
 
-    override fun visitPrintStmt(printStmt: PrintStmt) {
-        print("print " + evaluate(printStmt.expr))
-    }
+    override fun visitPrintStmt(printStmt: PrintStmt) = print("${evaluate(printStmt.expr)}")
 
-    fun evaluate(expr: Expr): Any {
-        return expr.accept(this)
-    }
+    fun evaluate(expr: Expr): Any = expr.accept(this)
+
 
     private fun isBoolean(vararg things: Any) = things.all { it is Boolean }
 
@@ -70,18 +73,15 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Unit> {
 }
 
 fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("(9+-10)==-1")
-    val ast = ExprParser(toks).parse()
-    TreeWalker().evaluate(ast).also { println(it) }
+    val toks = Scanner().tokenize("var d=4; d=d+1; val x =2; print (d+x);")
+    val ast = StmtParser(toks).parseStmt()
+    TreeWalker().evaluateStmts(ast)
+    "var d=4; print 110;".tokenize().parseStmts().evaluate()
 }
 
-typealias sourceCode = String
-typealias lox = String
-
-fun sourceCode.thing() {
-}
-
-fun stuff(s: lox) {
+fun List<Stmt>.evaluate(): Any {
+    val interpreter = TreeWalker()
+    return this.forEach { it.accept(interpreter) }
 }
 
 

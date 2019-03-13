@@ -39,7 +39,6 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     }
 
     fun stmt(): Stmt {
-        println(tokens[current].type)
         when (tokens[current].type) {
             TokenType.PRINT -> return printStmt()
             TokenType.VAR -> return varStmt()
@@ -69,6 +68,8 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     fun varStmt(): Stmt {
         consume(TokenType.VAR)
         val name = consume(TokenType.IDENTIFIER)
+        consume(TokenType.EQUAL)
+
         val valueAssigned = expression()
         return VarStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
     }
@@ -120,7 +121,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return when (tokens[current].type) {
             TokenType.NUMBER -> LiteralExpr(token = tokens[current])
             TokenType.STRING -> LiteralExpr(token = tokens[current])
-            TokenType.IDENTIFIER -> LiteralExpr(token = tokens[current])
+            TokenType.IDENTIFIER -> VariableExpr(token = tokens[current])
             TokenType.TRUE -> LiteralExpr(token = tokens[current])
             TokenType.False -> LiteralExpr(token = tokens[current])
             else -> throw RuntimeException("could not recognize ${tokens[current]}")
@@ -184,6 +185,14 @@ open class ExprParser(val tokens: List<Tok>) {
             primary()
         }
     }
+}
+
+fun List<Tok>.parseStmts(): List<Stmt> {
+    return StmtParser(this).parseStmt()
+}
+
+fun List<Tok>.parse(): Expr {
+    return ExprParser(this).parse()
 }
 
 fun main(args: Array<String>) {

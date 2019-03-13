@@ -1,7 +1,6 @@
 package expressions
 
 import interpreter.Rpn
-import interpreter.ExpressionVisitor
 import scanner.Tok
 import scanner.TokenType
 
@@ -43,6 +42,13 @@ class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
     companion object {
         fun create(init: Builder.() -> Unit) = Builder().apply(init).build()
     }
+}
+
+class VariableExpr(val token: Tok) : Expr() {
+    override fun <T> accept(visitor: ExpressionVisitor<T>): T {
+        return visitor.visitVariableExpr(this)
+    }
+
 }
 
 class LiteralExpr(val token: Tok) : Expr() {

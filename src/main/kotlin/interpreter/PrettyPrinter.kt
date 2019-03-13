@@ -14,6 +14,10 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
         return wrap(expr.operand.lexeme, expr.left, expr.right)
     }
 
+    override fun visitVariableExpr(variableExpr: VariableExpr): String {
+        return variableExpr.token.lexeme
+    }
+
     override fun visitAssignStmt(assignStmt: AssignStmt): String {
         return "${assignStmt.token.lexeme} = " + prettyPrint(assignStmt.expr)
     }
@@ -42,6 +46,7 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
         return prettyPrint(exprStmt.expr)
     }
 }
+
 //A reversed polish notation based pretty printer
 class Rpn : PrettyPrinter() {
     override fun wrap(operand: String, vararg exprs: Expr): String {
