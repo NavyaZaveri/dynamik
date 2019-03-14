@@ -3,40 +3,30 @@ package expressions
 import scanner.Tok
 
 abstract class Stmt {
-    abstract fun <T> accept(visitor: StatementVisitor<T>): T
+    abstract fun <T> evaluateBy(visitor: StatementVisitor<T>): T
 }
 
 class PrintStmt(val expr: Expr) : Stmt() {
-    override fun <T> accept(visitor: StatementVisitor<T>): T {
-        return visitor.visitPrintStmt(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitPrintStmt(this)
 }
 
 class AssignStmt(val token: Tok, val expr: Expr) : Stmt() {
-    override fun <T> accept(visitor: StatementVisitor<T>): T {
-        return visitor.visitAssignStmt(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitAssignStmt(this)
 }
 
 
 class ValStmt(val name: Tok, val expr: Expr) : Stmt() {
-    override fun <T> accept(visitor: StatementVisitor<T>): T {
-        return visitor.visitValStmt(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitValStmt(this)
 }
 
 class ExprStmt(val expr: Expr) : Stmt() {
-    override fun <T> accept(visitor: StatementVisitor<T>): T {
-        return visitor.visitExpressionsStatement(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitExpressionsStatement(this)
 
 }
 
 
 class VarStmt(val name: Tok, val expr: Expr) : Stmt() {
-    override fun <T> accept(visitor: StatementVisitor<T>): T {
-        return visitor.visitVariableStmt(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitVariableStmt(this)
 }
 
 interface StatementVisitor<out T> {

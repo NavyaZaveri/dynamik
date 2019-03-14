@@ -13,7 +13,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Unit> {
 
     fun evaluateStmts(stmts: List<Stmt>) {
         for (s in stmts) {
-            s.accept(this)
+            s.evaluateBy(this)
         }
     }
 
@@ -34,7 +34,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Unit> {
 
     override fun visitPrintStmt(printStmt: PrintStmt) = print("${evaluate(printStmt.expr)}")
 
-    fun evaluate(expr: Expr): Any = expr.accept(this)
+    fun evaluate(expr: Expr): Any = expr.evaluateBy(this)
 
 
     private fun isBoolean(vararg things: Any) = things.all { it is Boolean }
@@ -63,8 +63,9 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Unit> {
         val l = evaluate(expr.left)
         when (expr.token.type) {
             TokenType.MINUS -> return -(l as Double)
+            TokenType.BANG -> return !(l as Boolean)
         }
-        TODO()
+        throw RuntimeException("could not evaluate ${expr.token.type} for unary $l")
     }
 
     override fun visitLiteralExpression(expr: LiteralExpr): Any {
@@ -81,7 +82,7 @@ fun main(args: Array<String>) {
 
 fun List<Stmt>.evaluate(): Any {
     val interpreter = TreeWalker()
-    return this.forEach { it.accept(interpreter) }
+    return this.forEach { it.evaluateBy(interpreter) }
 }
 
 

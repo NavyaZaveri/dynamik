@@ -31,11 +31,11 @@ primary        → "true" | "false" | "nil" | "this"
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
     fun parseStmt(): List<Stmt> {
-        val stmt = mutableListOf<Stmt>()
+        val stmts = mutableListOf<Stmt>()
         while (!allTokensConsumed()) {
-            stmt.add(stmt())
+            stmts.add(stmt())
         }
-        return stmt
+        return stmts
     }
 
     fun stmt(): Stmt {
@@ -201,5 +201,5 @@ fun main(args: Array<String>) {
 
     val ts = Scanner().tokenize("val x = 3+10; print \"hello\"; ")
     val stm = StmtParser(ts).parseStmt()
-    stm.forEach { it.accept(Rpn()).also { println(it) } }
+    stm.forEach { it.evaluateBy(Rpn()).also { println(it) } }
 }

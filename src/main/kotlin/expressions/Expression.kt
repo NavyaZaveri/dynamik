@@ -6,12 +6,12 @@ import scanner.TokenType
 
 
 abstract class Expr {
-    abstract fun <T> accept(visitor: ExpressionVisitor<T>): T
+    abstract fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T
 }
 
 
 class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
-    override fun <T> accept(visitor: ExpressionVisitor<T>): T {
+    override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitBinaryExpression(this)
     }
 
@@ -29,7 +29,7 @@ class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
 
 class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
 
-    override fun <T> accept(visitor: ExpressionVisitor<T>): T {
+    override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitUnaryExpression(this)
     }
 
@@ -45,14 +45,14 @@ class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
 }
 
 class VariableExpr(val token: Tok) : Expr() {
-    override fun <T> accept(visitor: ExpressionVisitor<T>): T {
+    override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitVariableExpr(this)
     }
 
 }
 
 class LiteralExpr(val token: Tok) : Expr() {
-    override fun <T> accept(visitor: ExpressionVisitor<T>): T {
+    override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitLiteralExpression(this)
     }
 
@@ -80,7 +80,7 @@ fun main(args: Array<String>) {
             }
         }
     }
-    b.accept(Rpn()).also { println(it) }
+    b.evaluateBy(Rpn()).also { println(it) }
 }
 
 
