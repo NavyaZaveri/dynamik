@@ -32,26 +32,34 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Unit> {
         evaluate(exprStmt.expr)
     }
 
-    override fun visitPrintStmt(printStmt: PrintStmt) = print("${evaluate(printStmt.expr)}")
+    override fun visitPrintStmt(printStmt: PrintStmt) = println("${evaluate(printStmt.expr)}")
 
     fun evaluate(expr: Expr): Any = expr.evaluateBy(this)
 
 
-    private fun isBoolean(vararg things: Any) = things.all { it is Boolean }
+    private fun booleanTypes(vararg things: Any) = things.all { it is Boolean }
+    private fun stringTypes(vararg things: Any) = things.all { it is String }
 
+
+    fun concatOrAdd(left: Any, right: Any): Any {
+        if (stringTypes(left, right)) {
+            return left as String + right as String
+        }
+        return left as Double + right as Double
+    }
 
     override
     fun visitBinaryExpression(expr: BinaryExpr): Any {
         val left = evaluate(expr.left)
         val right = evaluate(expr.right)
         when (expr.operand.type) {
-            TokenType.PLUS -> return left as Double + right as Double
+            TokenType.PLUS -> return concatOrAdd(left, right)
             TokenType.MINUS -> return left as Double - right as Double
             TokenType.SLASH -> return left as Double / right as Double
             TokenType.STAR -> return left as Double * right as Double
             TokenType.EQUAL_EQUAL -> return left == right
             TokenType.AND -> {
-                if (isBoolean(left, right))
+                if (booleanTypes(left, right))
                     return left as Boolean && right as Boolean
             }
             TokenType.BANG_EQUAL -> return left != right
@@ -68,13 +76,11 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Unit> {
         throw RuntimeException("could not evaluate ${expr.token.type} for unary $l")
     }
 
-    override fun visitLiteralExpression(expr: LiteralExpr): Any {
-        return expr.token.literal
-    }
+    override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
 }
 
 fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("var d=4; d=d+1; val x =2; print (d+x);")
+    val toks = Scanner().tokenize("var d=4; d=d+1; val x =2; print (d+x); var s = \"hello\"; print s+\" world\"; ")
     val ast = StmtParser(toks).parseStmt()
     TreeWalker().evaluateStmts(ast)
     "var d=4; print 110;".tokenize().parseStmts().evaluate()
@@ -84,6 +90,7 @@ fun List<Stmt>.evaluate(): Any {
     val interpreter = TreeWalker()
     return this.forEach { it.evaluateBy(interpreter) }
 }
+
 
 
 

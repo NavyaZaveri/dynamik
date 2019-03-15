@@ -33,12 +33,9 @@ class Environment {
         return idenitifierToValue.containsKey(name)
     }
 
-    fun status(name: String): VariableStatus {
-        return idenitifierToValue[name]?.status
-            ?: throw RuntimeException("$name does not exist in the current scope")
-    }
+    fun status(name: String): VariableStatus = idenitifierToValue[name]?.status
+        ?: throw RuntimeException("$name does not exist in the current scope")
 
-    fun get(name: String): Any {
-        return idenitifierToValue[name]?.value ?: throw RuntimeException("$name not found in current environment")
-    }
+    fun get(name: String): Any =
+        idenitifierToValue[name]?.value ?: throw RuntimeException("$name not found in current environment")
 }
