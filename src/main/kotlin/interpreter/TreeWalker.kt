@@ -10,12 +10,16 @@ import scanner.tokenize
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     val env = Environment()
-
-    fun evaluateStmts(stmts: List<Stmt>) {
-        for (s in stmts) {
-            evaluate(s)
+    override fun visitWhileStatement(whileStmt: WhileStmt): Any {
+        var condition = evaluate(whileStmt.expr)
+        while (booleanTypes(condition) && condition as Boolean) {
+            whileStmt.stmts.forEach { evaluate(it) }
+            condition = evaluate(whileStmt.expr)
         }
+        return Any()
     }
+
+    fun evaluateStmts(stmts: List<Stmt>): Unit = stmts.forEach { evaluate(it) }
 
     override fun visitVariableExpr(variableExpr: VariableExpr): Any = env.get(variableExpr.token.lexeme)
 
@@ -30,14 +34,16 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     override fun visitExpressionsStatement(exprStmt: ExprStmt): Any = evaluate(exprStmt.expr)
 
-    override fun visitPrintStmt(printStmt: PrintStmt) = println("${evaluate(printStmt.expr)}")
+    override fun visitPrintStmt(printStmt: PrintStmt): Unit = println("${evaluate(printStmt.expr)}")
 
     fun evaluate(expr: Expr): Any = expr.evaluateBy(this)
+
     fun evaluate(stmt: Stmt): Any = stmt.evaluateBy(this)
 
-
     private fun booleanTypes(vararg things: Any) = things.all { it is Boolean }
+
     private fun stringTypes(vararg things: Any) = things.all { it is String }
+
     private fun concatOrAdd(left: Any, right: Any): Any {
         if (stringTypes(left, right)) {
             return left as String + right as String
@@ -83,8 +89,8 @@ fun main(args: Array<String>) {
     "var d=4; print 110;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 }
 
-fun <T> List<Stmt>.evaluateAllBy(evalurator: StatementVisitor<T>): Any {
-    return this.forEach { it.evaluateBy(evalurator) }
+fun <T> List<Stmt>.evaluateAllBy(evaluator: StatementVisitor<T>): Any {
+    return this.forEach { it.evaluateBy(evaluator) }
 }
 
 
