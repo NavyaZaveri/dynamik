@@ -51,6 +51,7 @@ enum class TokenType(val regex: Regex) {
     LOOP("loop".toRegex()),
     VAL("val".toRegex()),
     Par("par".toRegex()),
+    While("while".toRegex()),
 
     IDENTIFIER("\\w+".toRegex()),
     EOF("[\r\n]+".toRegex()),

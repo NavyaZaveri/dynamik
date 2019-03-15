@@ -8,9 +8,14 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
 
     abstract fun wrap(operand: String, vararg exprs: Expr): String
 
-    override fun visitWhileStatement(whileStmt: WhileStmt): String {
-        return "while ${prettyPrint(whileStmt.expr)} {\n" + { whileStmt.stmts.forEach { it.evaluateBy(this) + "\n" } }
-    }
+    override fun visitWhileStatement(whileStmt: WhileStmt): String =
+        "while ${prettyPrint(whileStmt.expr)} {\n" +
+                whileStmt.stmts.joinToString(
+                    prefix = "",
+                    postfix = "",
+                    separator = "\n"
+                ) { it.evaluateBy(this) + ";" } + "}"
+
 
     override fun visitBinaryExpression(expr: BinaryExpr): String = wrap(expr.operand.lexeme, expr.left, expr.right)
 
@@ -22,6 +27,7 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
     override fun visitLiteralExpression(expr: LiteralExpr): String = expr.token.literal.toString()
 
     override fun visitUnaryExpression(expr: UnaryExpr): String = wrap(expr.token.lexeme, expr.left)
+
 
     override fun visitPrintStmt(printStmt: PrintStmt): String {
         return "print " + prettyPrint(printStmt.expr)

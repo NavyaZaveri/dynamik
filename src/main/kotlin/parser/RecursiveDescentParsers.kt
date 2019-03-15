@@ -5,9 +5,8 @@ import interpreter.Rpn
 import scanner.Scanner
 import scanner.Tok
 import scanner.TokenType
+import scanner.tokenize
 import java.lang.RuntimeException
-import java.util.function.Consumer
-import kotlin.math.exp
 
 /*
 expression     → assignment ;
@@ -30,7 +29,7 @@ primary        → "true" | "false" | "nil" | "this"
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
-    fun parseStmt(): List<Stmt> {
+    fun parseStmts(): List<Stmt> {
         val stmt = mutableListOf<Stmt>()
         while (!allTokensConsumed()) {
             stmt.add(stmt())
@@ -44,8 +43,24 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.VAR -> return varStmt()
             TokenType.VAL -> return valStmt()
             TokenType.IDENTIFIER -> return assignStmt()
+            TokenType.While -> return whileStaement()
         }
         return exprStmt()
+    }
+
+    fun whileStaement(): Stmt {
+        consume(TokenType.While)
+        consume(TokenType.LEFT_PAREN)
+        val cond = expression()
+        consume(TokenType.RIGHT_PAREN)
+        consume(TokenType.LEFT_BRACE)
+        val stmts = mutableListOf<Stmt>()
+        while (!match(TokenType.RIGHT_BRACE)) {
+            stmts.add(stmt())
+        }
+        consume(TokenType.RIGHT_BRACE)
+
+        return WhileStmt(cond, stmts)
     }
 
     fun printStmt(): Stmt {
@@ -188,7 +203,7 @@ open class ExprParser(val tokens: List<Tok>) {
 }
 
 fun List<Tok>.parseStmts(): List<Stmt> {
-    return StmtParser(this).parseStmt()
+    return StmtParser(this).parseStmts()
 }
 
 fun List<Tok>.parse(): Expr {
@@ -200,6 +215,7 @@ fun main(args: Array<String>) {
     ExprParser(toks).parse().also { Rpn().prettyPrint(it).also { println(it) } }
 
     val ts = Scanner().tokenize("val x = 3+10; print \"hello\"; ")
-    val stm = StmtParser(ts).parseStmt()
+    val stm = StmtParser(ts).parseStmts()
     stm.forEach { it.evaluateBy(Rpn()).also { println(it) } }
+    "while (true) { var x = 1; var y =3;}".tokenize().parseStmts().forEach { it.evaluateBy(Rpn()).also { println(it) } }
 }

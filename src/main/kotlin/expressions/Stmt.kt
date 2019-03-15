@@ -18,9 +18,7 @@ class WhileStmt(val expr: Expr, val stmts: List<Stmt>) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitWhileStatement(this)
     }
-
 }
-
 
 class ValStmt(val name: Tok, val expr: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitValStmt(this)
@@ -28,9 +26,7 @@ class ValStmt(val name: Tok, val expr: Expr) : Stmt() {
 
 class ExprStmt(val expr: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitExpressionsStatement(this)
-
 }
-
 
 class VarStmt(val name: Tok, val expr: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitVariableStmt(this)
