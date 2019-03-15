@@ -39,9 +39,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Unit> {
 
     private fun booleanTypes(vararg things: Any) = things.all { it is Boolean }
     private fun stringTypes(vararg things: Any) = things.all { it is String }
-
-
-    fun concatOrAdd(left: Any, right: Any): Any {
+    private fun concatOrAdd(left: Any, right: Any): Any {
         if (stringTypes(left, right)) {
             return left as String + right as String
         }

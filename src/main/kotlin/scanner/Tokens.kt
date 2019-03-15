@@ -10,7 +10,6 @@ data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val li
 
 enum class TokenType(val regex: Regex) {
 
-    // Single-character tokens.
     LEFT_PAREN("\\(".toRegex()),
     NUMBER("-?\\d+".toRegex()),
     RIGHT_PAREN("\\)".toRegex()), LEFT_BRACE("\\{".toRegex()), RIGHT_BRACE("}".toRegex()),
@@ -21,13 +20,12 @@ enum class TokenType(val regex: Regex) {
     QUESTION("\\?".toRegex()),
     WHITESPACE("\\s+".toRegex()),
 
-    // One or two character tokens.
     BANG_EQUAL("!=".toRegex()),
     BANG("!".toRegex()),
 
     EQUAL_EQUAL("==".toRegex()),
-    LESS_EQUAL("<=".toRegex()),
     EQUAL("=".toRegex()),
+    LESS_EQUAL("<=".toRegex()),
     GREATER_EQUAL(">=".toRegex()),
 
     GREATER(">".toRegex()),
@@ -37,10 +35,8 @@ enum class TokenType(val regex: Regex) {
     COLON(";".toRegex()),
 
 
-    // Literals.
     STRING("\".*?\"".toRegex()),
 
-    // Keywords.
     AND("&&".toRegex()),
     CLASS("class".toRegex()), ELSE("else".toRegex()),
     FN("fn".toRegex()),

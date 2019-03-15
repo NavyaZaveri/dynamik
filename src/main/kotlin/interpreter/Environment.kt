@@ -1,14 +1,9 @@
 package interpreter
 
+import expressions.Variable
+import expressions.VariableStatus
 import java.lang.RuntimeException
 
-enum class VariableStatus {
-    VAL,
-    VAR
-}
-
-
-data class Variable(var value: Any, val status: VariableStatus)
 
 class Environment {
     val idenitifierToValue = mutableMapOf<String, Variable>()

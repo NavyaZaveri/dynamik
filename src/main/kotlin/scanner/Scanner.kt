@@ -7,9 +7,8 @@ import java.lang.RuntimeException
 
 
 class Scanner {
-    fun tokenize(sourceCode: String): List<Tok> {
-        return tokenizer.tokenize(sourceCode).filter { !it.type.ignored }.map { wrapToNativeToken(it) }.toList()
-    }
+    fun tokenize(sourceCode: String): List<Tok> =
+        tokenizer.tokenize(sourceCode).filter { !it.type.ignored }.map { wrapToNativeToken(it) }.toList()
 
     companion object {
         private val tokenizer = buildTokenizer()
