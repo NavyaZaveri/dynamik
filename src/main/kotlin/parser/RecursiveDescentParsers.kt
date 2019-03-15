@@ -31,11 +31,11 @@ primary        → "true" | "false" | "nil" | "this"
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
     fun parseStmt(): List<Stmt> {
-        val stmts = mutableListOf<Stmt>()
+        val stmt = mutableListOf<Stmt>()
         while (!allTokensConsumed()) {
-            stmts.add(stmt())
+            stmt.add(stmt())
         }
-        return stmts
+        return stmt
     }
 
     fun stmt(): Stmt {
@@ -62,7 +62,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     }
 
     fun exprStmt(): Stmt {
-        return ExprStmt(expression())
+        return ExprStmt(expression()).also { consume(TokenType.SEMICOLON) }
     }
 
     fun varStmt(): Stmt {
