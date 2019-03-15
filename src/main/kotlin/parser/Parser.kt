@@ -43,12 +43,12 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.VAR -> return varStmt()
             TokenType.VAL -> return valStmt()
             TokenType.IDENTIFIER -> return assignStmt()
-            TokenType.While -> return whileStaement()
+            TokenType.While -> return whileStatement()
         }
         return exprStmt()
     }
 
-    fun whileStaement(): Stmt {
+    fun whileStatement(): Stmt {
         consume(TokenType.While)
         consume(TokenType.LEFT_PAREN)
         val cond = expression()
