@@ -9,7 +9,7 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
     abstract fun wrap(operand: String, vararg exprs: Expr): String
 
     override fun visitWhileStatement(whileStmt: WhileStmt): String =
-        "while ${prettyPrint(whileStmt.expr)} {\n" +
+        "while " + prettyPrint(whileStmt.expr) + " {" +
                 whileStmt.stmts.joinToString(
                     prefix = "",
                     postfix = "",
