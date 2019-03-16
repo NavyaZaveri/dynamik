@@ -11,11 +11,12 @@ data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val li
 enum class TokenType(val regex: Regex) {
 
     LEFT_PAREN("\\(".toRegex()),
-    NUMBER("-?\\d+".toRegex()),
     RIGHT_PAREN("\\)".toRegex()), LEFT_BRACE("\\{".toRegex()), RIGHT_BRACE("}".toRegex()),
     COMMA(",".toRegex()), DOT("\\.".toRegex()), MINUS("-".toRegex()), PLUS("\\+".toRegex()), SEMICOLON(";".toRegex()), SLASH(
         "/".toRegex()
     ),
+    NUMBER("\\d+".toRegex()),
+
     STAR("\\*".toRegex()),
     QUESTION("\\?".toRegex()),
     WHITESPACE("\\s+".toRegex()),

@@ -1,12 +1,11 @@
 package parser
 
 import expressions.*
-import interpreter.Rpn
-import scanner.Scanner
+import interpreter.TreeWalker
+import interpreter.evaluateAllBy
 import scanner.Tok
 import scanner.TokenType
 import scanner.tokenize
-import java.lang.RuntimeException
 
 /*
 expression     → assignment ;
@@ -72,8 +71,8 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     fun assignStmt(): Stmt {
         val id = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
-        val valueAssined = expression()
-        return AssignStmt(id, valueAssined).also { consume(TokenType.SEMICOLON) }
+        val valueAssigned = expression()
+        return AssignStmt(id, valueAssigned).also { consume(TokenType.SEMICOLON) }
     }
 
     fun exprStmt(): Stmt {
@@ -211,11 +210,5 @@ fun List<Tok>.parse(): Expr {
 }
 
 fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("(3 +(5)) ==8")
-    ExprParser(toks).parse().also { Rpn().prettyPrint(it).also { println(it) } }
-
-    val ts = Scanner().tokenize("val x = 3+10; print \"hello\"; ")
-    val stm = StmtParser(ts).parseStmts()
-    stm.forEach { it.evaluateBy(Rpn()).also { println(it) } }
-    "while (true) { var x = 1; var y =3;}".tokenize().parseStmts().forEach { it.evaluateBy(Rpn()).also { println(it) } }
+    "var x =3; while (x!=0) { x = x-1; print x;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 }

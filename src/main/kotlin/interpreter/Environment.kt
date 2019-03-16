@@ -7,6 +7,7 @@ import java.lang.RuntimeException
 
 class Environment {
     val idenitifierToValue = mutableMapOf<String, Variable>()
+
     fun define(name: String, value: Any, status: VariableStatus) {
         if (exists(name)) {
             throw RuntimeException("cannot redefine $name")
@@ -16,17 +17,15 @@ class Environment {
 
     fun assign(name: String, value: Any) {
         if (!exists(name)) {
-            throw RuntimeException("$name  is not defined in the current scope")
+            throw RuntimeException("$name  is not defined in the current scope.")
         }
         if (status(name) == VariableStatus.VAL) {
-            throw RuntimeException("$name is a Val, cannot reassign")
+            throw RuntimeException("$name is a Val, cannot reassign.")
         }
         idenitifierToValue[name] = Variable(value, VariableStatus.VAR)
     }
 
-    fun exists(name: String): Boolean {
-        return idenitifierToValue.containsKey(name)
-    }
+    fun exists(name: String): Boolean = idenitifierToValue.containsKey(name)
 
     fun status(name: String): VariableStatus = idenitifierToValue[name]?.status
         ?: throw RuntimeException("$name does not exist in the current scope")

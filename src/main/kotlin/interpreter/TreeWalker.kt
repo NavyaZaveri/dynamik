@@ -19,6 +19,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         return Any()
     }
 
+
     fun evaluateStmts(stmts: List<Stmt>): Unit = stmts.forEach { evaluate(it) }
 
     override fun visitVariableExpr(variableExpr: VariableExpr): Any = env.get(variableExpr.token.lexeme)
