@@ -9,12 +9,12 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
     abstract fun wrap(operand: String, vararg exprs: Expr): String
 
     override fun visitWhileStatement(whileStmt: WhileStmt): String =
-        "while " + prettyPrint(whileStmt.expr) + " {" +
+        "while " + prettyPrint(whileStmt.expr) + "{ " +
                 whileStmt.stmts.joinToString(
                     prefix = "",
                     postfix = "",
                     separator = "\n"
-                ) { it.evaluateBy(this) + ";" } + "}"
+                ) { it.evaluateBy(this) + ";" } + " }"
 
 
     override fun visitBinaryExpression(expr: BinaryExpr): String = wrap(expr.operand.lexeme, expr.left, expr.right)

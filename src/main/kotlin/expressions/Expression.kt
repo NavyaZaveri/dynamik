@@ -66,22 +66,4 @@ class LiteralExpr(val token: Tok) : Expr() {
     }
 }
 
-fun main(args: Array<String>) {
-    val b = BinaryExpr.create {
-        left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "3", "3") }
-        operand = Tok(TokenType.MINUS, "-", "-", 1)
-        right = BinaryExpr.create {
-            left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "5", 5.0) }
-            operand = Tok(TokenType.MINUS, "*", "*")
-            right = BinaryExpr.create {
-                left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "100", 100.0, 0) }
-                operand = Tok(TokenType.MINUS, "-", "-")
-                right = LiteralExpr.create { token = Tok(TokenType.NUMBER, "200", 200.0, 0) }
-            }
-        }
-    }
-    b.evaluateBy(Rpn()).also { println(it) }
-}
-
-
 
