@@ -12,14 +12,14 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     val env = Environment()
     override fun visitWhileStatement(whileStmt: WhileStmt): Any {
         var condition = evaluate(whileStmt.expr)
-        while (isType(Boolean, condition) && condition as Boolean) {
+        while (isType<Boolean>(condition) && condition as Boolean) {
             whileStmt.stmts.forEach { evaluate(it) }
             condition = evaluate(whileStmt.expr)
         }
         return Any()
     }
 
-    inline fun <reified T> isType(t: T, vararg objects: Any): Boolean = objects.all { it is T }
+    inline fun <reified T> isType(vararg objects: Any): Boolean = objects.all { it is T }
 
     fun evaluateStmts(stmts: List<Stmt>): Unit = stmts.forEach { evaluate(it) }
 
@@ -43,7 +43,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     fun evaluate(stmt: Stmt): Any = stmt.evaluateBy(this)
 
     private fun concatOrAdd(left: Any, right: Any): Any {
-        if (isType(String, left, right)) {
+        if (isType<String>(left, right)) {
             return left as String + right as String
         }
         return left as Double + right as Double
@@ -60,7 +60,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             TokenType.STAR -> return left as Double * right as Double
             TokenType.EQUAL_EQUAL -> return left == right
             TokenType.AND -> {
-                if (isType(Boolean, left, right))
+                if (isType<Boolean>(left, right))
                     return left as Boolean && right as Boolean
             }
             TokenType.BANG_EQUAL -> return left != right
