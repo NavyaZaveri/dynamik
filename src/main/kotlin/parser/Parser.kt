@@ -210,5 +210,5 @@ fun List<Tok>.parse(): Expr {
 }
 
 fun main(args: Array<String>) {
-    "var x =3; while (x!=0) { x = x-1; print x;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+    "var x =3; while (x>0) { x = x-1; print x;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 }

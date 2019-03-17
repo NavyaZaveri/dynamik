@@ -1,8 +1,6 @@
 package expressions
 
-import interpreter.Rpn
 import scanner.Tok
-import scanner.TokenType
 
 
 abstract class Expr {

@@ -4,7 +4,6 @@ import expressions.Variable
 import expressions.VariableStatus
 import java.lang.RuntimeException
 
-
 class Environment {
     val idenitifierToValue = mutableMapOf<String, Variable>()
 
@@ -32,4 +31,9 @@ class Environment {
 
     fun get(name: String): Any =
         idenitifierToValue[name]?.value ?: throw RuntimeException("$name not found in current environment")
+
 }
+
+fun main(args: Array<String>) {
+}
+

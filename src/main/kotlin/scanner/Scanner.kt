@@ -13,19 +13,13 @@ class Scanner {
     companion object {
         private val tokenizer = buildTokenizer()
         private fun buildTokenizer(): DefaultTokenizer {
-            val tokens = mutableListOf<Token>()
-            for (nativeTokType in TokenType.values()) {
-                tokens.add(
-                    Token(
-                        nativeTokType.toString(), patternString = nativeTokType.regex.toString(),
-                        ignored = nativeTokType == TokenType.WHITESPACE
-                    )
-                )
+            val tokens = TokenType.values().map {
+                Token(it.toString(), patternString = it.regex.toString(), ignored = it == TokenType.WHITESPACE)
             }
             return DefaultTokenizer(tokens)
         }
     }
-    
+
     private fun wrapToNativeToken(tokenMatch: TokenMatch): Tok {
         for (nativeTokType in TokenType.values()) {
             if (tokenMatch.type.name == nativeTokType.toString()) {

@@ -19,24 +19,38 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         return Any()
     }
 
-    inline fun <reified T> isType(vararg objects: Any): Boolean = objects.all { it is T }
+    inline fun <reified T> isType(vararg objects: Any, throwException: Boolean = false): Boolean {
+        val allTypesMatch = objects.all { it is T }
+        if (allTypesMatch) {
+            return true
+        }
+        if (throwException) {
+            throw RuntimeException()
+        }
+        return false
+    }
 
     fun evaluateStmts(stmts: List<Stmt>): Unit = stmts.forEach { evaluate(it) }
 
     override fun visitVariableExpr(variableExpr: VariableExpr): Any = env.get(variableExpr.token.lexeme)
 
-    override fun visitVariableStmt(varStmt: VarStmt): Any =
+    override fun visitVariableStmt(varStmt: VarStmt) {
         env.define(varStmt.name.lexeme, evaluate(varStmt.expr), VariableStatus.VAR)
+    }
 
-    override fun visitValStmt(valStmt: ValStmt): Any =
+    override fun visitValStmt(valStmt: ValStmt) {
         env.define(valStmt.name.lexeme, evaluate(valStmt.expr), VariableStatus.VAL)
+    }
 
-    override fun visitAssignStmt(assignStmt: AssignStmt): Any =
+    override fun visitAssignStmt(assignStmt: AssignStmt) {
         env.assign(assignStmt.token.lexeme, evaluate(assignStmt.expr))
+    }
 
     override fun visitExpressionsStatement(exprStmt: ExprStmt): Any = evaluate(exprStmt.expr)
 
-    override fun visitPrintStmt(printStmt: PrintStmt): Unit = println("${evaluate(printStmt.expr)}")
+    override fun visitPrintStmt(printStmt: PrintStmt) {
+        println("${evaluate(printStmt.expr)}")
+    }
 
     fun evaluate(expr: Expr): Any = expr.evaluateBy(this)
 
@@ -49,6 +63,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         return left as Double + right as Double
     }
 
+
     override
     fun visitBinaryExpression(expr: BinaryExpr): Any {
         val left = evaluate(expr.left)
@@ -60,10 +75,19 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             TokenType.STAR -> return left as Double * right as Double
             TokenType.EQUAL_EQUAL -> return left == right
             TokenType.AND -> {
-                if (isType<Boolean>(left, right))
+                if (isType<Boolean>(left, right, throwException = true))
                     return left as Boolean && right as Boolean
             }
+            TokenType.AND_AND -> {
+                isType<Boolean>(left, right, throwException = true)
+                return left as Boolean && right as Boolean
+            }
             TokenType.BANG_EQUAL -> return left != right
+            TokenType.LESS -> return (left as Double) < (right as Double)
+            TokenType.LESS_EQUAL -> return (left as Double) <= (right as Double)
+            TokenType.GREATER -> return (left as Double) > (right as Double)
+            TokenType.GREATER_EQUAL -> return (left as Double) >= (right as Double)
+
         }
         throw RuntimeException("${expr.operand.type}  not recognized")
     }
