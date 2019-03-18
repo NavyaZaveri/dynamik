@@ -4,14 +4,13 @@ import expressions.Variable
 import expressions.VariableStatus
 import java.lang.RuntimeException
 
-class Environment {
-    val idenitifierToValue = mutableMapOf<String, Variable>()
+class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {
 
     fun define(name: String, value: Any, status: VariableStatus) {
         if (exists(name)) {
             throw RuntimeException("cannot redefine $name")
         }
-        idenitifierToValue[name] = Variable(status = status, value = value)
+        identifierToValue[name] = Variable(status = status, value = value)
     }
 
     fun assign(name: String, value: Any) {
@@ -21,19 +20,17 @@ class Environment {
         if (status(name) == VariableStatus.VAL) {
             throw RuntimeException("$name is a Val, cannot reassign.")
         }
-        idenitifierToValue[name] = Variable(value, VariableStatus.VAR)
+        identifierToValue[name] = Variable(value, VariableStatus.VAR)
     }
 
-    fun exists(name: String): Boolean = idenitifierToValue.containsKey(name)
+    fun exists(name: String): Boolean = identifierToValue.containsKey(name)
 
-    fun status(name: String): VariableStatus = idenitifierToValue[name]?.status
+    fun status(name: String): VariableStatus = identifierToValue[name]?.status
         ?: throw RuntimeException("$name does not exist in the current scope")
 
     fun get(name: String): Any =
-        idenitifierToValue[name]?.value ?: throw RuntimeException("$name not found in current environment")
+        identifierToValue[name]?.value ?: throw RuntimeException("$name not found in current environment")
 
 }
 
-fun main(args: Array<String>) {
-}
 
