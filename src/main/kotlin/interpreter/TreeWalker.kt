@@ -7,19 +7,49 @@ import scanner.Scanner
 import scanner.TokenType
 import scanner.tokenize
 
+class DynamikCallable(val closure: MutableMap<String, Variable>, val func: FnStmt) {
+    fun invoke(arguments: List<Any>, interpreter: TreeWalker) {
+        val env = Environment(closure)
+
+        //set up arguments
+        func.params.zip(arguments)
+            .forEach { (param, arg) -> env.define(param.lexeme, arg, status = VariableStatus.VAL) }
+
+        //now evaluate all statements against the function environment
+        interpreter.evaluateStmts(func.body, env = env)
+    }
+}
+
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
-    val env = Environment()
-    override fun visitWhileStatement(whileStmt: WhileStmt): Any {
+    var env = Environment()
+    override fun visitCallExpression(callExpr: CallExpr) {
+        //grab the callable
+
+        val callable = env.get(callExpr.funcName)
+        var args = callExpr.args.map { it.evaluateBy(this) }
+        val mainEnv = env
+        when (callable) {
+            is DynamikCallable -> callable.invoke(args, this)
+            else -> throw java.lang.RuntimeException("fwwpoaw")
+        }
+        this.env = mainEnv
+    }
+
+    override fun visitFnStatement(fnStmt: FnStmt) {
+        env.define(fnStmt.functionName.lexeme, DynamikCallable(mutableMapOf(), fnStmt), VariableStatus.VAL)
+    }
+
+    override fun visitWhileStatement(whileStmt: WhileStmt) {
         var condition = evaluate(whileStmt.expr)
         while (isType<Boolean>(condition) && condition as Boolean) {
             whileStmt.stmts.forEach { evaluate(it) }
             condition = evaluate(whileStmt.expr)
         }
-        return Any()
     }
 
     inline fun <reified T> isType(vararg objects: Any, throwException: Boolean = false): Boolean {
+
         val allTypesMatch = objects.all { it is T }
         if (allTypesMatch) {
             return true
@@ -30,7 +60,10 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         return false
     }
 
-    fun evaluateStmts(stmts: List<Stmt>): Unit = stmts.forEach { evaluate(it) }
+    fun evaluateStmts(stmts: List<Stmt>, env: Environment = this.env) {
+        this.env = env
+        stmts.forEach { evaluate(it) }
+    }
 
     override fun visitVariableExpr(variableExpr: VariableExpr): Any = env.get(variableExpr.token.lexeme)
 

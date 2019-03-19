@@ -8,6 +8,14 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
 
     abstract fun wrap(operand: String, vararg exprs: Expr): String
 
+    override fun visitFnStatement(fnStmt: FnStmt): String {
+        TODO()
+    }
+
+    override fun visitCallExpression(callExpr: CallExpr): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun visitWhileStatement(whileStmt: WhileStmt): String =
         "while " + prettyPrint(whileStmt.expr) + "{ " +
                 whileStmt.stmts.joinToString(

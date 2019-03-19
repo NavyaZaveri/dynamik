@@ -41,8 +41,9 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.PRINT -> return printStmt()
             TokenType.VAR -> return varStmt()
             TokenType.VAL -> return valStmt()
-            TokenType.IDENTIFIER -> return assignStmt()
+            TokenType.IDENTIFIER -> if (tokens[current + 1].type == TokenType.EQUAL) return assignStmt()
             TokenType.While -> return whileStatement()
+            TokenType.FN -> return fnStmt()
         }
         return exprStmt()
     }
@@ -86,6 +87,26 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
         val valueAssigned = expression()
         return VarStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
+    }
+
+    fun fnStmt(): Stmt {
+        consume(TokenType.FN)
+        val name = consume(TokenType.IDENTIFIER)
+        consume(TokenType.LEFT_PAREN)
+        var params = mutableListOf<Tok>()
+        while (!match(TokenType.RIGHT_PAREN)) {
+            val param = consume(TokenType.IDENTIFIER)
+            consume(TokenType.COMMA)
+            params.add(param)
+        }
+        consume(TokenType.RIGHT_PAREN)
+        consume(TokenType.LEFT_BRACE)
+        val body = mutableListOf<Stmt>()
+        while (!match(TokenType.RIGHT_BRACE)) {
+            body.add(stmt())
+        }
+        consume(TokenType.RIGHT_BRACE)
+        return FnStmt(name, params, body)
     }
 
     fun valStmt(): Stmt {
@@ -196,9 +217,25 @@ open class ExprParser(val tokens: List<Tok>) {
             consume(TokenType.RIGHT_PAREN)
             expr
         } else {
-            primary()
+            call()
         }
     }
+
+    fun call(): Expr {
+        val args = mutableListOf<Expr>()
+        if (match(TokenType.IDENTIFIER) && tokens[current + 1].type == TokenType.LEFT_PAREN) {
+            val name = consume(TokenType.IDENTIFIER)
+            consume(TokenType.LEFT_PAREN)
+            while (!match(TokenType.RIGHT_PAREN)) {
+                args.add(expression())
+                consume(TokenType.COMMA)
+            }
+            consume(TokenType.RIGHT_PAREN)
+            return CallExpr(name.lexeme, args = args)
+        }
+        return primary()
+    }
+
 }
 
 fun List<Tok>.parseStmts(): List<Stmt> {
@@ -210,5 +247,5 @@ fun List<Tok>.parse(): Expr {
 }
 
 fun main(args: Array<String>) {
-    "var x =3; while (x>0) { x = x-1; print x;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+    "fn stuff() {print 2; print 3;} stuff();".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 }

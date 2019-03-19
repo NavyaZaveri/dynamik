@@ -32,6 +32,13 @@ class VarStmt(val name: Tok, val expr: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitVariableStmt(this)
 }
 
+class FnStmt(val functionName: Tok, val params: List<Tok>, val body: List<Stmt>) : Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitFnStatement(this)
+    }
+
+}
+
 interface StatementVisitor<out T> {
     fun visitPrintStmt(printStmt: PrintStmt): T
     fun visitVariableStmt(varStmt: VarStmt): T
@@ -39,5 +46,6 @@ interface StatementVisitor<out T> {
     fun visitAssignStmt(assignStmt: AssignStmt): T
     fun visitExpressionsStatement(exprStmt: ExprStmt): T
     fun visitWhileStatement(whileStmt: WhileStmt): T
+    fun visitFnStatement(fnStmt: FnStmt): T
 }
 
