@@ -12,6 +12,10 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
         TODO()
     }
 
+    override fun visitIfStmt(ifStmt: IfStmt): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun visitCallExpression(callExpr: CallExpr): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -6,6 +6,7 @@ import parser.parseStmts
 import scanner.Scanner
 import scanner.TokenType
 import scanner.tokenize
+import java.lang.Exception
 
 class DynamikCallable(val closure: MutableMap<String, Variable>, val func: FnStmt) {
     fun invoke(arguments: List<Any>, interpreter: TreeWalker) {
@@ -22,6 +23,13 @@ class DynamikCallable(val closure: MutableMap<String, Variable>, val func: FnStm
 
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    override fun visitIfStmt(ifStmt: IfStmt) {
+        val condition = evaluate(ifStmt.condition)
+        if (isType<Boolean>(condition, throwException = true) && condition as Boolean) {
+            ifStmt.body.forEach { evaluate(it) }
+        }
+    }
+
     var env = Environment()
     override fun visitCallExpression(callExpr: CallExpr) {
         //grab the callable
@@ -49,13 +57,12 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     inline fun <reified T> isType(vararg objects: Any, throwException: Boolean = false): Boolean {
-
         val allTypesMatch = objects.all { it is T }
         if (allTypesMatch) {
             return true
         }
         if (throwException) {
-            throw RuntimeException()
+            throw RuntimeException("expecting ${T::class.java}")
         }
         return false
     }
@@ -120,8 +127,8 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             TokenType.LESS_EQUAL -> return (left as Double) <= (right as Double)
             TokenType.GREATER -> return (left as Double) > (right as Double)
             TokenType.GREATER_EQUAL -> return (left as Double) >= (right as Double)
-
         }
+
         throw RuntimeException("${expr.operand.type}  not recognized")
     }
 

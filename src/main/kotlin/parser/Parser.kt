@@ -44,8 +44,29 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.IDENTIFIER -> if (tokens[current + 1].type == TokenType.EQUAL) return assignStmt()
             TokenType.While -> return whileStatement()
             TokenType.FN -> return fnStmt()
+            TokenType.IF -> return ifStmt()
         }
         return exprStmt()
+    }
+
+    fun parseBody(): List<Stmt> {
+        consume(TokenType.LEFT_BRACE)
+        val body = mutableListOf<Stmt>()
+        while (!match(TokenType.RIGHT_BRACE)) {
+            body.add(stmt())
+        }
+        consume(TokenType.RIGHT_BRACE)
+        return body
+    }
+
+
+    private fun ifStmt(): Stmt {
+        consume(TokenType.IF)
+        consume(TokenType.LEFT_PAREN)
+        val condition = expression()
+        consume(TokenType.RIGHT_PAREN)
+        val body = parseBody()
+        return IfStmt(condition, body)
     }
 
     fun whileStatement(): Stmt {
@@ -53,14 +74,9 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         consume(TokenType.LEFT_PAREN)
         val cond = expression()
         consume(TokenType.RIGHT_PAREN)
-        consume(TokenType.LEFT_BRACE)
-        val stmts = mutableListOf<Stmt>()
-        while (!match(TokenType.RIGHT_BRACE)) {
-            stmts.add(stmt())
-        }
-        consume(TokenType.RIGHT_BRACE)
+        val body = parseBody()
 
-        return WhileStmt(cond, stmts)
+        return WhileStmt(cond, body)
     }
 
     fun printStmt(): Stmt {
@@ -100,12 +116,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             params.add(param)
         }
         consume(TokenType.RIGHT_PAREN)
-        consume(TokenType.LEFT_BRACE)
-        val body = mutableListOf<Stmt>()
-        while (!match(TokenType.RIGHT_BRACE)) {
-            body.add(stmt())
-        }
-        consume(TokenType.RIGHT_BRACE)
+        val body = parseBody()
         return FnStmt(name, params, body)
     }
 
@@ -221,6 +232,13 @@ open class ExprParser(val tokens: List<Tok>) {
         }
     }
 
+    fun consumeOptionally(wantedType: TokenType, doSthWith: (TokenType) -> Unit) {
+        if (match(wantedType)) {
+            consume(wantedType)
+            doSthWith(wantedType)
+        }
+    }
+
     fun call(): Expr {
         val args = mutableListOf<Expr>()
         if (match(TokenType.IDENTIFIER) && tokens[current + 1].type == TokenType.LEFT_PAREN) {
@@ -246,6 +264,14 @@ fun List<Tok>.parse(): Expr {
     return ExprParser(this).parse()
 }
 
+
 fun main(args: Array<String>) {
-    "fn stuff() {print 2; print 3;} stuff();".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+    ("fn stuff(b,c,) {" +
+            "print 2; print 3; fn thing(){ print 999;}\n" +
+            " var x =3; var y =100; thing();" +
+            " print x +y; while (x>=0) " +
+            "{ x = x-1;}" + "}" +
+            " stuff(20,30,);").tokenize()
+        .parseStmts()
+        .evaluateAllBy(TreeWalker())
 }
