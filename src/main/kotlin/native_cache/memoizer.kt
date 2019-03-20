@@ -1,47 +1,47 @@
 package native_cache
 
-class Memoizer<K, T, V> {
-    val map = mutableMapOf<T, V>()
+class Memoizer<C, K, V> {
+    private val cache = mutableMapOf<K, V>()
+    var hits = 0
 
-    fun curry(f: K.(T) -> V): K.(T) -> V {
+    fun curry(f: C.(K) -> V): C.(K) -> V {
         return { x ->
-            map.computeIfAbsent(x) { f(x) }
-            map[x]!!
+            cache.computeIfAbsent(x) { f(x).also { hits -= 1 } }
+            hits += 1
+            cache[x]!!
         }
     }
 }
 
-typealias  FuncName = String
-typealias  Arg = Any
-typealias Result = Any
 
-class Blah {
-    fun thing(funcStuff: Pair<FuncName, List<Arg>>): Any {
-        println("yello");
-        return 20
-    }
-
-    fun run() {
-
-        val func = Blah::thing.memoize()
-        var res = func(Pair("aa", mutableListOf()))
-        res = func(Pair("aa", mutableListOf()))
-    }
-
-    fun <K, T, V> (K.(T) -> V).memoize(): K.(T) -> V {
-        return Memoizer<K, T, V>().curry(this)
-    }
-
+fun <C, K, V> (C.(K) -> V).memoize(): C.(K) -> V {
+    return Memoizer<C, K, V>().curry(this)
 }
 
 
-fun stuff(n: Int): Int {
-    println("some sutff")
-    return 2;
+typealias FuncName = String
+typealias Arg = Any
+typealias Result = Any
+
+class Blah {
+    val func = Blah::thing.memoize()
+
+    fun thing(funcStuff: Pair<FuncName, List<Arg>>) {
+        println("helloe")
+    }
+
+    fun run(): Any {
+        /*
+        If the functionis nened to memo'd, 
+        return func(), otherwise just invoke
+        the callable i.e, thing  normally
+         */
+        return func(Pair("aa", mutableListOf()))
+    }
 }
 
 fun main(args: Array<String>) {
     val b = Blah()
     b.run()
-
+    b.run()
 }

@@ -32,7 +32,8 @@ class VarStmt(val name: Tok, val expr: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitVariableStmt(this)
 }
 
-class FnStmt(val functionName: Tok, val params: List<Tok>, val body: List<Stmt>) : Stmt() {
+class FnStmt(val functionName: Tok, val params: List<Tok>, val body: List<Stmt>, val memoize: Boolean = false) :
+    Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitFnStatement(this)
     }
@@ -42,8 +43,8 @@ class IfStmt(val condition: Expr, val body: List<Stmt>) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitIfStmt(this)
     }
-
 }
+
 
 interface StatementVisitor<out T> {
     fun visitPrintStmt(printStmt: PrintStmt): T

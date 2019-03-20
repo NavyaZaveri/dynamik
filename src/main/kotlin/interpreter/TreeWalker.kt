@@ -1,12 +1,23 @@
 package interpreter
 
 import expressions.*
+import native_cache.memoize
 import parser.StmtParser
 import parser.parseStmts
 import scanner.Scanner
 import scanner.TokenType
 import scanner.tokenize
 import java.lang.Exception
+
+interface Callable {
+    fun invoke(arguments: List<Any>, interpreter: TreeWalker): Any
+}
+
+class MemmizedCallable : Callable {
+    override fun invoke(arguments: List<Any>, interpreter: TreeWalker) {
+
+    }
+}
 
 class DynamikCallable(val closure: MutableMap<String, Variable>, val func: FnStmt) {
     fun invoke(arguments: List<Any>, interpreter: TreeWalker) {
@@ -18,6 +29,14 @@ class DynamikCallable(val closure: MutableMap<String, Variable>, val func: FnStm
 
         //now evaluate all statements against the function environment
         interpreter.evaluateStmts(func.body, env = env)
+    }
+}
+
+class MemoizedCallable(val closure: MutableMap<String, Variable>, val func: FnStmt) {
+    val c = MemoizedCallable::invoke.memoize()
+
+    fun invoke(args: List<Any>) {
+        return c(args)
     }
 }
 
@@ -33,7 +52,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
     override fun visitCallExpression(callExpr: CallExpr) {
         //grab the callable
-
         val callable = env.get(callExpr.funcName)
         var args = callExpr.args.map { it.evaluateBy(this) }
         val mainEnv = env
@@ -42,6 +60,10 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             else -> throw java.lang.RuntimeException("fwwpoaw")
         }
         this.env = mainEnv
+    }
+
+    fun runFunction() {
+
     }
 
     override fun visitFnStatement(fnStmt: FnStmt) {

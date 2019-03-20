@@ -1,13 +1,9 @@
 package scanner
 
-/*
-A scanner.Token is block
- */
 
 data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0)
 
 //The following tokentypes are ordered by precedence.
-
 enum class TokenType(val regex: Regex) {
 
     LEFT_PAREN("\\(".toRegex()),
