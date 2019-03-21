@@ -33,7 +33,12 @@ class DynamikCallable(val func: FnStmt) : Callable {
 }
 
 class MemoizedCallable(val func: FnStmt) : Callable {
-    val defaultCallable = DynamikCallable(func)
+
+    companion object {
+        val cache = mutableMapOf<Pair<FuncName, List<Arg>>, Any>()
+    }
+
+    val defaultCallable by lazy { DynamikCallable(func) }
 
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val funcKey = Pair(func.functionName.lexeme, arguments)
@@ -43,9 +48,6 @@ class MemoizedCallable(val func: FnStmt) : Callable {
         return defaultCallable.invoke(arguments, interpreter).also { cache[funcKey] = it }
     }
 
-    companion object {
-        val cache = mutableMapOf<Pair<FuncName, List<Arg>>, Any>()
-    }
 
     fun previouslyExecuted(args: List<Arg>, name: String): Boolean {
         return cache.contains(Pair(name, args))
