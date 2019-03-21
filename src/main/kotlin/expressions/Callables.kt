@@ -9,13 +9,17 @@ typealias Arg = Any
 
 
 interface Callable {
-    fun invoke(arguments: List<Any>, interpreter: TreeWalker): Any
+    fun invoke(arguments: List<Any>, interpreter: TreeWalker, env: Environment = Environment.new()): Any
 }
 
 
-class DynamikCallable(val closure: MutableMap<String, Variable>, val func: FnStmt) : Callable {
-    override fun invoke(arguments: List<Any>, interpreter: TreeWalker): Any {
-        val env = Environment(closure)
+class DynamikCallable(val func: FnStmt) : Callable {
+
+    override fun invoke(
+        arguments: List<Any>,
+        interpreter: TreeWalker,
+        env: Environment
+    ): Any {
 
         //set up arguments
         func.params.zip(arguments)
@@ -27,21 +31,15 @@ class DynamikCallable(val closure: MutableMap<String, Variable>, val func: FnStm
     }
 }
 
-class MemoizedCallable(val closure: MutableMap<String, Variable>, val func: FnStmt) : Callable {
-    val env = Environment(closure)
+class MemoizedCallable(val func: FnStmt) : Callable {
+    val defaultCallable = DynamikCallable(func)
 
-    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker): Any {
-        if (cache.contains(Pair(func.functionName.lexeme, arguments))) {
-            return cache[Pair(func.functionName.lexeme, arguments)]!!
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
+        val funcKey = Pair(func.functionName.lexeme, arguments)
+        if (cache.contains(funcKey)) {
+            return cache[funcKey]!!
         }
-
-        //set up arguments
-        func.params.zip(arguments)
-            .forEach { (param, arg) -> env.define(param.lexeme, arg, status = VariableStatus.VAL) }
-
-        //now evaluate all statements against the function environment
-        interpreter.evaluateStmts(func.body, env = env)
-        return Any()
+        return defaultCallable.invoke(arguments, interpreter).also { cache[funcKey] = it }
     }
 
     companion object {

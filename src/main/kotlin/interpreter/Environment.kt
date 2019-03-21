@@ -32,6 +32,11 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
     fun get(name: String): Any =
         identifierToValue[name]?.value ?: throw RuntimeException("$name not found in current environment")
 
+    companion object {
+        fun new(): Environment {
+            return Environment()
+        }
+    }
 }
 
 

@@ -27,8 +27,8 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     override fun visitFnStatement(fnStmt: FnStmt) {
         when (fnStmt.memoize) {
-            true -> env.define(fnStmt.functionName.lexeme, MemoizedCallable(mutableMapOf(), fnStmt), VariableStatus.VAL)
-            false -> env.define(fnStmt.functionName.lexeme, DynamikCallable(mutableMapOf(), fnStmt), VariableStatus.VAL)
+            true -> env.define(fnStmt.functionName.lexeme, MemoizedCallable(fnStmt), VariableStatus.VAL)
+            false -> env.define(fnStmt.functionName.lexeme, DynamikCallable(fnStmt), VariableStatus.VAL)
         }
     }
 
