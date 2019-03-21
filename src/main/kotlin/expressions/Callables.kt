@@ -10,16 +10,15 @@ typealias Arg = Any
 
 
 interface Callable {
-    fun invoke(arguments: List<Any>, interpreter: TreeWalker, env: Environment = Environment.new()): Any
+    fun invoke(arguments: List<Any>, interpreter: TreeWalker, env: Environment = Environment()): Any
 }
-
 
 class DynamikCallable(val func: FnStmt) : Callable {
 
     override fun invoke(args: List<Any>, interpreter: TreeWalker, env: Environment): Any {
 
         if (args.size != func.params.size) {
-            throw RuntimeException("${func.functionName.lexeme} takes ${func.params.size} args, supplied ${args.size}")
+            throw RuntimeException("${func.functionName.lexeme} takes ${func.params.size} args, supplied ${args.size}.")
         }
 
         //set up args
@@ -46,11 +45,6 @@ class MemoizedCallable(val func: FnStmt) : Callable {
             return cache[funcKey]!!
         }
         return defaultCallable.invoke(arguments, interpreter).also { cache[funcKey] = it }
-    }
-
-
-    fun previouslyExecuted(args: List<Arg>, name: String): Boolean {
-        return cache.contains(Pair(name, args))
     }
 }
 

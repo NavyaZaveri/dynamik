@@ -9,6 +9,8 @@ import scanner.tokenize
 
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    var env = Environment()
+
     override fun visitIfStmt(ifStmt: IfStmt) {
         val condition = evaluate(ifStmt.condition)
         if (isType<Boolean>(condition, throwException = true) && condition as Boolean) {
@@ -16,7 +18,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         }
     }
 
-    var env = Environment()
     override fun visitCallExpression(callExpr: CallExpr) {
         val callable = env.get(callExpr.funcName) as Callable
         val args = callExpr.args.map { it.evaluateBy(this) }

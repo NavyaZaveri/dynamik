@@ -270,8 +270,8 @@ fun List<Tok>.parse(): Expr {
 
 
 fun main(args: Array<String>) {
-    ("@memo fn stuff(a,b) {" +
-            "print 100;} stuff(30,30); stuff(30,30); ").tokenize()
+    ("@memo fn stuff(a,b) {val c =3;" +
+            "print c;} stuff(30,30); stuff(30,30); ").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }
