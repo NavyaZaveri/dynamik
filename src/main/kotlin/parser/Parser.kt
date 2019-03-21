@@ -112,10 +112,11 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         val name = consume(TokenType.IDENTIFIER)
         consume(TokenType.LEFT_PAREN)
         var params = mutableListOf<Tok>()
-        while (!match(TokenType.RIGHT_PAREN)) {
+        var argLeftToConsume = true
+        while (!match(TokenType.RIGHT_PAREN) && argLeftToConsume) {
             val param = consume(TokenType.IDENTIFIER)
             params.add(param)
-            consumeIfPresent(TokenType.COMMA)
+            val argLeftToConsume = consumeIfPresent(TokenType.COMMA)
         }
         consume(TokenType.RIGHT_PAREN)
         val body = parseBody()
@@ -270,7 +271,7 @@ fun List<Tok>.parse(): Expr {
 
 fun main(args: Array<String>) {
     ("@memo fn stuff(a,b) {" +
-            "print 100;} stuff(20,30); stuff(20,30); ").tokenize()
+            "print 100;} stuff(30,30); stuff(30,30); ").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }
