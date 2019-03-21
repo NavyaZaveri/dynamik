@@ -1,14 +1,11 @@
 package interpreter
 
 import expressions.*
-import native_cache.FuncName
-import native_cache.memoize
 import parser.StmtParser
 import parser.parseStmts
 import scanner.Scanner
 import scanner.TokenType
 import scanner.tokenize
-import java.lang.Exception
 
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
@@ -87,7 +84,10 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         if (isType<String>(left, right)) {
             return left as String + right as String
         }
-        return left as Double + right as Double
+        if (isType<Double>(left, right)) {
+            return left as Double + right as Double
+        }
+        throw RuntimeException("${Pair(left, right)}} need to be either Doubles or String")
     }
 
 
@@ -125,7 +125,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             TokenType.MINUS -> return -(l as Double)
             TokenType.BANG -> return !(l as Boolean)
         }
-        throw RuntimeException("could not evaluateAllBy ${expr.token.type} for unary $l")
+        throw RuntimeException("could not evaluate ${expr.token.type} for unary $l")
     }
 
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal

@@ -20,6 +20,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         if (status(name) == VariableStatus.VAL) {
             throw RuntimeException("$name is a Val, cannot reassign.")
         }
+
         identifierToValue[name] = Variable(value, VariableStatus.VAR)
     }
 

@@ -44,6 +44,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.IDENTIFIER -> if (tokens[current + 1].type == TokenType.EQUAL) return assignStmt()
             TokenType.While -> return whileStatement()
             TokenType.FN -> return fnStmt()
+            TokenType.Memo -> return fnStmt()
             TokenType.IF -> return ifStmt()
         }
         return exprStmt()
@@ -106,18 +107,19 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     }
 
     fun fnStmt(): Stmt {
+        val memoized = consumeIfPresent(TokenType.Memo)
         consume(TokenType.FN)
         val name = consume(TokenType.IDENTIFIER)
         consume(TokenType.LEFT_PAREN)
         var params = mutableListOf<Tok>()
         while (!match(TokenType.RIGHT_PAREN)) {
             val param = consume(TokenType.IDENTIFIER)
-            consume(TokenType.COMMA)
             params.add(param)
+            consumeIfPresent(TokenType.COMMA)
         }
         consume(TokenType.RIGHT_PAREN)
         val body = parseBody()
-        return FnStmt(name, params, body)
+        return FnStmt(name, params, body, memoized)
     }
 
     fun valStmt(): Stmt {
@@ -232,11 +234,12 @@ open class ExprParser(val tokens: List<Tok>) {
         }
     }
 
-    fun consumeOptionally(wantedType: TokenType, doSthWith: (TokenType) -> Unit) {
+    fun consumeIfPresent(wantedType: TokenType): Boolean {
         if (match(wantedType)) {
             consume(wantedType)
-            doSthWith(wantedType)
+            return true
         }
+        return false
     }
 
     fun call(): Expr {
@@ -246,7 +249,7 @@ open class ExprParser(val tokens: List<Tok>) {
             consume(TokenType.LEFT_PAREN)
             while (!match(TokenType.RIGHT_PAREN)) {
                 args.add(expression())
-                consume(TokenType.COMMA)
+                consumeIfPresent(TokenType.COMMA)
             }
             consume(TokenType.RIGHT_PAREN)
             return CallExpr(name.lexeme, args = args)
@@ -267,11 +270,11 @@ fun List<Tok>.parse(): Expr {
 
 fun main(args: Array<String>) {
     ("fn stuff(b,c,) {" +
-            "print 2; print 3; fn thing(){ print 999;}\n" +
+            "print 2; print 3; @memo fn thing(a, b){ print 999;}\n" +
             " var x =3; var y =100; thing();" +
             " print x +y; while (x>=0) " +
             "{ x = x-1;}" + "}" +
-            " stuff(20,30,);").tokenize()
+            " stuff(20,30);").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }
