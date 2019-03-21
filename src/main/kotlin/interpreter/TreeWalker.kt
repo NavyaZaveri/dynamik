@@ -1,6 +1,7 @@
 package interpreter
 
 import expressions.*
+import native_cache.FuncName
 import native_cache.memoize
 import parser.StmtParser
 import parser.parseStmts
@@ -8,37 +9,6 @@ import scanner.Scanner
 import scanner.TokenType
 import scanner.tokenize
 import java.lang.Exception
-
-interface Callable {
-    fun invoke(arguments: List<Any>, interpreter: TreeWalker): Any
-}
-
-class MemmizedCallable : Callable {
-    override fun invoke(arguments: List<Any>, interpreter: TreeWalker) {
-
-    }
-}
-
-class DynamikCallable(val closure: MutableMap<String, Variable>, val func: FnStmt) {
-    fun invoke(arguments: List<Any>, interpreter: TreeWalker) {
-        val env = Environment(closure)
-
-        //set up arguments
-        func.params.zip(arguments)
-            .forEach { (param, arg) -> env.define(param.lexeme, arg, status = VariableStatus.VAL) }
-
-        //now evaluate all statements against the function environment
-        interpreter.evaluateStmts(func.body, env = env)
-    }
-}
-
-class MemoizedCallable(val closure: MutableMap<String, Variable>, val func: FnStmt) {
-    val c = MemoizedCallable::invoke.memoize()
-
-    fun invoke(args: List<Any>) {
-        return c(args)
-    }
-}
 
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
@@ -51,23 +21,18 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     var env = Environment()
     override fun visitCallExpression(callExpr: CallExpr) {
-        //grab the callable
-        val callable = env.get(callExpr.funcName)
-        var args = callExpr.args.map { it.evaluateBy(this) }
+        val callable = env.get(callExpr.funcName) as Callable
+        val args = callExpr.args.map { it.evaluateBy(this) }
         val mainEnv = env
-        when (callable) {
-            is DynamikCallable -> callable.invoke(args, this)
-            else -> throw java.lang.RuntimeException("fwwpoaw")
-        }
+        callable.invoke(args, this)
         this.env = mainEnv
     }
 
-    fun runFunction() {
-
-    }
-
     override fun visitFnStatement(fnStmt: FnStmt) {
-        env.define(fnStmt.functionName.lexeme, DynamikCallable(mutableMapOf(), fnStmt), VariableStatus.VAL)
+        when (fnStmt.memoize) {
+            true -> env.define(fnStmt.functionName.lexeme, MemoizedCallable(mutableMapOf(), fnStmt), VariableStatus.VAL)
+            false -> env.define(fnStmt.functionName.lexeme, DynamikCallable(mutableMapOf(), fnStmt), VariableStatus.VAL)
+        }
     }
 
     override fun visitWhileStatement(whileStmt: WhileStmt) {
@@ -165,6 +130,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
 }
+
 
 fun main(args: Array<String>) {
     val toks = Scanner().tokenize("var d=4; d=d+1; val x =2; print (d+x); var s = \"hello\"; print s+\" world\"; ")
