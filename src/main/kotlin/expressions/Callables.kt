@@ -26,7 +26,11 @@ class DynamikCallable(val func: FnStmt) : Callable {
             .forEach { (param, arg) -> env.define(param.lexeme, arg, status = VariableStatus.VAL) }
 
         //now evaluate all statements against the function environment
-        interpreter.evaluateStmts(func.body, env = env)
+        try {
+            interpreter.evaluateStmts(func.body, env = env)
+        } catch (r: Return) {
+            return r.thingToReturn
+        }
         return Any()
     }
 }

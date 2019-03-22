@@ -39,6 +39,13 @@ class FnStmt(val functionName: Tok, val params: List<Tok>, val body: List<Stmt>,
     }
 }
 
+class ReturnStmt(val expression: Expr) : Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitReturnStatement(this)
+    }
+
+}
+
 class IfStmt(val condition: Expr, val body: List<Stmt>) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitIfStmt(this)
@@ -55,6 +62,6 @@ interface StatementVisitor<out T> {
     fun visitWhileStatement(whileStmt: WhileStmt): T
     fun visitFnStatement(fnStmt: FnStmt): T
     fun visitIfStmt(ifStmt: IfStmt): T
-
+    fun visitReturnStatement(returnStmt: ReturnStmt): T
 }
 

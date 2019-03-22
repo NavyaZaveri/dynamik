@@ -46,8 +46,20 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.FN -> return fnStmt()
             TokenType.Memo -> return fnStmt()
             TokenType.IF -> return ifStmt()
+            TokenType.RETURN -> return returnStmt()
         }
         return exprStmt()
+    }
+
+    fun returnStmt(): Stmt {
+        consume(TokenType.RETURN)
+        val emptyReturn = consumeIfPresent(TokenType.SEMICOLON) // return ;
+        var expr: Expr? = null
+        if (!emptyReturn) {
+            expr = expression()
+        }
+        consume(TokenType.SEMICOLON)
+        return ReturnStmt(expr!!)
     }
 
     fun parseBody(): List<Stmt> {
@@ -270,8 +282,15 @@ fun List<Tok>.parse(): Expr {
 
 
 fun main(args: Array<String>) {
-    ("@memo fn stuff(a,b) {val c =3;" +
-            "print c;} stuff(30,30); stuff(30,30); ").tokenize()
+    (" @memo fn stuff() {" +
+            "print \"hello\" ;" +
+            "return 20;" +
+            "}" +
+            "val c = stuff();" +
+            "print c; " +
+
+            "val d  = stuff();" +
+            "print d == c;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }

@@ -6,6 +6,10 @@ import expressions.*
 abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<String> {
     fun prettyPrint(expr: Expr): String = expr.evaluateBy(this)
 
+    override fun visitReturnStatement(returnStmt: ReturnStmt): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     abstract fun wrap(operand: String, vararg exprs: Expr): String
 
     override fun visitFnStatement(fnStmt: FnStmt): String {
