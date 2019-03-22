@@ -54,12 +54,11 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     fun returnStmt(): Stmt {
         consume(TokenType.RETURN)
         val emptyReturn = consumeIfPresent(TokenType.SEMICOLON) // return ;
-        var expr: Expr? = null
+        var stmt: Stmt? = null
         if (!emptyReturn) {
-            expr = expression()
+            stmt = stmt()
         }
-        consume(TokenType.SEMICOLON)
-        return ReturnStmt(expr!!)
+        return ReturnStmt(stmt!!)
     }
 
     fun parseBody(): List<Stmt> {
@@ -282,15 +281,13 @@ fun List<Tok>.parse(): Expr {
 
 
 fun main(args: Array<String>) {
-    (" @memo fn stuff() {" +
-            "print \"hello\" ;" +
-            "return 20;" +
+    ("  @memo fn fib(n) {" +
+            "if (n<=0) { return 1;}" +
+            " return  fib(n-1) + fib(n-2);" +
             "}" +
-            "val c = stuff();" +
-            "print c; " +
-
-            "val d  = stuff();" +
-            "print d == c;").tokenize()
+            "val c = fib(2);" +
+            "val d = fib(2);" +
+            "print c;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }

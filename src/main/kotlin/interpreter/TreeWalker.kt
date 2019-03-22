@@ -12,7 +12,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
 
     override fun visitReturnStatement(returnStmt: ReturnStmt): Any {
-        val result = evaluate(returnStmt.expression)
+        val result = evaluate(returnStmt.statement)
         throw Return(result)
     }
 
@@ -22,6 +22,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         if (isType<Boolean>(condition, throwException = true) && condition as Boolean) {
             ifStmt.body.forEach { evaluate(it) }
         }
+
     }
 
     override fun visitCallExpression(callExpr: CallExpr): Any {
@@ -40,7 +41,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     override fun visitWhileStatement(whileStmt: WhileStmt) {
         var condition = evaluate(whileStmt.expr)
-        while (isType<Boolean>(condition) && condition as Boolean) {
+        while (isType<Boolean>(condition)) {
             whileStmt.stmts.forEach { evaluate(it) }
             condition = evaluate(whileStmt.expr)
         }

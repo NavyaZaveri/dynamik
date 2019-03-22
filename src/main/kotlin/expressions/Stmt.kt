@@ -39,7 +39,7 @@ class FnStmt(val functionName: Tok, val params: List<Tok>, val body: List<Stmt>,
     }
 }
 
-class ReturnStmt(val expression: Expr) : Stmt() {
+class ReturnStmt(val statement: Stmt) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitReturnStatement(this)
     }

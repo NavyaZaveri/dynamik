@@ -23,15 +23,22 @@ class DynamikCallable(val func: FnStmt) : Callable {
 
         //set up args
         func.params.zip(args)
-            .forEach { (param, arg) -> env.define(param.lexeme, arg, status = VariableStatus.VAL) }
+            .forEach { (param, arg) ->
+                env.define(param.lexeme, arg, status = VariableStatus.VAR);
 
-        //now evaluate all statements against the function environment
-        try {
-            interpreter.evaluateStmts(func.body, env = env)
-        } catch (r: Return) {
-            return r.thingToReturn
-        }
+                //functions are global, put them into the local environment
+                interpreter.env.identifierToValue.filter { (k, variable) -> variable.value is Callable }
+                    .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
+
+                //now evaluate all statements against the function environment
+                try {
+                    interpreter.evaluateStmts(func.body, env = env)
+                } catch (r: Return) {
+                    return r.value
+                }
+            }
         return Any()
+
     }
 }
 
@@ -46,9 +53,10 @@ class MemoizedCallable(val func: FnStmt) : Callable {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val funcKey = Pair(func.functionName.lexeme, arguments)
         if (cache.contains(funcKey)) {
-            return cache[funcKey]!!
+            return cache[funcKey]!!.also { println("cache hit!") }
         }
         return defaultCallable.invoke(arguments, interpreter).also { cache[funcKey] = it }
     }
 }
+
 
