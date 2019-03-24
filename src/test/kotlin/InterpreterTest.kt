@@ -51,7 +51,7 @@ class InterpreterTest {
 
     @Test
     fun testRecursiveFibWithMemo() {
-        val stmts = (" f@memo n fib(n) {" +
+        val stmts = ("@memo fn fib(n) {" +
                 "if (n<2) { return 1;}" +
                 " return  fib(n-1) + fib(n-2);" +
                 "}" +
