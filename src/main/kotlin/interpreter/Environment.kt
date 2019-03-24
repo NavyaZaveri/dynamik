@@ -1,8 +1,11 @@
 package interpreter
 
+import expressions.Callable
 import expressions.Variable
 import expressions.VariableStatus
 import java.lang.RuntimeException
+import java.util.Map
+
 
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {
 
@@ -12,6 +15,11 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         }
         identifierToValue[name] = Variable(status = status, value = value)
     }
+
+    fun globals(): kotlin.collections.Map<String, Variable> {
+        return identifierToValue.filter { (k, v) -> v.value is Callable }
+    }
+
 
     fun assign(name: String, value: Any) {
         if (!exists(name)) {

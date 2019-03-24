@@ -27,7 +27,7 @@ class DynamikCallable(val func: FnStmt) : Callable {
                 env.define(param.lexeme, arg, status = VariableStatus.VAR);
 
                 //functions are global, put them into the local environment
-                interpreter.env.identifierToValue.filter { (k, variable) -> variable.value is Callable }
+                interpreter.env.globals()
                     .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
 
                 //now evaluate all statements against the function environment

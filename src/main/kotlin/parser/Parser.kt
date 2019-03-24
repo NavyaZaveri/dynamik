@@ -281,13 +281,14 @@ fun List<Tok>.parse(): Expr {
 
 
 fun main(args: Array<String>) {
-    ("  @memo fn fib(n) {" +
-            "if (n<=0) { return 1;}" +
+    (" @memo fn fib(n) {" +
+            "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
             "}" +
-            "val c = fib(2);" +
-            "val d = fib(2);" +
-            "print c;").tokenize()
+            "val c = fib(91);" +
+            "print \"got c\"; " +
+            "val d = fib(90);" +
+            "print d;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }

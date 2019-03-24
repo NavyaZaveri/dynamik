@@ -1,10 +1,13 @@
+import interpreter.Repl
 import interpreter.TreeWalker
+import interpreter.evaluateAllBy
 import org.junit.Test
 import parser.parse
 import parser.parseStmts
 import scanner.tokenize
 
 class InterpreterTest {
+    val repl = Repl()
 
     @Test
     fun testArithmetic() {
@@ -31,4 +34,32 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
+    @Test
+    fun testRecursiveFib() {
+        val stmts = (" fn fib(n) {" +
+                "if (n<2) { return 1;}" +
+                " return  fib(n-1) + fib(n-2);" +
+                "}" +
+                "val d = fib(3);" +
+                "d;").tokenize()
+            .parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 3.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+
+    @Test
+    fun testRecursiveFibWithMemo() {
+        val stmts = (" f@memo n fib(n) {" +
+                "if (n<2) { return 1;}" +
+                " return  fib(n-1) + fib(n-2);" +
+                "}" +
+                "val d = fib(3);" +
+                "d;").tokenize()
+            .parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 3.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
 }
