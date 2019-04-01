@@ -69,4 +69,6 @@ class InterpreterTest {
         val actual = repl.eval(stmts)
         val expected = 4.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+}
 
