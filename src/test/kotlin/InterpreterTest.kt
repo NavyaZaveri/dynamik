@@ -62,4 +62,11 @@ class InterpreterTest {
         val expected = 3.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
-}
+
+    @Test
+    fun testvariableReassignment() {
+        val stmts = "var x = 3; x= 4; x;".tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 4.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+

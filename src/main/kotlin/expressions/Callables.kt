@@ -24,7 +24,7 @@ class DynamikCallable(val func: FnStmt) : Callable {
         //set up args
         func.params.zip(args)
             .forEach { (param, arg) ->
-                env.define(param.lexeme, arg, status = VariableStatus.VAR);
+                env.define(param.lexeme, arg, status = VariableStatus.VAR)
 
                 //functions are global, put them into the local environment
                 interpreter.env.globals()

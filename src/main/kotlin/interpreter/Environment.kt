@@ -4,7 +4,6 @@ import expressions.Callable
 import expressions.Variable
 import expressions.VariableStatus
 import java.lang.RuntimeException
-import java.util.Map
 
 
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {
@@ -16,7 +15,8 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         identifierToValue[name] = Variable(status = status, value = value)
     }
 
-    fun globals(): kotlin.collections.Map<String, Variable> {
+    fun globals(): Map<String, Variable> {
+        //functions are global
         return identifierToValue.filter { (k, v) -> v.value is Callable }
     }
 
@@ -35,11 +35,49 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
     fun exists(name: String): Boolean = identifierToValue.containsKey(name)
 
     fun status(name: String): VariableStatus = identifierToValue[name]?.status
-        ?: throw RuntimeException("$name does not exist in the current scope")
+        ?: throw RuntimeException(
+            "$name does not exist in the current scope, did you mean ${cloestMatch(
+                name,
+                identifierToValue.keys
+            )}"
+        )
 
     fun get(name: String): Any =
         identifierToValue[name]?.value ?: throw RuntimeException("$name not found in current environment")
 
+    companion object {
+        fun cloestMatch(unknown: String, candidates: Set<String>): String {
+            return candidates.sortedBy { levenshtein(it, unknown) }[0]
+        }
+    }
+}
+
+fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
+    val lhsLength = lhs.length
+    val rhsLength = rhs.length
+
+    var cost = IntArray(lhsLength + 1) { it }
+    var newCost = IntArray(lhsLength + 1) { 0 }
+
+    for (i in 1..rhsLength) {
+        newCost[0] = i
+
+        for (j in 1..lhsLength) {
+            val editCost = if (lhs[j - 1] == rhs[i - 1]) 0 else 1
+
+            val costReplace = cost[j - 1] + editCost
+            val costInsert = cost[j] + 1
+            val costDelete = newCost[j - 1] + 1
+
+            newCost[j] = minOf(costInsert, costDelete, costReplace)
+        }
+
+        val swap = cost
+        cost = newCost
+        newCost = swap
+    }
+
+    return cost[lhsLength]
 }
 
 
