@@ -5,7 +5,6 @@ import expressions.Variable
 import expressions.VariableStatus
 import java.lang.RuntimeException
 
-
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {
 
     fun define(name: String, value: Any, status: VariableStatus) {
@@ -16,10 +15,9 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
     }
 
     fun globals(): Map<String, Variable> {
-        //functions are global
+        // functions are global
         return identifierToValue.filter { (k, v) -> v.value is Callable }
     }
-
 
     fun assign(name: String, value: Any) {
         if (!exists(name)) {
@@ -79,5 +77,3 @@ fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
 
     return cost[lhsLength]
 }
-
-

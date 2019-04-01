@@ -7,7 +7,6 @@ import scanner.Scanner
 import scanner.TokenType
 import scanner.tokenize
 
-
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
 
@@ -16,13 +15,11 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         throw Return(result)
     }
 
-
     override fun visitIfStmt(ifStmt: IfStmt) {
         val condition = evaluate(ifStmt.condition)
         if (isType<Boolean>(condition, throwException = true) && condition as Boolean) {
             ifStmt.body.forEach { evaluate(it) }
         }
-
     }
 
     override fun visitCallExpression(callExpr: CallExpr): Any {
@@ -97,7 +94,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         throw RuntimeException("${Pair(left, right)}} need to be either Doubles or String")
     }
 
-
     override
     fun visitBinaryExpression(expr: BinaryExpr): Any {
         val left = evaluate(expr.left)
@@ -138,7 +134,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
 }
 
-
 fun main(args: Array<String>) {
     val toks = Scanner().tokenize("var d=4; d=d+1; val x =2; print (d+x); var s = \"hello\"; print s+\" world\"; ")
     val ast = StmtParser(toks).parseStmts()
@@ -149,7 +144,3 @@ fun main(args: Array<String>) {
 fun <T> List<Stmt>.evaluateAllBy(evaluator: StatementVisitor<T>): Any {
     return this.forEach { it.evaluateBy(evaluator) }
 }
-
-
-
-

@@ -2,11 +2,9 @@ package expressions
 
 import scanner.Tok
 
-
 abstract class Expr {
     abstract fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T
 }
-
 
 class CallExpr(val funcName: String, val args: List<Expr>) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
@@ -52,7 +50,6 @@ class VariableExpr(val token: Tok) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitVariableExpr(this)
     }
-
 }
 
 class LiteralExpr(val token: Tok) : Expr() {
@@ -69,5 +66,3 @@ class LiteralExpr(val token: Tok) : Expr() {
         fun create(init: Builder.() -> Unit) = Builder().apply(init).build()
     }
 }
-
-

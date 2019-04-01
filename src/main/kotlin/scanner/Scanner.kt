@@ -5,7 +5,6 @@ import com.github.h0tk3y.betterParse.lexer.Token
 import com.github.h0tk3y.betterParse.lexer.TokenMatch
 import java.lang.RuntimeException
 
-
 class Scanner {
     fun tokenize(sourceCode: String): List<Tok> =
         tokenizer.tokenize(sourceCode).filter { !it.type.ignored }.map { wrapToNativeToken(it) }.toList()
@@ -44,7 +43,6 @@ class Scanner {
 fun String.tokenize(): List<Tok> {
     return Scanner().tokenize(this)
 }
-
 
 fun main(args: Array<String>) {
     val s = Scanner()

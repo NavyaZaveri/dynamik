@@ -21,7 +21,6 @@ class ParserTest {
         assertTrue("expected $expected, actual = $actual", expected == actual)
     }
 
-
     @Test
     fun testBracketPrecedence() {
         val srcCode = "(3+5)*4"

@@ -2,12 +2,11 @@ package interpreter
 
 import expressions.*
 
-
 abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<String> {
     fun prettyPrint(expr: Expr): String = expr.evaluateBy(this)
 
     override fun visitReturnStatement(returnStmt: ReturnStmt): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     abstract fun wrap(operand: String, vararg exprs: Expr): String
@@ -17,11 +16,11 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
     }
 
     override fun visitIfStmt(ifStmt: IfStmt): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun visitCallExpression(callExpr: CallExpr): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun visitWhileStatement(whileStmt: WhileStmt): String =
@@ -31,7 +30,6 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
                     postfix = "",
                     separator = "\n"
                 ) { it.evaluateBy(this) + ";" } + " }"
-
 
     override fun visitBinaryExpression(expr: BinaryExpr): String = wrap(expr.operand.lexeme, expr.left, expr.right)
 
@@ -43,7 +41,6 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
     override fun visitLiteralExpression(expr: LiteralExpr): String = expr.token.literal.toString()
 
     override fun visitUnaryExpression(expr: UnaryExpr): String = wrap(expr.token.lexeme, expr.left)
-
 
     override fun visitPrintStmt(printStmt: PrintStmt): String {
         return "print " + prettyPrint(printStmt.expr)
@@ -57,7 +54,7 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
     override fun visitExpressionsStatement(exprStmt: ExprStmt): String = prettyPrint(exprStmt.expr)
 }
 
-//A reversed polish notation based pretty printer
+// A reversed polish notation based pretty printer
 class Rpn : PrettyPrinter() {
     override fun wrap(operand: String, vararg exprs: Expr): String {
         var res = ""

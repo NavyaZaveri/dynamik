@@ -7,4 +7,3 @@ interface ExpressionVisitor<out T> {
     fun visitVariableExpr(variableExpr: VariableExpr): T
     fun visitCallExpression(callExpr: CallExpr): T
 }
-

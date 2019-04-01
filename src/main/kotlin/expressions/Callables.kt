@@ -4,10 +4,8 @@ import interpreter.Environment
 import interpreter.TreeWalker
 import java.lang.RuntimeException
 
-
 typealias FuncName = String
 typealias Arg = Any
-
 
 interface Callable {
     fun invoke(arguments: List<Any>, interpreter: TreeWalker, env: Environment = Environment()): Any
@@ -21,16 +19,16 @@ class DynamikCallable(val func: FnStmt) : Callable {
             throw RuntimeException("${func.functionName.lexeme} takes ${func.params.size} args, supplied ${args.size}.")
         }
 
-        //set up args
+        // set up args
         func.params.zip(args)
             .forEach { (param, arg) ->
                 env.define(param.lexeme, arg, status = VariableStatus.VAR)
 
-                //functions are global, put them into the local environment
+                // functions are global, put them into the local environment
                 interpreter.env.globals()
                     .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
 
-                //now evaluate all statements against the function environment
+                // now evaluate all statements against the function environment
                 try {
                     interpreter.evaluateStmts(func.body, env = env)
                 } catch (r: Return) {
@@ -38,7 +36,6 @@ class DynamikCallable(val func: FnStmt) : Callable {
                 }
             }
         return Any()
-
     }
 }
 
@@ -58,5 +55,3 @@ class MemoizedCallable(val func: FnStmt) : Callable {
         return defaultCallable.invoke(arguments, interpreter).also { cache[funcKey] = it }
     }
 }
-
-

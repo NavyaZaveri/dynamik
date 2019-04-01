@@ -14,7 +14,6 @@ class Repl {
     fun eval(statements: List<Stmt>): Any {
         val res = statements.map { eval(it) }
         return res[statements.size - 1]
-
     }
 }
 

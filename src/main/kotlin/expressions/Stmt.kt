@@ -43,7 +43,6 @@ class ReturnStmt(val statement: Stmt) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitReturnStatement(this)
     }
-
 }
 
 class IfStmt(val condition: Expr, val body: List<Stmt>) : Stmt() {
@@ -51,7 +50,6 @@ class IfStmt(val condition: Expr, val body: List<Stmt>) : Stmt() {
         return visitor.visitIfStmt(this)
     }
 }
-
 
 interface StatementVisitor<out T> {
     fun visitPrintStmt(printStmt: PrintStmt): T
@@ -64,4 +62,3 @@ interface StatementVisitor<out T> {
     fun visitIfStmt(ifStmt: IfStmt): T
     fun visitReturnStatement(returnStmt: ReturnStmt): T
 }
-

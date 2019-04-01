@@ -13,11 +13,9 @@ class Memoizer<C, K, V> {
     }
 }
 
-
 fun <C, K, V> (C.(K) -> V).memoize(): C.(K) -> V {
     return Memoizer<C, K, V>().curry(this)
 }
-
 
 typealias FuncName = String
 typealias Arg = Any

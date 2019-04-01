@@ -1,9 +1,8 @@
 package scanner
 
-
 data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0)
 
-//The following tokentypes are ordered by precedence.
+// The following tokentypes are ordered by precedence.
 enum class TokenType(val regex: Regex) {
 
     LEFT_PAREN("\\(".toRegex()),
@@ -28,9 +27,7 @@ enum class TokenType(val regex: Regex) {
     GREATER(">".toRegex()),
     LESS("<".toRegex()),
 
-
     COLON(";".toRegex()),
-
 
     STRING("\".*?\"".toRegex()),
 

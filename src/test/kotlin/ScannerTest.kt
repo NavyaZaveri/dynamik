@@ -3,10 +3,8 @@ import org.junit.Test
 import scanner.Scanner
 import scanner.TokenType
 
-
 class ScannerTest {
     private val s = Scanner()
-
 
     @Test
     fun testTruthTokenIdentification() {

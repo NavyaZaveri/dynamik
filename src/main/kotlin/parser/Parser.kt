@@ -71,7 +71,6 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return body
     }
 
-
     private fun ifStmt(): Stmt {
         consume(TokenType.IF)
         consume(TokenType.LEFT_PAREN)
@@ -140,7 +139,6 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         consume(TokenType.EQUAL)
         val valueAssigned = expression()
         return ValStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
-
     }
 }
 
@@ -175,8 +173,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return expr
     }
 
-
-    //matches against tbe single token and then advances
+    // matches against tbe single token and then advances
     private fun primary(): Expr {
         return when (tokens[current].type) {
             TokenType.NUMBER -> LiteralExpr(token = tokens[current])
@@ -200,7 +197,6 @@ open class ExprParser(val tokens: List<Tok>) {
         return tokens[current].also { current += 1 }
     }
 
-
     fun allTokensConsumed(): Boolean = current >= tokens.size
 
     fun match(vararg tokenTypes: TokenType): Boolean =
@@ -214,7 +210,6 @@ open class ExprParser(val tokens: List<Tok>) {
             expr = BinaryExpr(expr, operator, right)
         }
         return expr
-
     }
 
     fun multiplication(): Expr {
@@ -268,7 +263,6 @@ open class ExprParser(val tokens: List<Tok>) {
         }
         return primary()
     }
-
 }
 
 fun List<Tok>.parseStmts(): List<Stmt> {
@@ -278,7 +272,6 @@ fun List<Tok>.parseStmts(): List<Stmt> {
 fun List<Tok>.parse(): Expr {
     return ExprParser(this).parse()
 }
-
 
 fun main(args: Array<String>) {
     (" @memo fn fib(n) {" +
@@ -292,5 +285,3 @@ fun main(args: Array<String>) {
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }
-
-

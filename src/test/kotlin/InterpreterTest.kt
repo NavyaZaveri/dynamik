@@ -1,6 +1,5 @@
 import interpreter.Repl
 import interpreter.TreeWalker
-import interpreter.evaluateAllBy
 import org.junit.Test
 import parser.parse
 import parser.parseStmts
@@ -48,7 +47,6 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
-
     @Test
     fun testRecursiveFibWithMemo() {
         val stmts = ("@memo fn fib(n) {" +
@@ -71,4 +69,3 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 }
-
