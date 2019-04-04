@@ -47,18 +47,28 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.Memo -> return fnStmt()
             TokenType.IF -> return ifStmt()
             TokenType.RETURN -> return returnStmt()
+            TokenType.FOR -> return forStmt()
         }
         return exprStmt()
     }
 
     fun returnStmt(): Stmt {
         consume(TokenType.RETURN)
-        val emptyReturn = consumeIfPresent(TokenType.SEMICOLON) // return ;
+        val emptyReturn = consumeIfPresent(TokenType.SEMICOLON)
         var stmt: Stmt? = null
         if (!emptyReturn) {
             stmt = stmt()
         }
         return ReturnStmt(stmt!!)
+    }
+
+    fun forStmt(): Stmt {
+        consume(TokenType.FOR)
+        val init = exprStmt()
+        val cond = expression()
+        val intermediate = exprStmt()
+        val body = listOf(init) + parseBody() + listOf(intermediate)
+        return WhileStmt(cond, body)
     }
 
     fun parseBody(): List<Stmt> {
