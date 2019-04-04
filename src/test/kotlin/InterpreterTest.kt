@@ -62,10 +62,23 @@ class InterpreterTest {
     }
 
     @Test
-    fun testvariableReassignment() {
+    fun testVariableReassignment() {
         val stmts = "var x = 3; x= 4; x;".tokenize().parseStmts()
         val actual = repl.eval(stmts)
         val expected = 4.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
+
+    @Test
+    fun testSameVarNameInDifferentScopes() {
+        val stmts = ("fn hello() {" +
+                "val x = 3;}" +
+                "val x = 100;" +
+                "hello();" +
+                "x;").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 100.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
 }

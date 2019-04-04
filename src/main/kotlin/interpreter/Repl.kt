@@ -3,6 +3,8 @@ package interpreter
 import expressions.Stmt
 import parser.parseStmts
 import scanner.tokenize
+import java.lang.RuntimeException
+
 
 class Repl {
     val interpreter = TreeWalker()
@@ -15,10 +17,20 @@ class Repl {
         val res = statements.map { eval(it) }
         return res[statements.size - 1]
     }
-}
 
-fun main(args: Array<String>) {
-    val r = Repl()
-    val stmts = "val x = 3; x+1; x+2;".tokenize().parseStmts()
-    r.eval(stmts).also { println(it) }
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val repl = Repl()
+            while (true) {
+                print(">>")
+                try {
+                    readLine()!!.also { repl.eval(it.tokenize().parseStmts()) }.also { println(it) }
+                } catch (r: RuntimeException) {
+                    println(r.message)
+                }
+            }
+
+        }
+    }
 }

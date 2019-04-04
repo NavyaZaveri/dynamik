@@ -1,5 +1,6 @@
 package interpreter
 
+import errors.VariableNotInScope
 import expressions.Callable
 import expressions.Variable
 import expressions.VariableStatus
@@ -33,15 +34,21 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
     fun exists(name: String): Boolean = identifierToValue.containsKey(name)
 
     fun status(name: String): VariableStatus = identifierToValue[name]?.status
-        ?: throw RuntimeException(
+        ?: throw VariableNotInScope(
             "$name does not exist in the current scope, did you mean ${cloestMatch(
+                name,
+                identifierToValue.keys
+            )}?"
+        )
+
+    fun get(name: String): Any {
+        return identifierToValue[name]?.value ?: throw VariableNotInScope(
+            "$name does not exist, did you mean ${cloestMatch(
                 name,
                 identifierToValue.keys
             )}"
         )
-
-    fun get(name: String): Any =
-        identifierToValue[name]?.value ?: throw RuntimeException("$name not found in current environment")
+    }
 
     companion object {
         fun cloestMatch(unknown: String, candidates: Set<String>): String {

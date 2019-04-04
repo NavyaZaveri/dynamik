@@ -1,11 +1,7 @@
 package interpreter
 
 import expressions.*
-import parser.StmtParser
-import parser.parseStmts
-import scanner.Scanner
 import scanner.TokenType
-import scanner.tokenize
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
@@ -132,13 +128,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
-}
-
-fun main(args: Array<String>) {
-    val toks = Scanner().tokenize("var d=4; d=d+1; val x =2; print (d+x); var s = \"hello\"; print s+\" world\"; ")
-    val ast = StmtParser(toks).parseStmts()
-    TreeWalker().evaluateStmts(ast)
-    "var d=4; print 110;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 }
 
 fun <T> List<Stmt>.evaluateAllBy(evaluator: StatementVisitor<T>): Any {

@@ -40,6 +40,7 @@ class DynamikCallable(val func: FnStmt) : Callable {
 }
 
 class MemoizedCallable(val func: FnStmt) : Callable {
+    var hits = 0
 
     companion object {
         val cache = mutableMapOf<Pair<FuncName, List<Arg>>, Any>()
@@ -49,8 +50,9 @@ class MemoizedCallable(val func: FnStmt) : Callable {
 
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val funcKey = Pair(func.functionName.lexeme, arguments)
+
         if (cache.contains(funcKey)) {
-            return cache[funcKey]!!.also { println("cache hit!") }
+            return cache[funcKey]!!.also { println("cache hit!"); hits += 1 }
         }
         return defaultCallable.invoke(arguments, interpreter).also { cache[funcKey] = it }
     }

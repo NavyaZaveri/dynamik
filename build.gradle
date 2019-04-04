@@ -4,6 +4,11 @@ plugins {
 
 group 'com.me.shiny-interpreter'
 version '1.0-SNAPSHOT'
+apply plugin: 'application'
+apply plugin: 'kotlin'
+//mainClassName = "interpreter.Repl"
+
+
 
 repositories {
     mavenCentral()
