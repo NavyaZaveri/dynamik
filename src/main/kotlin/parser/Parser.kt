@@ -64,11 +64,14 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
     fun forStmt(): Stmt {
         consume(TokenType.FOR)
-        val init = exprStmt()
+        consume(TokenType.LEFT_PAREN)
+        val init = stmt()
         val cond = expression()
-        val intermediate = exprStmt()
-        val body = listOf(init) + parseBody() + listOf(intermediate)
-        return WhileStmt(cond, body)
+        consume(TokenType.SEMICOLON)
+        val intermediate = stmt()
+        consume(TokenType.RIGHT_PAREN)
+        val body = parseBody() + listOf(intermediate)
+        return ForStmt(init, cond, body)
     }
 
     fun parseBody(): List<Stmt> {
@@ -284,6 +287,8 @@ fun List<Tok>.parse(): Expr {
 }
 
 fun main(args: Array<String>) {
+
+    /*
     (" @memo fn fib(n) {" +
             "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
@@ -293,5 +298,9 @@ fun main(args: Array<String>) {
             "val d = fib(90);" +
             "print d;").tokenize()
         .parseStmts()
-        .evaluateAllBy(TreeWalker())
+        .evaluateAllBy(TreeWalker())*/
+
+    "var i = 0; for (i=0;i<5;i = i+1;) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+
+
 }
