@@ -3,7 +3,6 @@ package interpreter
 import expressions.Stmt
 import parser.parseStmts
 import scanner.tokenize
-import java.lang.RuntimeException
 
 
 class Repl {
@@ -11,6 +10,10 @@ class Repl {
 
     fun eval(statememt: Stmt): Any {
         return statememt.evaluateBy(interpreter)
+    }
+
+    fun eval(sourceCode: String): Any {
+        return this.eval(sourceCode.tokenize().parseStmts())
     }
 
     fun eval(statements: List<Stmt>): Any {
@@ -26,7 +29,7 @@ class Repl {
                 print(">>")
                 try {
                     readLine()!!.also { repl.eval(it.tokenize().parseStmts()) }.also { println(it) }
-                } catch (r: RuntimeException) {
+                } catch (r: Exception) {
                     println(r.message)
                 }
             }
