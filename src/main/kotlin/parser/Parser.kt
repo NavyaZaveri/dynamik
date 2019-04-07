@@ -1,5 +1,6 @@
 package parser
 
+import errors.InvalidToken
 import expressions.*
 import interpreter.TreeWalker
 import interpreter.evaluateAllBy
@@ -36,7 +37,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return stmt
     }
 
-    fun stmt(): Stmt {
+    private fun stmt(): Stmt {
         when (tokens[current].type) {
             TokenType.PRINT -> return printStmt()
             TokenType.VAR -> return varStmt()
@@ -52,7 +53,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return exprStmt()
     }
 
-    fun returnStmt(): Stmt {
+    private fun returnStmt(): Stmt {
         consume(TokenType.RETURN)
         val emptyReturn = consumeIfPresent(TokenType.SEMICOLON)
         var stmt: Stmt? = null
@@ -62,7 +63,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return ReturnStmt(stmt!!)
     }
 
-    fun forStmt(): Stmt {
+    private fun forStmt(): Stmt {
         consume(TokenType.FOR)
         consume(TokenType.LEFT_PAREN)
         val init = stmt()
@@ -74,7 +75,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return ForStmt(init, cond, body)
     }
 
-    fun parseBody(): List<Stmt> {
+    private fun parseBody(): List<Stmt> {
         consume(TokenType.LEFT_BRACE)
         val body = mutableListOf<Stmt>()
         while (!match(TokenType.RIGHT_BRACE)) {
@@ -93,7 +94,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return IfStmt(condition, body)
     }
 
-    fun whileStatement(): Stmt {
+    private fun whileStatement(): Stmt {
         consume(TokenType.While)
         consume(TokenType.LEFT_PAREN)
         val cond = expression()
@@ -103,24 +104,24 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return WhileStmt(cond, body)
     }
 
-    fun printStmt(): Stmt {
+    private fun printStmt(): Stmt {
         consume(TokenType.PRINT)
         val thingToPrint = expression()
         return PrintStmt(thingToPrint).also { consume(TokenType.SEMICOLON) }
     }
 
-    fun assignStmt(): Stmt {
+    private fun assignStmt(): Stmt {
         val id = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
         val valueAssigned = expression()
         return AssignStmt(id, valueAssigned).also { consume(TokenType.SEMICOLON) }
     }
 
-    fun exprStmt(): Stmt {
+    private fun exprStmt(): Stmt {
         return ExprStmt(expression()).also { consume(TokenType.SEMICOLON) }
     }
 
-    fun varStmt(): Stmt {
+    private fun varStmt(): Stmt {
         consume(TokenType.VAR)
         val name = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
@@ -129,7 +130,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return VarStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
     }
 
-    fun fnStmt(): Stmt {
+    private fun fnStmt(): Stmt {
         val memoized = consumeIfPresent(TokenType.Memo)
         consume(TokenType.FN)
         val name = consume(TokenType.IDENTIFIER)
@@ -146,7 +147,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return FnStmt(name, params, body, memoized)
     }
 
-    fun valStmt(): Stmt {
+    private fun valStmt(): Stmt {
         consume(TokenType.VAL)
         val name = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
@@ -194,7 +195,7 @@ open class ExprParser(val tokens: List<Tok>) {
             TokenType.IDENTIFIER -> VariableExpr(token = tokens[current])
             TokenType.TRUE -> LiteralExpr(token = tokens[current])
             TokenType.False -> LiteralExpr(token = tokens[current])
-            else -> throw RuntimeException("could not recognize ${tokens[current]}")
+            else -> throw InvalidToken("could not recognize ${tokens[current]}")
         }.also { advance() }
     }
 
@@ -282,13 +283,13 @@ fun List<Tok>.parseStmts(): List<Stmt> {
     return StmtParser(this).parseStmts()
 }
 
-fun List<Tok>.parse(): Expr {
+fun List<Tok>.parseExpr(): Expr {
     return ExprParser(this).parse()
 }
 
 fun main(args: Array<String>) {
 
-    /*
+
     (" @memo fn fib(n) {" +
             "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
@@ -298,8 +299,7 @@ fun main(args: Array<String>) {
             "val d = fib(90);" +
             "print d;").tokenize()
         .parseStmts()
-        .evaluateAllBy(TreeWalker())*/
-
+        .evaluateAllBy(TreeWalker())
     "var i = 0; for (i=0;i<5;i = i+1;) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 
 

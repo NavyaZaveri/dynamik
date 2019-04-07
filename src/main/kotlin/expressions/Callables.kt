@@ -1,11 +1,12 @@
 package expressions
 
+import errors.InvalidArgumentSize
 import interpreter.Environment
 import interpreter.TreeWalker
-import java.lang.RuntimeException
 
 typealias FuncName = String
 typealias Arg = Any
+typealias RetVal = Any
 
 interface Callable {
     fun invoke(arguments: List<Any>, interpreter: TreeWalker, env: Environment = Environment()): Any
@@ -13,10 +14,10 @@ interface Callable {
 
 class DynamikCallable(val func: FnStmt) : Callable {
 
-    override fun invoke(args: List<Any>, interpreter: TreeWalker, env: Environment): Any {
+    override fun invoke(args: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
 
         if (args.size != func.params.size) {
-            throw RuntimeException("${func.functionName.lexeme} takes ${func.params.size} args, supplied ${args.size}.")
+            throw InvalidArgumentSize("${func.functionName.lexeme} takes ${func.params.size} args, supplied ${args.size}.")
         }
 
         // set up args
@@ -28,7 +29,7 @@ class DynamikCallable(val func: FnStmt) : Callable {
                 interpreter.env.globals()
                     .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
 
-                // now evaluate all statements against the function environment
+                // now evaluate all statements against the environment supplied to the function
                 try {
                     interpreter.evaluateStmts(func.body, env = env)
                 } catch (r: Return) {
@@ -48,6 +49,10 @@ class MemoizedCallable(val func: FnStmt) : Callable {
 
     val defaultCallable by lazy { DynamikCallable(func) }
 
+    /**
+     * Invokes the callable if its result has not already been cached. Ohterwise the cache value
+     * value is returned
+     */
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val funcKey = Pair(func.functionName.lexeme, arguments)
 

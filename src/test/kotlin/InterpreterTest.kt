@@ -1,7 +1,7 @@
 import interpreter.Repl
 import interpreter.TreeWalker
 import org.junit.Test
-import parser.parse
+import parser.parseExpr
 import parser.parseStmts
 import scanner.tokenize
 
@@ -10,14 +10,14 @@ class InterpreterTest {
 
     @Test
     fun testArithmetic() {
-        val actual = "3+(5+6)*6".tokenize().parse().evaluateBy(TreeWalker())
+        val actual = "3+(5+6)*6".tokenize().parseExpr().evaluateBy(TreeWalker())
         val expected = 69.0
         assert(actual == expected) { "actual = $actual, expected=$expected" }
     }
 
     @Test
     fun testArithmeticWithTrickyBrackets() {
-        val actual = "5*(6+(3*1))".tokenize().parse().evaluateBy(TreeWalker())
+        val actual = "5*(6+(3*1))".tokenize().parseExpr ().evaluateBy(TreeWalker())
         val expected = 45.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }

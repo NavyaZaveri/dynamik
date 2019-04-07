@@ -1,5 +1,6 @@
 package interpreter
 
+import errors.ValError
 import errors.VariableNotInScope
 import expressions.Callable
 import expressions.Variable
@@ -23,10 +24,10 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
 
     fun assign(name: String, value: Any) {
         if (!exists(name)) {
-            throw RuntimeException("$name  is not defined in the current scope.")
+            throw VariableNotInScope("$name  is not defined in the current scope.")
         }
         if (status(name) == VariableStatus.VAL) {
-            throw RuntimeException("$name is a Val, cannot reassign.")
+            throw ValError("$name is a Val, cannot reassign.")
         }
 
         identifierToValue[name] = Variable(value, VariableStatus.VAR)
@@ -53,7 +54,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
 
     companion object {
         fun cloestMatch(unknown: String, candidates: Set<String>): String {
-            return candidates.sortedBy { levenshtein(it, unknown) }[0]
+            return candidates.maxBy { levenshtein(it, unknown) } ?: ""
         }
     }
 }

@@ -1,5 +1,6 @@
 package interpreter
 
+import errors.UnexpectedType
 import expressions.*
 import scanner.TokenType
 
@@ -47,7 +48,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             return true
         }
         if (throwException) {
-            throw RuntimeException("expecting ${T::class.java}")
+            throw UnexpectedType("expecting ${T::class.java}")
         }
         return false
     }
@@ -88,7 +89,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         if (isType<Double>(left, right)) {
             return left as Double + right as Double
         }
-        throw RuntimeException("${Pair(left, right)}} need to be either Doubles or String")
+        throw UnexpectedType("${Pair(left, right)}} need to be either Doubles or Strings")
     }
 
     override
@@ -117,7 +118,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             TokenType.GREATER_EQUAL -> return (left as Double) >= (right as Double)
         }
 
-        throw RuntimeException("${expr.operand.type}  not recognized")
+        throw UnexpectedType("${expr.operand.type}  not recognized")
     }
 
     override fun visitUnaryExpression(expr: UnaryExpr): Any {
@@ -126,7 +127,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             TokenType.MINUS -> return -(l as Double)
             TokenType.BANG -> return !(l as Boolean)
         }
-        throw RuntimeException("could not evaluate ${expr.token.type} for unary $l")
+        throw UnexpectedType("could not evaluate ${expr.token.type} for unary $l")
     }
 
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
