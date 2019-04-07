@@ -17,7 +17,7 @@ class InterpreterTest {
 
     @Test
     fun testArithmeticWithTrickyBrackets() {
-        val actual = "5*(6+(3*1))".tokenize().parseExpr ().evaluateBy(TreeWalker())
+        val actual = "5*(6+(3*1))".tokenize().parseExpr().evaluateBy(TreeWalker())
         val expected = 45.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
@@ -81,4 +81,11 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
+    @Test
+    fun testSideEffectInWhileLoop() {
+        val stmts = "var x =3; var y =1; while (x>0) { x =  x-1; y = y+1;} y;".tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 4.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
 }
