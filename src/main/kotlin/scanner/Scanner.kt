@@ -4,7 +4,6 @@ import com.github.h0tk3y.betterParse.lexer.DefaultTokenizer
 import com.github.h0tk3y.betterParse.lexer.Token
 import com.github.h0tk3y.betterParse.lexer.TokenMatch
 import errors.InvalidToken
-import java.lang.RuntimeException
 
 class Scanner {
     fun tokenize(sourceCode: String): List<Tok> =
@@ -19,7 +18,6 @@ class Scanner {
             return DefaultTokenizer(tokens)
         }
     }
-
 
     private fun wrapToNativeToken(tokenMatch: TokenMatch): Tok {
         for (nativeTokType in TokenType.values()) {

@@ -12,6 +12,7 @@ interface Callable {
     fun invoke(arguments: List<Any>, interpreter: TreeWalker, env: Environment = Environment()): Any
 }
 
+
 class DynamikCallable(val func: FnStmt) : Callable {
 
     override fun invoke(args: List<Arg>, interpreter: TreeWalker, env: Environment): Any {

@@ -69,7 +69,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         val init = stmt()
         val cond = expression()
         consume(TokenType.SEMICOLON)
-        val intermediate = stmt()
+        val intermediate = assignStmt(false)
         consume(TokenType.RIGHT_PAREN)
         val body = parseBody() + listOf(intermediate)
         return ForStmt(init, cond, body)
@@ -110,11 +110,11 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return PrintStmt(thingToPrint).also { consume(TokenType.SEMICOLON) }
     }
 
-    private fun assignStmt(): Stmt {
+    private fun assignStmt(consumeSemicolon: Boolean = true): Stmt {
         val id = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
         val valueAssigned = expression()
-        return AssignStmt(id, valueAssigned).also { consume(TokenType.SEMICOLON) }
+        return AssignStmt(id, valueAssigned).also { if (consumeSemicolon) consume(TokenType.SEMICOLON) }
     }
 
     private fun exprStmt(): Stmt {
@@ -289,7 +289,6 @@ fun List<Tok>.parseExpr(): Expr {
 
 fun main(args: Array<String>) {
 
-
     (" @memo fn fib(n) {" +
             "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
@@ -300,7 +299,5 @@ fun main(args: Array<String>) {
             "print d;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
-    "var i = 0; for (i=0;i<5;i = i+1;) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
-
-
+    "var i = 0; for (i=0;i<5;i = i+1) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 }

@@ -1,7 +1,6 @@
 package expressions
 
 import scanner.Tok
-import interpreter.TreeWalker
 
 abstract class Stmt {
     abstract fun <T> evaluateBy(visitor: StatementVisitor<T>): T
@@ -23,7 +22,7 @@ class WhileStmt(val expr: Expr, val stmts: List<Stmt>) : Stmt() {
 
 class ForStmt(val init: Stmt, val condition: Expr, val body: List<Stmt>) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        //desugaring into while loops
+        // desugaring into while loops
         init.evaluateBy(visitor)
         return WhileStmt(condition, body).evaluateBy(visitor)
     }

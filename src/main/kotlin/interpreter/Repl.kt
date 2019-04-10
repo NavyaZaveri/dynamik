@@ -1,9 +1,10 @@
 package interpreter
 
+import expressions.Return
 import expressions.Stmt
 import parser.parseStmts
 import scanner.tokenize
-
+import java.lang.Exception
 
 class Repl {
     val interpreter = TreeWalker()
@@ -21,7 +22,6 @@ class Repl {
         return res[statements.size - 1]
     }
 
-
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
@@ -29,7 +29,7 @@ class Repl {
             while (true) {
                 print(">>")
                 try {
-                    readLine()!!.also { repl.eval(it.tokenize().parseStmts()) }.also { println(it) }
+                    readLine()!!.also { repl.eval(it.tokenize().parseStmts()).also { println(it) } }
                 } catch (r: Exception) {
                     println(r.message)
                 }

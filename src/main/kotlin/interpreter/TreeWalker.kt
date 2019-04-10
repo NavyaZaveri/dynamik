@@ -19,7 +19,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         }
     }
 
-
     override fun visitCallExpression(callExpr: CallExpr): Any {
         val callable = env.get(callExpr.funcName) as Callable
         val args = callExpr.args.map { it.evaluateBy(this) }

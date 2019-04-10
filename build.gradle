@@ -6,7 +6,7 @@ group 'com.me.shiny-interpreter'
 version '1.0-SNAPSHOT'
 apply plugin: 'application'
 apply plugin: 'kotlin'
-//mainClassName = "interpreter.Repl"
+mainClassName = "interpreter.Repl"
 
 
 
@@ -26,7 +26,6 @@ dependencies {
     ktlint "com.github.shyiko:ktlint:0.31.0"
 
 
-
 }
 
 compileKotlin {
@@ -36,20 +35,6 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-task ktlint(type: JavaExec, group: "verification") {
-    description = "Check Kotlin code style."
-    main = "com.github.shyiko.ktlint.Main"
-    classpath = configurations.ktlint
-    args "src/**/*.kt"
-    // to generate report in checkstyle format prepend following args:
-    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
-    // see https://github.com/shyiko/ktlint#usage for more
-}
-check.dependsOn ktlint
-
-task ktlintFormat(type: JavaExec, group: "formatting") {
-    description = "Fix Kotlin code style deviations."
-    main = "com.github.shyiko.ktlint.Main"
-    classpath = configurations.ktlint
-    args "-F", "src/**/*.kt"
+run {
+    standardInput = System.in
 }
