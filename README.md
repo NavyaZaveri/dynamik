@@ -1,11 +1,23 @@
 # dynamik
 
-Inspired by ths simplicity of Lox, I thought abut creating a simple interpreter 
+Inspired by ths simplicity of Lox, Dynamik is a similar dynamically typed  language with additional features tacked on.  
 
 
 ### Features
 
-- [x] For-loops 
+- [x] Arithmetic Expressions 
 
-- [ ] 
+- [x] (Im)mutable bindings 
+
+- [x] If/Else
+
+- [x] For/While loops
+
+- [x] Functions 
+
+- [x] Built-in memoization 
+
+- [x] Type checks
+
+- [x] Repl
 
