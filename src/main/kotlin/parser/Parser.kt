@@ -140,7 +140,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         while (!match(TokenType.RIGHT_PAREN) && argLeftToConsume) {
             val param = consume(TokenType.IDENTIFIER)
             params.add(param)
-            val argLeftToConsume = consumeIfPresent(TokenType.COMMA)
+            argLeftToConsume = consumeIfPresent(TokenType.COMMA)
         }
         consume(TokenType.RIGHT_PAREN)
         val body = parseBody()
