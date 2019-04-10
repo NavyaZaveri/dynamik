@@ -51,7 +51,7 @@ class MemoizedCallable(val func: FnStmt) : Callable {
     val defaultCallable by lazy { DynamikCallable(func) }
 
     /**
-     * Invokes the callable if its result has not already been cached. Ohterwise the cache value
+     * Invokes the callable if its result has not already been cached. Otherwise the cache value
      * value is returned
      */
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {

@@ -15,6 +15,7 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected=$expected" }
     }
 
+
     @Test
     fun testArithmeticWithTrickyBrackets() {
         val actual = "5*(6+(3*1))".tokenize().parseExpr().evaluateBy(TreeWalker())
@@ -87,5 +88,17 @@ class InterpreterTest {
         val actual = repl.eval(stmts)
         val expected = 4.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testForLoopEquivalenceToWhileLoop() {
+        val stmts =
+            "var x =3; while (x>2) { x = x -1;} var y = 3; var i = 0;  for (i=0;i<1;i = i+1){ y = y-1; } x==y;"
+                .tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = true
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+
+
     }
 }

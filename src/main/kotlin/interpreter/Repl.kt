@@ -1,10 +1,8 @@
 package interpreter
 
-import expressions.Return
 import expressions.Stmt
 import parser.parseStmts
 import scanner.tokenize
-import java.lang.Exception
 
 class Repl {
     val interpreter = TreeWalker()
