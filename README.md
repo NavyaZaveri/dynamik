@@ -19,5 +19,9 @@ Inspired by ths simplicity of Lox, Dynamik is a similar dynamically typed  langu
 
 - [x] Type checks
 
+- [ ] Par statements 
+
+- [ ] Collections
+
 - [x] Repl
 
