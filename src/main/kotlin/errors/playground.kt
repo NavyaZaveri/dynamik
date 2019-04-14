@@ -18,7 +18,7 @@ open class Animal {
 
 
 object blah : Animal() {
-    val m = "off";
+    val m = "off"
     fun hello() {
         println(this.name)
         this.bark()
@@ -33,7 +33,9 @@ fun main() {
         blah.hello()
     }
 
-    runBlocking {
-
+    val x = runBlocking {
+        println("waiting")
+        10
     }
+    println(x)
 }

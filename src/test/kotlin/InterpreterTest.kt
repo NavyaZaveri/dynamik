@@ -115,14 +115,14 @@ class InterpreterTest {
     @Test
     fun testEnvironmentLeak() {
         val stmts = "fn foo() { val x = 2;} x;".tokenize().parseStmts()
-        var exceptionCaught = false
+        var leak = false
         try {
             repl.eval(stmts)
         } catch (v: VariableNotInScope) {
-            exceptionCaught = true
+            leak = true
         }
 
-        assert(exceptionCaught == true, { "environment leak not caught!" });
+        assert(leak) { "environment leak not caught!" };
 
     }
 }

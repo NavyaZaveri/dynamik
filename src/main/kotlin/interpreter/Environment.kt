@@ -51,7 +51,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
             "$name does not exist, did you mean ${cloestMatch(
                 name,
                 identifierToValue.keys
-            )}"
+            )}?"
         )
     }
 
