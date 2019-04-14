@@ -2,9 +2,19 @@ package interpreter
 
 import errors.UnexpectedType
 import expressions.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import scanner.TokenType
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    override fun visitParStatement(parStmt: ParStmt): Any {
+        GlobalScope.launch {
+            this@TreeWalker.evaluate(parStmt.callExpr)
+        }
+        return Any()
+    }
+
     var env = Environment()
 
     override fun visitReturnStatement(returnStmt: ReturnStmt): Any {

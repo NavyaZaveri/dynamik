@@ -5,6 +5,10 @@ import expressions.*
 abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<String> {
     fun prettyPrint(expr: Expr): String = expr.evaluateBy(this)
 
+    override fun visitParStatement(parStmt: ParStmt): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun visitReturnStatement(returnStmt: ReturnStmt): String {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
@@ -56,6 +60,7 @@ abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<Strin
 
 // A reversed polish notation based pretty printer
 class Rpn : PrettyPrinter() {
+
     override fun wrap(operand: String, vararg exprs: Expr): String {
         var res = ""
         for (expr in exprs) {

@@ -49,8 +49,18 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.IF -> return ifStmt()
             TokenType.RETURN -> return returnStmt()
             TokenType.FOR -> return forStmt()
+            TokenType.Par -> return parStmt()
         }
         return exprStmt()
+    }
+
+    private fun parStmt(): Stmt {
+        consume(TokenType.Par)
+        val callExpr = call()
+        when (callExpr) {
+            is CallExpr -> return ParStmt(callExpr).also { consume(TokenType.SEMICOLON) }
+            else -> throw RuntimeException("par needs to be followed by a function invocation.")
+        }
     }
 
     private fun returnStmt(): Stmt {
@@ -289,6 +299,7 @@ fun List<Tok>.parseExpr(): Expr {
 
 fun main(args: Array<String>) {
 
+    /*
     (" @memo fn fib(n) {" +
             "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
@@ -299,5 +310,9 @@ fun main(args: Array<String>) {
             "print d;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
-    "var i = 0; for (i=0;i<5;i = i+1) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+    "var i = 0; for (i=0;i<5;i = i+1) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())*/
+
+    "fn hello() { print 20;} par hello(); print 3; var i =0; for (i=0;i<1000;i = i+1) {} ".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+
+    //throws exceptions because
 }

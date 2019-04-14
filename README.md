@@ -1,11 +1,13 @@
 # dynamik
 
-Inspired by ths simplicity of Lox, Dynamik is a similar dynamically typed  language with additional features tacked on.  
+Dynamik is a dynamically typed language, written in Kotlin.   
 
 
 ### Features
 
-- [x] Arithmetic Expressions 
+- [X] Types - Strings/Doubles
+
+- [x] Arithmetic Expressions / String manipulation 
 
 - [x] (Im)mutable bindings 
 
@@ -21,7 +23,8 @@ Inspired by ths simplicity of Lox, Dynamik is a similar dynamically typed  langu
 
 - [ ] Par statements 
 
-- [ ] Collections
+- [ ] Collections (list, map)
 
 - [x] Repl
+
 

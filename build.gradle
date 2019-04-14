@@ -25,6 +25,9 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.4'
     ktlint "com.github.shyiko:ktlint:0.31.0"
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
+
+
 
 }
 

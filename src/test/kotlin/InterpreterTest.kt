@@ -99,6 +99,10 @@ class InterpreterTest {
         val expected = true
         assert(actual == expected) { "actual = $actual, expected = $expected" }
 
+    }
+
+    @Test
+    fun testEnvironmentLeak() {
 
     }
 }

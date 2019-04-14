@@ -16,6 +16,10 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         identifierToValue[name] = Variable(status = status, value = value)
     }
 
+    fun clone(): Environment {
+        return Environment(identifierToValue.toMutableMap())
+    }
+
     fun globals(): Map<String, Variable> {
         // functions are global
         return identifierToValue.filter { (_, v) -> v.value is Callable }

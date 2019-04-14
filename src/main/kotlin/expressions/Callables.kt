@@ -3,6 +3,7 @@ package expressions
 import errors.InvalidArgumentSize
 import interpreter.Environment
 import interpreter.TreeWalker
+import interpreter.Rpn
 
 typealias FuncName = String
 typealias Arg = Any
@@ -21,23 +22,25 @@ class DynamikCallable(val func: FnStmt) : Callable {
             throw InvalidArgumentSize("${func.functionName.lexeme} takes ${func.params.size} args, supplied ${args.size}.")
         }
 
+
         // set up args
         func.params.zip(args)
             .forEach { (param, arg) ->
                 env.define(param.lexeme, arg, status = VariableStatus.VAR)
-
-                // functions are global, put them into the local environment
-                interpreter.env.globals()
-                    .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
-
-                // now evaluate all statements against the environment supplied to the function
-                try {
-                    interpreter.evaluateStmts(func.body, env = env)
-                } catch (r: Return) {
-                    return r.value
-                }
             }
+
+        // functions are global, put them into the local environment
+        interpreter.env.globals()
+            .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
+
+        // now evaluate all statements against the environment supplied to the function
+        try {
+            interpreter.evaluateStmts(func.body, env = env)
+        } catch (r: Return) {
+            return r.value
+        }
         return Any()
+
     }
 }
 

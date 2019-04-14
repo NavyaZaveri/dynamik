@@ -59,6 +59,13 @@ class IfStmt(val condition: Expr, val body: List<Stmt>) : Stmt() {
     }
 }
 
+class ParStmt(val callExpr: CallExpr) : Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitParStatement(this)
+    }
+}
+
+
 interface StatementVisitor<out T> {
     fun visitPrintStmt(printStmt: PrintStmt): T
     fun visitVariableStmt(varStmt: VarStmt): T
@@ -69,4 +76,5 @@ interface StatementVisitor<out T> {
     fun visitFnStatement(fnStmt: FnStmt): T
     fun visitIfStmt(ifStmt: IfStmt): T
     fun visitReturnStatement(returnStmt: ReturnStmt): T
+    fun visitParStatement(parStmt: ParStmt): T
 }
