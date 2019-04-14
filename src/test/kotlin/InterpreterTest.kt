@@ -1,3 +1,4 @@
+import errors.VariableNotInScope
 import interpreter.Repl
 import interpreter.TreeWalker
 import org.junit.Test
@@ -113,6 +114,15 @@ class InterpreterTest {
 
     @Test
     fun testEnvironmentLeak() {
+        val stmts = "fn foo() { val x = 2;} x;".tokenize().parseStmts()
+        var exceptionCaught = false
+        try {
+            repl.eval(stmts)
+        } catch (v: VariableNotInScope) {
+            exceptionCaught = true
+        }
+
+        assert(exceptionCaught == true, { "environment leak not caught!" });
 
     }
 }

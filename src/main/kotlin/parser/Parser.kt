@@ -312,7 +312,7 @@ fun main(args: Array<String>) {
         .evaluateAllBy(TreeWalker())
     "var i = 0; for (i=0;i<5;i = i+1) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())*/
 
-    "fn hello() { print 20;} par hello(); print 3; var i =0; for (i=0;i<10;i = i+1) {} ".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+    "fn hello() { print 20;} par hello(); print 3; var i =0; for (i=0;i<10;i = i+1) {} ".tokenize().parseStmts()
+        .evaluateAllBy(TreeWalker())
 
-    //throws exceptions because
 }
