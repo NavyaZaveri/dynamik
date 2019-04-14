@@ -8,14 +8,15 @@ import kotlinx.coroutines.runBlocking
 import scanner.TokenType
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    var env = Environment()
+
     override fun visitParStatement(parStmt: ParStmt): Any {
         GlobalScope.launch {
-            this@TreeWalker.evaluate(parStmt.callExpr)
+            this@TreeWalker.visitCallExpression(parStmt.callExpr, true)
         }
         return Any()
     }
 
-    var env = Environment()
 
     override fun visitReturnStatement(returnStmt: ReturnStmt): Any {
         val result = evaluate(returnStmt.statement)
@@ -29,10 +30,23 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         }
     }
 
-    override fun visitCallExpression(callExpr: CallExpr): Any {
+    /*
+    Restore environent
+     */
+    override fun visitCallExpression(callExpr: CallExpr, par: Boolean): Any {
         val callable = env.get(callExpr.funcName) as Callable
         val args = callExpr.args.map { it.evaluateBy(this) }
         val mainEnv = env
+
+        if (par) {
+            val newInterpreter = TreeWalker()
+            this.env.globals()
+                .forEach { (k, v) -> newInterpreter.env.define(k, v.value, VariableStatus.VAL) }
+            return callable.invoke(args, newInterpreter)
+        }
+
+        //invokes the function with a new environment. After invocation, restores current evironment,
+        //since the interpreter executes the body of the callable with the new enivronment supplied.
         return callable.invoke(args, this).also { this.env = mainEnv }
     }
 

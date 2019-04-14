@@ -35,6 +35,16 @@ class InterpreterTest {
     }
 
     @Test
+    fun testReturn() {
+        val stmts = "fn foo() { return 20;} var d = foo(); d;".tokenize().parseStmts()
+        val repl = Repl()
+        val actual = repl.eval(stmts)
+        val expected = 20.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+
+    }
+
+    @Test
     fun testRecursiveFib() {
         val stmts = (" fn fib(n) {" +
                 "if (n<2) { return 1;}" +
