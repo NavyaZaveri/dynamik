@@ -3,7 +3,6 @@ package expressions
 import errors.InvalidArgumentSize
 import interpreter.Environment
 import interpreter.TreeWalker
-import interpreter.Rpn
 
 typealias FuncName = String
 typealias Arg = Any
@@ -19,6 +18,8 @@ class DynamikCallable(val func: FnStmt) : Callable {
 
     override fun invoke(args: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
 
+
+        //check args size
         if (args.size != func.params.size) {
             throw InvalidArgumentSize("${func.functionName.lexeme} takes ${func.params.size} args, supplied ${args.size}.")
         }

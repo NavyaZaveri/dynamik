@@ -8,24 +8,6 @@ import scanner.Tok
 import scanner.TokenType
 import scanner.tokenize
 
-/*
-expression     → assignment ;
-
-assignment     → ( call "." )? IDENTIFIER "=" assignment
-| logic_or;
-
-logic_or       → logic_and ( "or" logic_and )* ;
-logic_and      → equality ( "and" equality )* ;
-equality       → comparison ( ( "!=" | "==" ) comparison )* ;
-comparison     → addition ( ( ">" | ">=" | "<" | "<=" ) addition )* ;
-addition       → multiplication ( ( "-" | "+" ) multiplication )* ;
-multiplication → unary ( ( "/" | "*" ) unary )* ;
-
-unary          → ( "!" | "-" ) unary | call ;
-call           → primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
-primary        → "true" | "false" | "nil" | "this"
-| NUMBER | STRING | IDENTIFIER | "(" expression ")"
-| "super" "." IDENTIFIER ;*/
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
@@ -318,7 +300,7 @@ fun main(args: Array<String>) {
         .evaluateAllBy(TreeWalker())
     "var i = 0; for (i=0;i<5;i = i+1) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())*/
 
-    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}} par hello(); wait;  print 3;  ".tokenize()
+    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   } par hello(); wait;  print 3;  ".tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 

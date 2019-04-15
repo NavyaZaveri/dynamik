@@ -1,6 +1,6 @@
 # dynamik
 
-Dynamik is a dynamically typed language, written in Kotlin.   
+Dynamik is a toy dynamically typed language, written in Kotlin.   
 
 
 ### Features
@@ -9,9 +9,11 @@ Dynamik is a dynamically typed language, written in Kotlin.
 
 - [x] Arithmetic Expressions / String manipulation 
 
+- [ ] Code execution from .dy files 
+
 - [x] (Im)mutable bindings 
 
-- [x] If/Else
+- [x] If/Else statements
 
 - [x] For/While loops
 
@@ -21,10 +23,13 @@ Dynamik is a dynamically typed language, written in Kotlin.
 
 - [x] Type checks
 
-- [ ] Par statements 
+- [x] Par statements 
+
+- [x] Synchronization 
 
 - [ ] Collections (list, map)
 
 - [x] Repl
+
 
 
