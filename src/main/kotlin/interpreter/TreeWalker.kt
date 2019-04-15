@@ -10,9 +10,9 @@ import scanner.TokenType
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
 
-    /*
-    waits until all par functions invoked thus far have finished
-    running
+    /**
+    Waits until all par functions invoked thus far have finished
+    running.
      */
     override fun visitWaitStmt(waitStmt: WaitStmt): Any {
         return runBlocking { }
@@ -55,6 +55,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             val newInterpreter = TreeWalker()
             this.env.globals()
                 .forEach { (k, v) -> newInterpreter.env.define(k, v.value, VariableStatus.VAL) }
+
             return callable.invoke(args, newInterpreter)
         }
 
