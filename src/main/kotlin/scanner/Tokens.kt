@@ -49,6 +49,8 @@ enum class TokenType(val regex: Regex) {
     Par("par".toRegex()),
     While("while".toRegex()),
     Memo("@memo".toRegex()),
+    Wait("wait".toRegex()),
+
     IDENTIFIER("\\w+".toRegex()),
     EOF("[\r\n]+".toRegex()),
 }

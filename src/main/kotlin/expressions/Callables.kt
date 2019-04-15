@@ -9,6 +9,7 @@ typealias FuncName = String
 typealias Arg = Any
 typealias RetVal = Any
 
+
 interface Callable {
     fun invoke(arguments: List<Any>, interpreter: TreeWalker, env: Environment = Environment()): Any
 }

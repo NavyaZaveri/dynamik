@@ -5,6 +5,10 @@ import expressions.*
 abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<String> {
     fun prettyPrint(expr: Expr): String = expr.evaluateBy(this)
 
+    override fun visitWaitStmt(waitStmt: WaitStmt): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun visitParStatement(parStmt: ParStmt): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

@@ -50,8 +50,14 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.RETURN -> return returnStmt()
             TokenType.FOR -> return forStmt()
             TokenType.Par -> return parStmt()
+            TokenType.Wait -> return waitStmt()
         }
         return exprStmt()
+    }
+
+    private fun waitStmt(): Stmt {
+        consume(TokenType.Wait)
+        return WaitStmt().also { consume(TokenType.SEMICOLON) }
     }
 
     private fun parStmt(): Stmt {
@@ -312,7 +318,8 @@ fun main(args: Array<String>) {
         .evaluateAllBy(TreeWalker())
     "var i = 0; for (i=0;i<5;i = i+1) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())*/
 
-    "fn hello() { print 20;} par hello(); print 3; var i =0; for (i=0;i<10;i = i+1) {} ".tokenize().parseStmts()
+    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}} par hello(); wait;  print 3;  ".tokenize()
+        .parseStmts()
         .evaluateAllBy(TreeWalker())
 
 }

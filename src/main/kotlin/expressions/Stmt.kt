@@ -65,6 +65,12 @@ class ParStmt(val callExpr: CallExpr) : Stmt() {
     }
 }
 
+class WaitStmt : Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitWaitStmt(this)
+    }
+}
+
 
 interface StatementVisitor<out T> {
     fun visitPrintStmt(printStmt: PrintStmt): T
@@ -77,4 +83,5 @@ interface StatementVisitor<out T> {
     fun visitIfStmt(ifStmt: IfStmt): T
     fun visitReturnStatement(returnStmt: ReturnStmt): T
     fun visitParStatement(parStmt: ParStmt): T
+    fun visitWaitStmt(waitStmt: WaitStmt): T
 }

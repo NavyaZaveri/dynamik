@@ -10,6 +10,14 @@ import scanner.TokenType
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
 
+    /*
+    waits until all par functions invoked thus far have finished
+    running
+     */
+    override fun visitWaitStmt(waitStmt: WaitStmt): Any {
+        return runBlocking { }
+    }
+
     override fun visitParStatement(parStmt: ParStmt): Any {
         GlobalScope.launch {
             this@TreeWalker.visitCallExpression(parStmt.callExpr, true)
@@ -30,14 +38,19 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         }
     }
 
-    /*
-    Restore environent
+    /* Calls a function, with arguments passed by value.
      */
     override fun visitCallExpression(callExpr: CallExpr, par: Boolean): Any {
         val callable = env.get(callExpr.funcName) as Callable
         val args = callExpr.args.map { it.evaluateBy(this) }
         val mainEnv = env
 
+
+        /** If the function needs to spawned in parallel, simply invoke the
+        function against a *new* interpreter instance. So each par function has
+        its own fresh environment, thus  ensuring the environment belonging to the
+        main sequential thread can never be overwritten/reassigned.
+         */
         if (par) {
             val newInterpreter = TreeWalker()
             this.env.globals()
@@ -45,8 +58,9 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             return callable.invoke(args, newInterpreter)
         }
 
-        //invokes the function with a new environment. After invocation, restores current evironment,
-        //since the interpreter executes the body of the callable with the new enivronment supplied.
+        /** Invokes the function with a new environment. .
+         * The original environment is preserved  and assigned to `env` when the function ends.
+         */
         return callable.invoke(args, this).also { this.env = mainEnv }
     }
 
@@ -156,6 +170,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
 }
 
-fun <T> List<Stmt>.evaluateAllBy(evaluator: StatementVisitor<T>): Any {
+fun List<Stmt>.evaluateAllBy(evaluator: StatementVisitor<*>): Any {
     return this.forEach { it.evaluateBy(evaluator) }
 }
