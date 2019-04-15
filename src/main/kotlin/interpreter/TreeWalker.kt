@@ -48,7 +48,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
         /** If the function needs to spawned in parallel, simply invoke the
         function against a *new* interpreter instance. So each par function has
-        its own fresh environment, thus  ensuring the environment belonging to the
+        its own fresh environment, ensuring the environment belonging to the
         main sequential thread can never be overwritten/reassigned.
          */
         if (par) {
