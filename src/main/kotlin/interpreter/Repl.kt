@@ -1,5 +1,7 @@
 package interpreter
 
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.option
 import expressions.Stmt
 import parser.parseStmts
 import scanner.tokenize
@@ -22,7 +24,7 @@ class Repl {
 
     companion object {
         @JvmStatic
-        fun main(args: Array<String>) {
+        fun run() {
             val repl = Repl()
             while (true) {
                 print(">>")

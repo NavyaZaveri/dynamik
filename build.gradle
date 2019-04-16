@@ -19,7 +19,7 @@ apply plugin: 'kotlin'
 apply plugin: 'java'
 
 
-mainClassName = "interpreter.Repl"
+mainClassName = "interpreter.MainEntryKt"
 
 repositories {
     mavenCentral()
@@ -60,6 +60,6 @@ run {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'interpreter.Repl'
+        attributes 'Main-Class': 'interpreter.MainEntryKt'
     }
 }
