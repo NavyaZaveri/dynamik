@@ -63,7 +63,7 @@ class MemoizedCallable(val func: FnStmt) : Callable {
         val funcKey = Pair(func.functionName.lexeme, arguments)
 
         if (cache.contains(funcKey)) {
-            return cache[funcKey]!!.also { println("cache hit!"); hits += 1 }
+            return cache[funcKey]!!.also { /* println("cache hit!"); */ hits += 1 }
         }
         return defaultCallable.invoke(arguments, interpreter).also { cache[funcKey] = it }
     }

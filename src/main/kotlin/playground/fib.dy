@@ -1,3 +1,8 @@
-fn hello() {
-  print "hello";
+@memo
+fn fib(n) {
+    if (n<2) { return 1;}
+    return fib(n-1) + fib(n-2);
 }
+
+val res = fib(10);
+print(res);
