@@ -7,7 +7,7 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 
 - [X] Types - Strings/Doubles
 
-- [x] Arithmetic Expressions / String manipulation 
+- [x] Arithmetic Expressions 
 
 - [ ] Code execution from .dy files 
 
@@ -30,6 +30,12 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 - [x] Synchronization with wait 
 
 - [ ] Collections (list, map)
+
+- [ ] Importing file scopes
+
+- [ ] Read/Write to files 
+
+- [ ] Builtin timer
 
 - [x] Repl
 
