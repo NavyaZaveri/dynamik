@@ -1,16 +1,22 @@
-import com.github.NavyaZaveri.dynamik.interpreter.Rpn
+import com.github.navyazaveri.dynamik.interpreter.Rpn
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import com.github.NavyaZaveri.dynamik.expressions.BinaryExpr
-import com.github.NavyaZaveri.dynamik.expressions.LiteralExpr
-import com.github.NavyaZaveri.dynamik.scanner.Tok
-import com.github.NavyaZaveri.dynamik.scanner.TokenType
+import com.github.navyazaveri.dynamik.expressions.BinaryExpr
+import com.github.navyazaveri.dynamik.expressions.LiteralExpr
+import com.github.navyazaveri.dynamik.scanner.Tok
+import com.github.navyazaveri.dynamik.scanner.TokenType
 
 class PrettyPrinterTest {
     val rpn = Rpn()
     @Test
     fun testValidInterpretationForLiterals() {
-        val expr = LiteralExpr.create { token = Tok(TokenType.NUMBER, "3", 3.0) }
+        val expr = LiteralExpr.create { token =
+                Tok(
+                    TokenType.NUMBER,
+                    "3",
+                    3.0
+                )
+        }
         val expected = "3.0"
         val actual = rpn.prettyPrint(expr)
         assertTrue("expected = $expected, actual = $actual", expected == actual)
@@ -19,9 +25,25 @@ class PrettyPrinterTest {
     @Test
     fun testValidInterpretationForBinaryExprs() {
         val expr = BinaryExpr.create {
-            left = LiteralExpr.create { token = Tok(TokenType.NUMBER, "5", 5.0) }
-            operand = Tok(TokenType.PLUS, "+", "+")
-            right = LiteralExpr.create { token = Tok(TokenType.NUMBER, "6", 6.0) }
+            left = LiteralExpr.create { token =
+                    Tok(
+                        TokenType.NUMBER,
+                        "5",
+                        5.0
+                    )
+            }
+            operand = Tok(
+                TokenType.PLUS,
+                "+",
+                "+"
+            )
+            right = LiteralExpr.create { token =
+                    Tok(
+                        TokenType.NUMBER,
+                        "6",
+                        6.0
+                    )
+            }
         }
         val expected = "5.0 6.0 +"
         val actual = rpn.prettyPrint(expr)

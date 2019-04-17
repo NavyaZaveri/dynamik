@@ -1,6 +1,6 @@
-package com.github.NavyaZaveri.dynamik.expressions
+package com.github.navyazaveri.dynamik.expressions
 
-import com.github.NavyaZaveri.dynamik.scanner.Tok
+import com.github.navyazaveri.dynamik.scanner.Tok
 
 abstract class Stmt {
     abstract fun <T> evaluateBy(visitor: StatementVisitor<T>): T

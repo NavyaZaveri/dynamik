@@ -1,10 +1,10 @@
-package com.github.NavyaZaveri.dynamik.interpreter
+package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import parser.parseStmts
-import com.github.NavyaZaveri.dynamik.scanner.tokenize
+import com.github.navyazaveri.dynamik.scanner.tokenize
 import java.io.File
 
 class CommandLineParser : CliktCommand() {

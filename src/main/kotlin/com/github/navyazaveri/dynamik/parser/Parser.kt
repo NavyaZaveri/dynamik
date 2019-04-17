@@ -1,12 +1,13 @@
 package parser
 
-import com.github.NavyaZaveri.dynamik.errors.InvalidToken
+import com.github.navyazaveri.dynamik.errors.InvalidToken
 import com.github.NavyaZaveri.dynamik.expressions.*
-import com.github.NavyaZaveri.dynamik.interpreter.TreeWalker
-import com.github.NavyaZaveri.dynamik.interpreter.evaluateAllBy
-import com.github.NavyaZaveri.dynamik.scanner.Tok
-import com.github.NavyaZaveri.dynamik.scanner.TokenType
-import com.github.NavyaZaveri.dynamik.scanner.tokenize
+import com.github.navyazaveri.dynamik.expressions.*
+import com.github.navyazaveri.dynamik.interpreter.TreeWalker
+import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
+import com.github.navyazaveri.dynamik.scanner.Tok
+import com.github.navyazaveri.dynamik.scanner.TokenType
+import com.github.navyazaveri.dynamik.scanner.tokenize
 
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
@@ -39,14 +40,17 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
     private fun waitStmt(): Stmt {
         consume(TokenType.Wait)
-        return WaitStmt().also { consume(TokenType.SEMICOLON) }
+        return WaitStmt()
+            .also { consume(TokenType.SEMICOLON) }
     }
 
     private fun parStmt(): Stmt {
         consume(TokenType.Par)
         val callExpr = call()
         when (callExpr) {
-            is CallExpr -> return ParStmt(callExpr).also { consume(TokenType.SEMICOLON) }
+            is CallExpr -> return ParStmt(
+                callExpr
+            ).also { consume(TokenType.SEMICOLON) }
             else -> throw RuntimeException("par needs to be followed by a function invocation.")
         }
     }
@@ -105,18 +109,21 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     private fun printStmt(): Stmt {
         consume(TokenType.PRINT)
         val thingToPrint = expression()
-        return PrintStmt(thingToPrint).also { consume(TokenType.SEMICOLON) }
+        return PrintStmt(thingToPrint)
+            .also { consume(TokenType.SEMICOLON) }
     }
 
     private fun assignStmt(consumeSemicolon: Boolean = true): Stmt {
         val id = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
         val valueAssigned = expression()
-        return AssignStmt(id, valueAssigned).also { if (consumeSemicolon) consume(TokenType.SEMICOLON) }
+        return AssignStmt(id, valueAssigned)
+            .also { if (consumeSemicolon) consume(TokenType.SEMICOLON) }
     }
 
     private fun exprStmt(): Stmt {
-        return ExprStmt(expression()).also { consume(TokenType.SEMICOLON) }
+        return ExprStmt(expression())
+            .also { consume(TokenType.SEMICOLON) }
     }
 
     private fun varStmt(): Stmt {
@@ -125,7 +132,8 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         consume(TokenType.EQUAL)
 
         val valueAssigned = expression()
-        return VarStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
+        return VarStmt(name, valueAssigned)
+            .also { consume(TokenType.SEMICOLON) }
     }
 
     private fun fnStmt(): Stmt {
@@ -150,7 +158,8 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         val name = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
         val valueAssigned = expression()
-        return ValStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
+        return ValStmt(name, valueAssigned)
+            .also { consume(TokenType.SEMICOLON) }
     }
 }
 
@@ -188,11 +197,21 @@ open class ExprParser(val tokens: List<Tok>) {
     // matches against tbe single token and then advances
     private fun primary(): Expr {
         return when (tokens[current].type) {
-            TokenType.NUMBER -> LiteralExpr(token = tokens[current])
-            TokenType.STRING -> LiteralExpr(token = tokens[current])
-            TokenType.IDENTIFIER -> VariableExpr(token = tokens[current])
-            TokenType.TRUE -> LiteralExpr(token = tokens[current])
-            TokenType.False -> LiteralExpr(token = tokens[current])
+            TokenType.NUMBER -> LiteralExpr(
+                token = tokens[current]
+            )
+            TokenType.STRING -> LiteralExpr(
+                token = tokens[current]
+            )
+            TokenType.IDENTIFIER -> VariableExpr(
+                token = tokens[current]
+            )
+            TokenType.TRUE -> LiteralExpr(
+                token = tokens[current]
+            )
+            TokenType.False -> LiteralExpr(
+                token = tokens[current]
+            )
             else -> throw InvalidToken("could not recognize ${tokens[current]}")
         }.also { advance() }
     }

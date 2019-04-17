@@ -1,10 +1,10 @@
 package interpreter
 
-import com.github.NavyaZaveri.dynamik.errors.ValError
-import com.github.NavyaZaveri.dynamik.errors.VariableNotInScope
-import com.github.NavyaZaveri.dynamik.expressions.Callable
-import com.github.NavyaZaveri.dynamik.expressions.Variable
-import com.github.NavyaZaveri.dynamik.expressions.VariableStatus
+import com.github.navyazaveri.dynamik.errors.ValError
+import com.github.navyazaveri.dynamik.errors.VariableNotInScope
+import com.github.navyazaveri.dynamik.expressions.Callable
+import com.github.navyazaveri.dynamik.expressions.Variable
+import com.github.navyazaveri.dynamik.expressions.VariableStatus
 import java.lang.RuntimeException
 
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {
@@ -33,7 +33,10 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
             throw ValError("$name is a Val, cannot reassign.")
         }
 
-        identifierToValue[name] = Variable(value, VariableStatus.VAR)
+        identifierToValue[name] = Variable(
+            value,
+            VariableStatus.VAR
+        )
     }
 
     fun exists(name: String): Boolean = identifierToValue.containsKey(name)

@@ -1,8 +1,8 @@
-package com.github.NavyaZaveri.dynamik.interpreter
+package com.github.navyazaveri.dynamik.interpreter
 
-import com.github.NavyaZaveri.dynamik.expressions.Stmt
+import com.github.navyazaveri.dynamik.expressions.Stmt
 import parser.parseStmts
-import com.github.NavyaZaveri.dynamik.scanner.tokenize
+import com.github.navyazaveri.dynamik.scanner.tokenize
 
 class Repl {
     val interpreter = TreeWalker()

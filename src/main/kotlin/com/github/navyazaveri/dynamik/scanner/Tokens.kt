@@ -1,4 +1,4 @@
-package com.github.NavyaZaveri.dynamik.scanner
+package com.github.navyazaveri.dynamik.scanner
 
 data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0)
 

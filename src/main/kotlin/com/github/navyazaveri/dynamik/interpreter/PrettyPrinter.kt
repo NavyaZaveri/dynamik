@@ -1,8 +1,10 @@
-package com.github.NavyaZaveri.dynamik.interpreter
+package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.NavyaZaveri.dynamik.expressions.*
+import com.github.navyazaveri.dynamik.expressions.*
 
-abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<String> {
+abstract class PrettyPrinter : ExpressionVisitor<String>,
+    StatementVisitor<String> {
     fun prettyPrint(expr: Expr): String = expr.evaluateBy(this)
 
     override fun visitWaitStmt(waitStmt: WaitStmt): String {

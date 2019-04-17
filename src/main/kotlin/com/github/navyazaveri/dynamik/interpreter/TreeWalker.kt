@@ -1,15 +1,17 @@
-package com.github.NavyaZaveri.dynamik.interpreter
+package com.github.navyazaveri.dynamik.interpreter
 
-import com.github.NavyaZaveri.dynamik.errors.UnexpectedType
+import com.github.navyazaveri.dynamik.errors.UnexpectedType
 import com.github.NavyaZaveri.dynamik.expressions.*
+import com.github.navyazaveri.dynamik.expressions.*
 import expressions.*
 import interpreter.Environment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import com.github.NavyaZaveri.dynamik.scanner.TokenType
+import com.github.navyazaveri.dynamik.scanner.TokenType
 
-class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+class TreeWalker : ExpressionVisitor<Any>,
+    StatementVisitor<Any> {
     var env = Environment()
 
     /**
@@ -69,8 +71,10 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     override fun visitFnStatement(fnStmt: FnStmt) {
         when (fnStmt.memoize) {
-            true -> env.define(fnStmt.functionName.lexeme, MemoizedCallable(fnStmt), VariableStatus.VAL)
-            false -> env.define(fnStmt.functionName.lexeme, DynamikCallable(fnStmt), VariableStatus.VAL)
+            true -> env.define(fnStmt.functionName.lexeme,
+                MemoizedCallable(fnStmt), VariableStatus.VAL)
+            false -> env.define(fnStmt.functionName.lexeme,
+                DynamikCallable(fnStmt), VariableStatus.VAL)
         }
     }
 

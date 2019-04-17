@@ -1,6 +1,6 @@
-package com.github.NavyaZaveri.dynamik.expressions
+package com.github.navyazaveri.dynamik.expressions
 
-import com.github.NavyaZaveri.dynamik.scanner.Tok
+import com.github.navyazaveri.dynamik.scanner.Tok
 
 abstract class Expr {
     abstract fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T
@@ -38,7 +38,8 @@ class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
     class Builder {
         lateinit var left: Expr
         lateinit var token: Tok
-        fun build(): UnaryExpr = UnaryExpr(token, left)
+        fun build(): UnaryExpr =
+            UnaryExpr(token, left)
     }
 
     companion object {
@@ -59,7 +60,8 @@ class LiteralExpr(val token: Tok) : Expr() {
 
     class Builder {
         lateinit var token: Tok
-        fun build(): LiteralExpr = LiteralExpr(token)
+        fun build(): LiteralExpr =
+            LiteralExpr(token)
     }
 
     companion object {

@@ -1,3 +1,3 @@
-package com.github.NavyaZaveri.dynamik.expressions
+package com.github.navyazaveri.dynamik.expressions
 
 class Return(val value: Any) : RuntimeException(null, null, false, false)

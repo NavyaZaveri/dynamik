@@ -1,8 +1,8 @@
-package com.github.NavyaZaveri.dynamik.expressions
+package com.github.navyazaveri.dynamik.expressions
 
-import com.github.NavyaZaveri.dynamik.errors.InvalidArgumentSize
+import com.github.navyazaveri.dynamik.errors.InvalidArgumentSize
 import interpreter.Environment
-import com.github.NavyaZaveri.dynamik.interpreter.TreeWalker
+import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 
 typealias FuncName = String
 typealias Arg = Any
@@ -14,7 +14,8 @@ interface Callable {
 }
 
 
-class DynamikCallable(val func: FnStmt) : Callable {
+class DynamikCallable(val func: FnStmt) :
+    Callable {
 
     override fun invoke(args: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
 
@@ -46,7 +47,8 @@ class DynamikCallable(val func: FnStmt) : Callable {
     }
 }
 
-class MemoizedCallable(val func: FnStmt) : Callable {
+class MemoizedCallable(val func: FnStmt) :
+    Callable {
     var hits = 0
 
     companion object {
