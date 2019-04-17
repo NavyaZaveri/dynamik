@@ -1,10 +1,10 @@
-import interpreter.Rpn
+import com.github.NavyaZaveri.dynamik.interpreter.Rpn
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import expressions.BinaryExpr
-import expressions.LiteralExpr
-import scanner.Tok
-import scanner.TokenType
+import com.github.NavyaZaveri.dynamik.expressions.BinaryExpr
+import com.github.NavyaZaveri.dynamik.expressions.LiteralExpr
+import com.github.NavyaZaveri.dynamik.scanner.Tok
+import com.github.NavyaZaveri.dynamik.scanner.TokenType
 
 class PrettyPrinterTest {
     val rpn = Rpn()

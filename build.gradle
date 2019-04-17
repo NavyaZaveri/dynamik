@@ -12,6 +12,7 @@ plugins {
 
 }
 
+
 group 'com.github.dynamik'
 version '1.0-SNAPSHOT'
 apply plugin: 'application'
@@ -19,7 +20,7 @@ apply plugin: 'kotlin'
 apply plugin: 'java'
 
 
-mainClassName = "interpreter.MainEntryKt"
+mainClassName = 'com.github.NavyaZaveri.dynamik.interpreter.MainEntryKt'
 
 repositories {
     mavenCentral()
@@ -60,6 +61,6 @@ run {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'interpreter.MainEntryKt'
+        attributes 'Main-Class': 'com.github.NavyaZaveri.dynamik.interpreter.MainEntryKt'
     }
 }

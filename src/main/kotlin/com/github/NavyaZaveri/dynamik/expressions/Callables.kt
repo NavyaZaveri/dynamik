@@ -1,8 +1,8 @@
-package expressions
+package com.github.NavyaZaveri.dynamik.expressions
 
-import errors.InvalidArgumentSize
+import com.github.NavyaZaveri.dynamik.errors.InvalidArgumentSize
 import interpreter.Environment
-import interpreter.TreeWalker
+import com.github.NavyaZaveri.dynamik.interpreter.TreeWalker
 
 typealias FuncName = String
 typealias Arg = Any

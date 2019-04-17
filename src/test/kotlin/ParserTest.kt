@@ -1,10 +1,10 @@
-import interpreter.Rpn
+import com.github.NavyaZaveri.dynamik.interpreter.Rpn
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import expressions.Expr
+import com.github.NavyaZaveri.dynamik.expressions.Expr
 import parser.ExprParser
-import scanner.Scanner
-import scanner.Tok
+import com.github.NavyaZaveri.dynamik.scanner.Scanner
+import com.github.NavyaZaveri.dynamik.scanner.Tok
 
 class ParserTest {
     fun parse(toks: List<Tok>): Expr {

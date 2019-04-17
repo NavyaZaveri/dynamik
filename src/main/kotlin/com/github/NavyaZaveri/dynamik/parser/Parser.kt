@@ -1,12 +1,12 @@
 package parser
 
-import errors.InvalidToken
-import expressions.*
-import interpreter.TreeWalker
-import interpreter.evaluateAllBy
-import scanner.Tok
-import scanner.TokenType
-import scanner.tokenize
+import com.github.NavyaZaveri.dynamik.errors.InvalidToken
+import com.github.NavyaZaveri.dynamik.expressions.*
+import com.github.NavyaZaveri.dynamik.interpreter.TreeWalker
+import com.github.NavyaZaveri.dynamik.interpreter.evaluateAllBy
+import com.github.NavyaZaveri.dynamik.scanner.Tok
+import com.github.NavyaZaveri.dynamik.scanner.TokenType
+import com.github.NavyaZaveri.dynamik.scanner.tokenize
 
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {

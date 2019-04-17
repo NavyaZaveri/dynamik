@@ -1,4 +1,4 @@
-package expressions
+package com.github.NavyaZaveri.dynamik.expressions
 
 interface ExpressionVisitor<out T> {
     fun visitBinaryExpression(expr: BinaryExpr): T

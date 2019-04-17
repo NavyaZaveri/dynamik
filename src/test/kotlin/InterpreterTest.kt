@@ -1,10 +1,10 @@
-import errors.VariableNotInScope
-import interpreter.Repl
-import interpreter.TreeWalker
+import com.github.NavyaZaveri.dynamik.errors.VariableNotInScope
+import com.github.NavyaZaveri.dynamik.interpreter.Repl
+import com.github.NavyaZaveri.dynamik.interpreter.TreeWalker
 import org.junit.Test
 import parser.parseExpr
 import parser.parseStmts
-import scanner.tokenize
+import com.github.NavyaZaveri.dynamik.scanner.tokenize
 
 class InterpreterTest {
     val repl = Repl()

@@ -1,7 +1,7 @@
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import scanner.Scanner
-import scanner.TokenType
+import com.github.NavyaZaveri.dynamik.scanner.Scanner
+import com.github.NavyaZaveri.dynamik.scanner.TokenType
 
 class ScannerTest {
     private val s = Scanner()

@@ -1,10 +1,10 @@
 package interpreter
 
-import errors.ValError
-import errors.VariableNotInScope
-import expressions.Callable
-import expressions.Variable
-import expressions.VariableStatus
+import com.github.NavyaZaveri.dynamik.errors.ValError
+import com.github.NavyaZaveri.dynamik.errors.VariableNotInScope
+import com.github.NavyaZaveri.dynamik.expressions.Callable
+import com.github.NavyaZaveri.dynamik.expressions.Variable
+import com.github.NavyaZaveri.dynamik.expressions.VariableStatus
 import java.lang.RuntimeException
 
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {

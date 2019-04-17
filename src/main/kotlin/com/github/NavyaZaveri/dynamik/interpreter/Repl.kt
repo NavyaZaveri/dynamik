@@ -1,10 +1,8 @@
-package interpreter
+package com.github.NavyaZaveri.dynamik.interpreter
 
-import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.options.option
-import expressions.Stmt
+import com.github.NavyaZaveri.dynamik.expressions.Stmt
 import parser.parseStmts
-import scanner.tokenize
+import com.github.NavyaZaveri.dynamik.scanner.tokenize
 
 class Repl {
     val interpreter = TreeWalker()
@@ -29,7 +27,7 @@ class Repl {
             while (true) {
                 print(">>")
                 try {
-                    readLine()!!.also { repl.eval(it.tokenize().parseStmts()).also { println(it) } }
+                    readLine()!!.also { repl.eval(it) }
                 } catch (r: Exception) {
                     println(r.message)
                 }

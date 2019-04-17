@@ -1,4 +1,4 @@
-package errors
+package com.github.NavyaZaveri.dynamik.errors
 
 class UnexpectedType(message: String) : Exception(message)
 class VariableNotInScope(message: String) : Exception(message)

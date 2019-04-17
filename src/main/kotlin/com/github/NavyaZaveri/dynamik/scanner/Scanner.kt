@@ -1,9 +1,9 @@
-package scanner
+package com.github.NavyaZaveri.dynamik.scanner
 
 import com.github.h0tk3y.betterParse.lexer.DefaultTokenizer
 import com.github.h0tk3y.betterParse.lexer.Token
 import com.github.h0tk3y.betterParse.lexer.TokenMatch
-import errors.InvalidToken
+import com.github.NavyaZaveri.dynamik.errors.InvalidToken
 
 class Scanner {
     fun tokenize(sourceCode: String): List<Tok> =

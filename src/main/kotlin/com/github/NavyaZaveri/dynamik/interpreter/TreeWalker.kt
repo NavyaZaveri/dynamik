@@ -1,11 +1,13 @@
-package interpreter
+package com.github.NavyaZaveri.dynamik.interpreter
 
-import errors.UnexpectedType
+import com.github.NavyaZaveri.dynamik.errors.UnexpectedType
+import com.github.NavyaZaveri.dynamik.expressions.*
 import expressions.*
+import interpreter.Environment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import scanner.TokenType
+import com.github.NavyaZaveri.dynamik.scanner.TokenType
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
@@ -127,7 +129,12 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         if (isType<Double>(left, right)) {
             return left as Double + right as Double
         }
-        throw UnexpectedType("${Pair(left, right)}} need to be either Doubles or Strings")
+        throw UnexpectedType(
+            "${Pair(
+                left,
+                right
+            )}} need to be either Doubles or Strings"
+        )
     }
 
     override

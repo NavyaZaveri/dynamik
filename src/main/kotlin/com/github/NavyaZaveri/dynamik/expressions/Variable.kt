@@ -1,4 +1,4 @@
-package expressions
+package com.github.NavyaZaveri.dynamik.expressions
 
 enum class VariableStatus {
     VAL,

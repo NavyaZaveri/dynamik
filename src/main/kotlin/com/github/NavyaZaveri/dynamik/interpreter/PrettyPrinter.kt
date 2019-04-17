@@ -1,6 +1,6 @@
-package interpreter
+package com.github.NavyaZaveri.dynamik.interpreter
 
-import expressions.*
+import com.github.NavyaZaveri.dynamik.expressions.*
 
 abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<String> {
     fun prettyPrint(expr: Expr): String = expr.evaluateBy(this)
