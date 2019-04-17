@@ -10,7 +10,7 @@ typealias RetVal = Any
 
 
 interface Callable {
-    fun invoke(arguments: List<Any>, interpreter: TreeWalker, env: Environment = Environment()): Any
+    fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): Any
 }
 
 

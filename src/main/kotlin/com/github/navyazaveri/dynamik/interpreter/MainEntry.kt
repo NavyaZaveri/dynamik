@@ -20,7 +20,6 @@ class CommandLineParser : CliktCommand() {
                 stuff.tokenize().parseStmts().evaluateAllBy(TreeWalker())
             }
         }
-
     }
 }
 
