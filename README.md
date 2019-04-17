@@ -21,7 +21,7 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 
 - [x] Functions 
 
-- [x] Built-in memoization 
+- [x] Memoization builtin
 
 - [x] Type checks
 
@@ -38,6 +38,5 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 - [ ] Builtin timer
 
 - [x] Repl
-
 
 

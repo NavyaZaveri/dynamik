@@ -2,7 +2,7 @@ import com.github.navyazaveri.dynamik.interpreter.Rpn
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import com.github.navyazaveri.dynamik.expressions.Expr
-import parser.ExprParser
+import com.github.navyazaveri.dynamik.parser.ExprParser
 import com.github.navyazaveri.dynamik.scanner.Scanner
 import com.github.navyazaveri.dynamik.scanner.Tok
 

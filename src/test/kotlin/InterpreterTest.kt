@@ -2,8 +2,8 @@ import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.interpreter.Repl
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 import org.junit.Test
-import parser.parseExpr
-import parser.parseStmts
+import com.github.navyazaveri.dynamik.parser.parseExpr
+import com.github.navyazaveri.dynamik.parser.parseStmts
 import com.github.navyazaveri.dynamik.scanner.tokenize
 
 class InterpreterTest {

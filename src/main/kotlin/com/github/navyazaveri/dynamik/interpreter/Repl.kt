@@ -1,7 +1,7 @@
 package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.expressions.Stmt
-import parser.parseStmts
+import com.github.navyazaveri.dynamik.parser.parseStmts
 import com.github.navyazaveri.dynamik.scanner.tokenize
 
 class Repl {

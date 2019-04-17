@@ -1,7 +1,6 @@
-package parser
+package com.github.navyazaveri.dynamik.parser
 
 import com.github.navyazaveri.dynamik.errors.InvalidToken
-import com.github.NavyaZaveri.dynamik.expressions.*
 import com.github.navyazaveri.dynamik.expressions.*
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
@@ -197,21 +196,11 @@ open class ExprParser(val tokens: List<Tok>) {
     // matches against tbe single token and then advances
     private fun primary(): Expr {
         return when (tokens[current].type) {
-            TokenType.NUMBER -> LiteralExpr(
-                token = tokens[current]
-            )
-            TokenType.STRING -> LiteralExpr(
-                token = tokens[current]
-            )
-            TokenType.IDENTIFIER -> VariableExpr(
-                token = tokens[current]
-            )
-            TokenType.TRUE -> LiteralExpr(
-                token = tokens[current]
-            )
-            TokenType.False -> LiteralExpr(
-                token = tokens[current]
-            )
+            TokenType.NUMBER -> LiteralExpr(token = tokens[current])
+            TokenType.STRING -> LiteralExpr(token = tokens[current])
+            TokenType.IDENTIFIER -> VariableExpr(token = tokens[current])
+            TokenType.TRUE -> LiteralExpr(token = tokens[current])
+            TokenType.False -> LiteralExpr(token = tokens[current])
             else -> throw InvalidToken("could not recognize ${tokens[current]}")
         }.also { advance() }
     }
@@ -243,7 +232,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return expr
     }
 
-    fun multiplication(): Expr {
+    private fun multiplication(): Expr {
         var expr = unary()
         while (match(TokenType.STAR, TokenType.SLASH)) {
             val operator = advance()
@@ -253,7 +242,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return expr
     }
 
-    fun unary(): Expr {
+    private fun unary(): Expr {
         val expr = brackets()
         if (match(TokenType.BANG)) {
             return UnaryExpr(advance(), expr)
