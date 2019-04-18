@@ -38,8 +38,7 @@ class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
     class Builder {
         lateinit var left: Expr
         lateinit var token: Tok
-        fun build(): UnaryExpr =
-            UnaryExpr(token, left)
+        fun build(): UnaryExpr = UnaryExpr(token, left)
     }
 
     companion object {
@@ -60,8 +59,7 @@ class LiteralExpr(val token: Tok) : Expr() {
 
     class Builder {
         lateinit var token: Tok
-        fun build(): LiteralExpr =
-            LiteralExpr(token)
+        fun build(): LiteralExpr = LiteralExpr(token)
     }
 
     companion object {

@@ -1,6 +1,6 @@
 package com.github.navyazaveri.dynamik.interpreter
 
-import com.github.NavyaZaveri.dynamik.expressions.*
+import com.github.navyazaveri.dynamik.expressions.*
 import com.github.navyazaveri.dynamik.expressions.*
 
 abstract class PrettyPrinter : ExpressionVisitor<String>,

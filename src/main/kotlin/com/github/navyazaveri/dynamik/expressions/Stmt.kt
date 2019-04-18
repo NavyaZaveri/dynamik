@@ -53,7 +53,7 @@ class ReturnStmt(val statement: Stmt) : Stmt() {
     }
 }
 
-class IfStmt(val condition: Expr, val body: List<Stmt>) : Stmt() {
+class IfStmt(val condition: Expr, val body: List<Stmt>, val elseBody: List<Stmt> = mutableListOf()) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitIfStmt(this)
     }

@@ -1,17 +1,14 @@
 package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.errors.UnexpectedType
-import com.github.NavyaZaveri.dynamik.expressions.*
 import com.github.navyazaveri.dynamik.expressions.*
-import expressions.*
 import interpreter.Environment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import com.github.navyazaveri.dynamik.scanner.TokenType
 
-class TreeWalker : ExpressionVisitor<Any>,
-    StatementVisitor<Any> {
+class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
 
     /**
@@ -39,11 +36,11 @@ class TreeWalker : ExpressionVisitor<Any>,
         val condition = evaluate(ifStmt.condition)
         if (isType<Boolean>(condition, throwException = true) && condition as Boolean) {
             ifStmt.body.forEach { evaluate(it) }
+        } else {
+            ifStmt.elseBody.forEach { evaluate(it) }
         }
     }
 
-    /* Calls a function, with arguments passed by value.
-     */
     override fun visitCallExpression(callExpr: CallExpr, par: Boolean): Any {
         val callable = env.get(callExpr.funcName) as Callable
         val args = callExpr.args.map { it.evaluateBy(this) }
@@ -71,10 +68,14 @@ class TreeWalker : ExpressionVisitor<Any>,
 
     override fun visitFnStatement(fnStmt: FnStmt) {
         when (fnStmt.memoize) {
-            true -> env.define(fnStmt.functionName.lexeme,
-                MemoizedCallable(fnStmt), VariableStatus.VAL)
-            false -> env.define(fnStmt.functionName.lexeme,
-                DynamikCallable(fnStmt), VariableStatus.VAL)
+            true -> env.define(
+                fnStmt.functionName.lexeme,
+                MemoizedCallable(fnStmt), VariableStatus.VAL
+            )
+            false -> env.define(
+                fnStmt.functionName.lexeme,
+                DynamikCallable(fnStmt), VariableStatus.VAL
+            )
         }
     }
 

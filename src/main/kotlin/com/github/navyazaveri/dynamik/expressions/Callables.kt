@@ -14,8 +14,7 @@ interface Callable {
 }
 
 
-class DynamikCallable(val func: FnStmt) :
-    Callable {
+class DynamikCallable(val func: FnStmt) : Callable {
 
     override fun invoke(args: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
 
@@ -47,8 +46,7 @@ class DynamikCallable(val func: FnStmt) :
     }
 }
 
-class MemoizedCallable(val func: FnStmt) :
-    Callable {
+class MemoizedCallable(val func: FnStmt) : Callable {
     var hits = 0
 
     companion object {

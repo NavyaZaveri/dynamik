@@ -7,3 +7,9 @@ val z = 20;
 val res = add(mul(y,z), x);
 
 print(res);
+
+if (res == 140) {
+    print("yes");
+} else {
+    print("nooo");
+}

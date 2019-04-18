@@ -1,9 +1,10 @@
 package com.github.navyazaveri.dynamik.scanner
 
+import com.github.navyazaveri.dynamik.errors.InvalidToken
+
 import com.github.h0tk3y.betterParse.lexer.DefaultTokenizer
 import com.github.h0tk3y.betterParse.lexer.Token
 import com.github.h0tk3y.betterParse.lexer.TokenMatch
-import com.github.navyazaveri.dynamik.errors.InvalidToken
 
 class Scanner {
     fun tokenize(sourceCode: String): List<Tok> =
@@ -57,6 +58,7 @@ class Scanner {
         throw InvalidToken("${tokenMatch.text} is not a valid token")
     }
 }
+
 
 fun String.tokenize(): List<Tok> {
     return Scanner().tokenize(this)

@@ -38,6 +38,7 @@ enum class TokenType(val regex: Regex) {
     FN("fn".toRegex()),
     FOR("for".toRegex()),
     IF("if".toRegex()),
+
     NIL("nil".toRegex()),
     TRUE("true".toRegex()),
     False("false".toRegex()),

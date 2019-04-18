@@ -92,6 +92,11 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         val condition = expression()
         consume(TokenType.RIGHT_PAREN)
         val body = parseBody()
+        if (consumeIfPresent(TokenType.ELSE)) {
+           val elseBody = parseBody()
+            return IfStmt(condition, body, elseBody)
+        }
+
         return IfStmt(condition, body)
     }
 
