@@ -17,7 +17,7 @@ class CommandLineParser : CliktCommand() {
         } else {
             if (file != null) {
                 val stuff = File(file).readText()
-                stuff.tokenize().parseStmts().evaluateAllBy(TreeWalker())
+                Repl().eval(stuff)
             }
         }
     }
