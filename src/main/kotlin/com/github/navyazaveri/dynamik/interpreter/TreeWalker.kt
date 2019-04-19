@@ -10,8 +10,14 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
-
     var env = Environment()
+    override fun visitAssertStmt(assertStmt: AssertStmt): Any {
+        if (evaluate(assertStmt.e1) != evaluate(assertStmt.e2)) {
+
+        }
+        return Any()
+    }
+
 
     override fun visitGlobalStmt(globalStmt: GlobalStmt): Any {
         env.define(globalStmt.name.lexeme, globalStmt.value, VariableStatus.VAL)

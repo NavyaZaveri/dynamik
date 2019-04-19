@@ -1,6 +1,6 @@
 package com.github.navyazaveri.dynamik.expressions
 
-import com.github.navyazaveri.dynamik.errors.InvalidArgumentSize
+import com.github.navyazaveri.dynamik.errors.InvalidArgSize
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 
@@ -21,7 +21,7 @@ class DynamikCallable(val func: FnStmt) : Callable {
 
         //check args size
         if (args.size != func.params.size) {
-            throw InvalidArgumentSize("${func.functionName.lexeme} takes ${func.params.size} args, supplied ${args.size}.")
+            throw InvalidArgSize(expected = func.params.size, actual = args.size, fname = func.functionName.lexeme)
         }
 
 

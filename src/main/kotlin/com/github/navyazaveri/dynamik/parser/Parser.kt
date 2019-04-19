@@ -34,8 +34,20 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.Par -> return parStmt()
             TokenType.Wait -> return waitStmt()
             TokenType.GLOBAL -> return globalStmt()
+            TokenType.ASSERT -> return assertStmt()
         }
         return exprStmt()
+    }
+
+    private fun assertStmt(): Stmt {
+        consume(TokenType.ASSERT)
+        val brackets = consumeIfPresent(TokenType.LEFT_PAREN)
+        val e1 = expression()
+        consume(TokenType.EQUAL_EQUAL)
+        val e2 = expression()
+
+        TODO()
+
     }
 
     private fun globalStmt(): Stmt {

@@ -27,6 +27,8 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 
 - [x] Par statements 
 
+- [ ] Thread safe by default
+
 - [x] Synchronization with wait 
 
 - [ ] Collections (list, map)

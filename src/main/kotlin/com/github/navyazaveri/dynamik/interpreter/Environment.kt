@@ -12,7 +12,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
 
     fun define(name: String, value: Any, status: VariableStatus) {
         if (existsInCurrentScope(name)) {
-            throw RuntimeException("cannot redefine $name")
+            throw ValError(name)
         }
         identifierToValue[name] = Variable(status = status, value = value)
     }
@@ -28,10 +28,10 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
 
     fun assign(name: String, value: Any) {
         if (!existsInCurrentScope(name)) {
-            throw VariableNotInScope("$name  is not defined in the current scope.")
+            throw VariableNotInScope(name, this.identifierToValue.keys)
         }
         if (status(name) == VariableStatus.VAL) {
-            throw ValError("$name is a Val, cannot reassign.")
+            throw ValError(name)
         }
 
         identifierToValue[name] = Variable(value, VariableStatus.VAR)
@@ -42,9 +42,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
     fun existsGlobally(name: String): Boolean = globals.containsKey(name)
 
     fun status(name: String): VariableStatus = identifierToValue[name]?.status
-        ?: throw VariableNotInScope(
-            "$name does not exist, did you mean ${cloestMatch(name, identifierToValue.keys)}?"
-        )
+        ?: throw VariableNotInScope(name, this.identifierToValue.keys)
 
     fun get(name: String): Any {
         if (existsInCurrentScope(name)) {
@@ -56,7 +54,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
 
         val vars = identifierToValue.keys + globals.keys
 
-        throw VariableNotInScope("$name does not exists, did you mean ${cloestMatch(name, vars)}")
+        throw VariableNotInScope(name, this.identifierToValue.keys)
     }
 
     companion object {
@@ -64,10 +62,6 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
 
         fun addGlobal(name: String, value: Any) {
             globals[name] = Variable(value, VariableStatus.VAL)
-        }
-
-        fun cloestMatch(unknown: String, candidates: Set<String>): String? {
-            return candidates.maxBy { levenshtein(it, unknown) }
         }
     }
 }

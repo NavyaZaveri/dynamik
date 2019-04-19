@@ -1,7 +1,7 @@
 package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.expressions.*
-
+/*
 abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<String> {
 
     override fun visitGlobalStmt(globalStmt: GlobalStmt): String {
@@ -77,4 +77,4 @@ class Rpn : PrettyPrinter() {
         }
         return "$res $operand".trim()
     }
-}
+}*/

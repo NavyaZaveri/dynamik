@@ -44,6 +44,7 @@ enum class TokenType(val regex: Regex) {
     TRUE("true".toRegex()),
     False("false".toRegex()),
     VAR("var".toRegex()),
+    ASSERT("assert".toRegex()),
 
     PRINT("print".toRegex()), RETURN("return".toRegex()),
     LOOP("loop".toRegex()),
