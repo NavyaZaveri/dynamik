@@ -1,3 +1,4 @@
+import com.github.navyazaveri.dynamik.errors.AssertionError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.interpreter.Repl
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
@@ -133,7 +134,17 @@ class InterpreterTest {
         val expected = 3.0
         val actual = repl.eval(stmts)
         assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
 
-
+    @Test
+    fun testAssertions() {
+        val stmts = ("val x =3; val y = 4; assert (x,y)").tokenize().parseStmts()
+        var errorThrown = true
+        try {
+            repl.eval(stmts)
+        } catch (err: AssertionError) {
+            errorThrown = true
+        }
+        assert(errorThrown) { "assertion error not caught!" };
     }
 }

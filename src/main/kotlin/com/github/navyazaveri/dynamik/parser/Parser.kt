@@ -41,13 +41,12 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
     private fun assertStmt(): Stmt {
         consume(TokenType.ASSERT)
-        val brackets = consumeIfPresent(TokenType.LEFT_PAREN)
+        consume(TokenType.LEFT_PAREN)
         val e1 = expression()
-        consume(TokenType.EQUAL_EQUAL)
+        consume(TokenType.COMMA)
         val e2 = expression()
-
-        TODO()
-
+        consume(TokenType.RIGHT_PAREN)
+        return AssertStmt(e1, e2)
     }
 
     private fun globalStmt(): Stmt {
