@@ -2,13 +2,18 @@ package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.errors.UnexpectedType
 import com.github.navyazaveri.dynamik.expressions.*
-import interpreter.Environment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import com.github.navyazaveri.dynamik.scanner.TokenType
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    override fun visitGlobalStmt(globalStmt: GlobalStmt): Any {
+        env.define(globalStmt.name.lexeme, globalStmt.value, VariableStatus.VAL)
+        Environment.addGlobal(globalStmt.name.lexeme, globalStmt.value)
+        return Any()
+    }
+
     var env = Environment()
 
     /**
@@ -135,10 +140,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             return left as Double + right as Double
         }
         throw UnexpectedType(
-            "${Pair(
-                left,
-                right
-            )}} need to be either Doubles or Strings"
+            "${Pair(left, right)} need to be either Doubles or Strings"
         )
     }
 

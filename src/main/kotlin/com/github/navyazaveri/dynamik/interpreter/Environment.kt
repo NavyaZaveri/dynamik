@@ -1,4 +1,4 @@
-package interpreter
+package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.errors.ValError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
@@ -9,8 +9,9 @@ import java.lang.RuntimeException
 
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {
 
+
     fun define(name: String, value: Any, status: VariableStatus) {
-        if (exists(name)) {
+        if (existsInCurrentScope(name)) {
             throw RuntimeException("cannot redefine $name")
         }
         identifierToValue[name] = Variable(status = status, value = value)
@@ -26,41 +27,47 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
     }
 
     fun assign(name: String, value: Any) {
-        if (!exists(name)) {
+        if (!existsInCurrentScope(name)) {
             throw VariableNotInScope("$name  is not defined in the current scope.")
         }
         if (status(name) == VariableStatus.VAL) {
             throw ValError("$name is a Val, cannot reassign.")
         }
 
-        identifierToValue[name] = Variable(
-            value,
-            VariableStatus.VAR
-        )
+        identifierToValue[name] = Variable(value, VariableStatus.VAR)
     }
 
-    fun exists(name: String): Boolean = identifierToValue.containsKey(name)
+    fun existsInCurrentScope(name: String): Boolean = identifierToValue.containsKey(name)
+
+    fun existsGlobally(name: String): Boolean = globals.containsKey(name)
 
     fun status(name: String): VariableStatus = identifierToValue[name]?.status
         ?: throw VariableNotInScope(
-            "$name does not exist in the current scope, did you mean ${cloestMatch(
-                name,
-                identifierToValue.keys
-            )}?"
+            "$name does not exist, did you mean ${cloestMatch(name, identifierToValue.keys)}?"
         )
 
     fun get(name: String): Any {
-        return identifierToValue[name]?.value ?: throw VariableNotInScope(
-            "$name does not exist, did you mean ${cloestMatch(
-                name,
-                identifierToValue.keys
-            )}?"
-        )
+        if (existsInCurrentScope(name)) {
+            return identifierToValue[name]!!.value
+        }
+        if (existsGlobally(name)) {
+            return globals[name]!!.value
+        }
+
+        val vars = identifierToValue.keys + globals.keys
+
+        throw VariableNotInScope("$name does not exists, did you mean ${cloestMatch(name, vars)}")
     }
 
     companion object {
-        fun cloestMatch(unknown: String, candidates: Set<String>): String {
-            return candidates.maxBy { levenshtein(it, unknown) } ?: ""
+        val globals = mutableMapOf<String, Variable>()
+
+        fun addGlobal(name: String, value: Any) {
+            globals[name] = Variable(value, VariableStatus.VAL)
+        }
+
+        fun cloestMatch(unknown: String, candidates: Set<String>): String? {
+            return candidates.maxBy { levenshtein(it, unknown) }
         }
     }
 }

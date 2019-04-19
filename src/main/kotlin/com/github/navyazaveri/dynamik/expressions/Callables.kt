@@ -1,7 +1,7 @@
 package com.github.navyazaveri.dynamik.expressions
 
 import com.github.navyazaveri.dynamik.errors.InvalidArgumentSize
-import interpreter.Environment
+import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 
 typealias FuncName = String

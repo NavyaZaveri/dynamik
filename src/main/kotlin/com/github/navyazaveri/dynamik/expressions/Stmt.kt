@@ -71,6 +71,13 @@ class WaitStmt : Stmt() {
     }
 }
 
+class GlobalStmt(val name: Tok, val value: Any) : Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitGlobalStmt(this)
+    }
+
+}
+
 
 interface StatementVisitor<out T> {
     fun visitPrintStmt(printStmt: PrintStmt): T
@@ -84,4 +91,5 @@ interface StatementVisitor<out T> {
     fun visitReturnStatement(returnStmt: ReturnStmt): T
     fun visitParStatement(parStmt: ParStmt): T
     fun visitWaitStmt(waitStmt: WaitStmt): T
+    fun visitGlobalStmt(globalStmt: GlobalStmt): T
 }

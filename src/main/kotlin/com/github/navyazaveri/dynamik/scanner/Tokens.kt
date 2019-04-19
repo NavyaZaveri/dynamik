@@ -28,6 +28,7 @@ enum class TokenType(val regex: Regex) {
     LESS("<".toRegex()),
 
     COLON(";".toRegex()),
+    GLOBAL("@global".toRegex()),
 
     STRING("\".*?\"".toRegex()),
 

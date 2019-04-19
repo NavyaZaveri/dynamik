@@ -33,8 +33,18 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.FOR -> return forStmt()
             TokenType.Par -> return parStmt()
             TokenType.Wait -> return waitStmt()
+            TokenType.GLOBAL -> return globalStmt()
         }
         return exprStmt()
+    }
+
+    private fun globalStmt(): Stmt {
+        consume(TokenType.VAL)
+        val name = consume(TokenType.IDENTIFIER)
+        consume(TokenType.EQUAL)
+        val valueAssigned = expression()
+        return GlobalStmt(name, valueAssigned)
+            .also { consume(TokenType.SEMICOLON) }
     }
 
     private fun waitStmt(): Stmt {
@@ -93,7 +103,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         consume(TokenType.RIGHT_PAREN)
         val body = parseBody()
         if (consumeIfPresent(TokenType.ELSE)) {
-           val elseBody = parseBody()
+            val elseBody = parseBody()
             return IfStmt(condition, body, elseBody)
         }
 
@@ -300,7 +310,7 @@ fun List<Tok>.parseExpr(): Expr {
 
 fun main(args: Array<String>) {
 
-    /*
+
     (" @memo fn fib(n) {" +
             "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
@@ -311,10 +321,11 @@ fun main(args: Array<String>) {
             "print d;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
-    "var i = 0; for (i=0;i<5;i = i+1) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())*/
+    "var i = 0; for (i=0;i<5;i = i+1) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 
+/*
     "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   } @par hello();   print 3;  ".tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
-
+*/
 }
