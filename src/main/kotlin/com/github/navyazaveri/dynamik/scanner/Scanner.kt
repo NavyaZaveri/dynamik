@@ -44,7 +44,8 @@ class Scanner {
                     TokenType.False -> Tok(
                         nativeTokType,
                         tokenMatch.text,
-                        false
+                        false,
+                        tokenMatch.row
                     )
                     else -> Tok(
                         nativeTokType,
