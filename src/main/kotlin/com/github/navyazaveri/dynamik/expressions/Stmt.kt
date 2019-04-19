@@ -77,7 +77,7 @@ class GlobalStmt(val name: Tok, val value: Expr) : Stmt() {
     }
 }
 
-class AssertStmt(val e1: Expr, val e2: Expr) : Stmt() {
+class AssertStmt(val e1: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitAssertStmt(this)
     }

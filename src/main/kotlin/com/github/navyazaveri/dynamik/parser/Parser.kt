@@ -42,11 +42,9 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     private fun assertStmt(): Stmt {
         consume(TokenType.ASSERT)
         consume(TokenType.LEFT_PAREN)
-        val e1 = expression()
-        consume(TokenType.COMMA)
-        val e2 = expression()
+        val expr = expression()
         consume(TokenType.RIGHT_PAREN)
-        return AssertStmt(e1, e2)
+        return AssertStmt(expr)
     }
 
     private fun globalStmt(): Stmt {

@@ -1,6 +1,6 @@
 package com.github.navyazaveri.dynamik.interpreter
 
-import com.github.navyazaveri.dynamik.errors.AssertionError
+import com.github.navyazaveri.dynamik.errors.AssertionErr
 import com.github.navyazaveri.dynamik.errors.UnexpectedType
 import com.github.navyazaveri.dynamik.expressions.*
 import kotlinx.coroutines.GlobalScope
@@ -13,12 +13,11 @@ import kotlinx.coroutines.sync.withLock
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
     override fun visitAssertStmt(assertStmt: AssertStmt): Any {
-        val v1 = evaluate(assertStmt.e1)
-        val v2 = evaluate(assertStmt.e2)
-        if (v1 != v2) {
-            throw AssertionError(v1, v2)
+        val assertion = evaluate(assertStmt.e1) as Boolean
+        if (!assertion) {
+            throw AssertionErr(assertion)
         }
-        return Any()
+        return true
     }
 
 
