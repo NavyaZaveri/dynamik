@@ -6,6 +6,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import com.github.navyazaveri.dynamik.scanner.TokenType
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
@@ -26,8 +28,11 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     override fun visitParStatement(parStmt: ParStmt): Any {
+
         GlobalScope.launch {
-            this@TreeWalker.visitCallExpression(parStmt.callExpr, true)
+            Mutex().withLock {
+                this@TreeWalker.visitCallExpression(parStmt.callExpr, true)
+            }
         }
         return Any()
     }
@@ -140,9 +145,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         if (isType<Double>(left, right)) {
             return left as Double + right as Double
         }
-        throw UnexpectedType(
-            "${Pair(left, right)} need to be either Doubles or Strings"
-        )
+        throw UnexpectedType("${Pair(left, right)} need to be either Doubles or Strings")
     }
 
     override

@@ -319,11 +319,10 @@ fun main(args: Array<String>) {
             "print d;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
-    "var i = 0; for (i=0;i<5;i = i+1) {print 3;}".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 
-/*
-    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   } @par hello();   print 3;  ".tokenize()
+
+    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();  print 3;  ".tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
-*/
+
 }

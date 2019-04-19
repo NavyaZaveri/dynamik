@@ -3,6 +3,8 @@ package errors
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 fun compute(t: MutableList<Int>) {
     println("computing")
@@ -25,17 +27,26 @@ object blah : Animal() {
     }
 }
 
+object Locker {
+    suspend fun lock_this(stuff: () -> Unit) {
+        Mutex().withLock { stuff }
+    }
+}
 
-fun main() {
-
-    val thing = mutableListOf<Int>()
+fun blah() {
     GlobalScope.launch {
-        blah.hello()
+        blah()
+        Locker.lock_this { }
     }
+}
 
-    val x = runBlocking {
-        println("waiting")
-        10
+fun do_a_lock() {
+    GlobalScope.launch {
+        blah()
+        Locker.lock_this { }
     }
-    println(x)
+}
+
+suspend fun stuff() {
+
 }

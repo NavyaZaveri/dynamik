@@ -2,12 +2,12 @@ package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.expressions.*
 
-abstract class PrettyPrinter : ExpressionVisitor<String>,
-    StatementVisitor<String> {
+abstract class PrettyPrinter : ExpressionVisitor<String>, StatementVisitor<String> {
 
     override fun visitGlobalStmt(globalStmt: GlobalStmt): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
     fun prettyPrint(expr: Expr): String = expr.evaluateBy(this)
 
     override fun visitWaitStmt(waitStmt: WaitStmt): String {
