@@ -14,6 +14,6 @@ class VariableNotInScope(varName: String, candidates: Set<String>) :
 class ValError(varName: String) : Exception("${varName} is val, cannot reassign.")
 class InvalidToken(message: String) : Exception(message)
 class InvalidArgSize(actual: Int, expected: Int, fname: String) :
-    Exception("passed $actual args to $fname, exepected $expected")
+    Exception("passed $actual args to $fname, expected $expected")
 
 class AssertionError(v1: Any, v2: Any) : Exception("Assertion Error: $v1 != $v2 ")
