@@ -44,7 +44,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         consume(TokenType.LEFT_PAREN)
         val expr = expression()
         consume(TokenType.RIGHT_PAREN)
-        return AssertStmt(expr)
+        return AssertStmt(expr).also { consume(TokenType.SEMICOLON) }
     }
 
     private fun globalStmt(): Stmt {

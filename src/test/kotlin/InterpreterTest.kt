@@ -138,7 +138,7 @@ class InterpreterTest {
 
     @Test
     fun testAssertions() {
-        val stmts = ("val x =3; val y = 4; assert (x == y)").tokenize().parseStmts()
+        val stmts = ("val x =3; val y = 4; assert (x == y);").tokenize().parseStmts()
         var errorThrown = true
         try {
             repl.eval(stmts)

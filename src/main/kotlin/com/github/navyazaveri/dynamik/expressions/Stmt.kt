@@ -15,9 +15,7 @@ class AssignStmt(val token: Tok, val expr: Expr) : Stmt() {
 }
 
 class WhileStmt(val expr: Expr, val stmts: List<Stmt>) : Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitWhileStatement(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitWhileStatement(this)
 }
 
 class ForStmt(val init: Stmt, val condition: Expr, val body: List<Stmt>) : Stmt() {
@@ -42,45 +40,31 @@ class VarStmt(val name: Tok, val expr: Expr) : Stmt() {
 
 class FnStmt(val functionName: Tok, val params: List<Tok>, val body: List<Stmt>, val memoize: Boolean = false) :
     Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitFnStatement(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitFnStatement(this)
 }
 
 class ReturnStmt(val statement: Stmt) : Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitReturnStatement(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitReturnStatement(this)
 }
 
 class IfStmt(val condition: Expr, val body: List<Stmt>, val elseBody: List<Stmt> = mutableListOf()) : Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitIfStmt(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitIfStmt(this)
 }
 
 class ParStmt(val callExpr: CallExpr) : Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitParStatement(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitParStatement(this)
 }
 
 class WaitStmt : Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitWaitStmt(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitWaitStmt(this)
 }
 
 class GlobalStmt(val name: Tok, val value: Expr) : Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitGlobalStmt(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitGlobalStmt(this)
 }
 
 class AssertStmt(val e1: Expr) : Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitAssertStmt(this)
-    }
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitAssertStmt(this)
 
 }
 
