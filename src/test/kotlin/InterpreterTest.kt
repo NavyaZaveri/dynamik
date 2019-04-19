@@ -125,4 +125,15 @@ class InterpreterTest {
         assert(leak) { "environment leak not caught!" };
 
     }
+
+    @Test
+    fun testGlobalVariableExistence() {
+        val stmts = ("fn foo() { return x; } @global val x = 3; foo(); val c = foo(); c;")
+            .tokenize().parseStmts()
+        val expected = 3.0
+        val actual = repl.eval(stmts)
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+
+
+    }
 }

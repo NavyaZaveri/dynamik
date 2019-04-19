@@ -10,7 +10,7 @@ import com.github.navyazaveri.dynamik.scanner.TokenType
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitGlobalStmt(globalStmt: GlobalStmt): Any {
         env.define(globalStmt.name.lexeme, globalStmt.value, VariableStatus.VAL)
-        Environment.addGlobal(globalStmt.name.lexeme, globalStmt.value)
+        Environment.addGlobal(globalStmt.name.lexeme, evaluate(globalStmt.value))
         return Any()
     }
 

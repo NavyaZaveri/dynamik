@@ -71,7 +71,7 @@ class WaitStmt : Stmt() {
     }
 }
 
-class GlobalStmt(val name: Tok, val value: Any) : Stmt() {
+class GlobalStmt(val name: Tok, val value: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitGlobalStmt(this)
     }

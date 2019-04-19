@@ -39,27 +39,24 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     }
 
     private fun globalStmt(): Stmt {
+        consume(TokenType.GLOBAL)
         consume(TokenType.VAL)
         val name = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
         val valueAssigned = expression()
-        return GlobalStmt(name, valueAssigned)
-            .also { consume(TokenType.SEMICOLON) }
+        return GlobalStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
     }
 
     private fun waitStmt(): Stmt {
         consume(TokenType.Wait)
-        return WaitStmt()
-            .also { consume(TokenType.SEMICOLON) }
+        return WaitStmt().also { consume(TokenType.SEMICOLON) }
     }
 
     private fun parStmt(): Stmt {
         consume(TokenType.Par)
         val callExpr = call()
         when (callExpr) {
-            is CallExpr -> return ParStmt(
-                callExpr
-            ).also { consume(TokenType.SEMICOLON) }
+            is CallExpr -> return ParStmt(callExpr).also { consume(TokenType.SEMICOLON) }
             else -> throw RuntimeException("par needs to be followed by a function invocation.")
         }
     }
@@ -315,6 +312,7 @@ fun main(args: Array<String>) {
             "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
             "}" +
+            "@global val x = 3;" +
             "val c = fib(91);" +
             "print \"got c\"; " +
             "val d = fib(90);" +
