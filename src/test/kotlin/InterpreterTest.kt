@@ -150,7 +150,7 @@ class InterpreterTest {
     }
 
     @Test
-    fun testComments() {
+    fun testMultiLineComments() {
         val stmts = "/* val x = 2; / print x;".tokenize().parseStmts()
         var errorThrown = false
         try {
@@ -159,6 +159,5 @@ class InterpreterTest {
             errorThrown = true
         }
         assert(errorThrown) { "comment parsing error!" };
-
     }
 }

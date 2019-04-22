@@ -5,13 +5,20 @@ import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.Callable
 import com.github.navyazaveri.dynamik.expressions.Variable
 import com.github.navyazaveri.dynamik.expressions.VariableStatus
-import java.lang.RuntimeException
 
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {
 
+    fun String.existGlobally(): Boolean {
+        return globals.containsKey(this)
+    }
+
+    fun String.inCurrentScope(): Boolean {
+        return identifierToValue.containsKey(this)
+    }
+
 
     fun define(name: String, value: Any, status: VariableStatus) {
-        if (existsInCurrentScope(name)) {
+        if (name.inCurrentScope()) {
             throw ValError(name)
         }
         identifierToValue[name] = Variable(status = status, value = value)
@@ -27,7 +34,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
     }
 
     fun assign(name: String, value: Any) {
-        if (!existsInCurrentScope(name)) {
+        if (!name.inCurrentScope()) {
             throw VariableNotInScope(name, this.identifierToValue.keys)
         }
         if (status(name) == VariableStatus.VAL) {
@@ -45,10 +52,10 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         ?: throw VariableNotInScope(name, this.identifierToValue.keys)
 
     fun get(name: String): Any {
-        if (existsInCurrentScope(name)) {
+        if (name.inCurrentScope()) {
             return identifierToValue[name]!!.value
         }
-        if (existsGlobally(name)) {
+        if (name.existGlobally()) {
             return globals[name]!!.value
         }
 
@@ -93,3 +100,6 @@ fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
 
     return cost[lhsLength]
 }
+
+
+
