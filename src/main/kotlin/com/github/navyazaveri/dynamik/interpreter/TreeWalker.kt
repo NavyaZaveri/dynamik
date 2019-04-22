@@ -11,6 +11,10 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    override fun visitSkipStatement(skipStmt: SkipStmt): Any {
+        return Any()
+    }
+
     var env = Environment()
     override fun visitAssertStmt(assertStmt: AssertStmt): Any {
         val assertion = evaluate(assertStmt.e1) as Boolean

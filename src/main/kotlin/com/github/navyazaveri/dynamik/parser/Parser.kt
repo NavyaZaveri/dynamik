@@ -36,13 +36,14 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.GLOBAL -> return globalStmt()
             TokenType.ASSERT -> return assertStmt()
             TokenType.SLASH -> {
-                if (!allTokensConsumed() && tokens[current + 1].type == TokenType.STAR)  multiLineComment(); return stmt()
+                if (!allTokensConsumed() && tokens[current + 1].type == TokenType.STAR) return multiLineComment()
+                return singleLineComment()
             }
         }
         return exprStmt()
     }
 
-    fun multiLineComment() {
+    fun multiLineComment(): Stmt {
         consume(TokenType.SLASH)
         consume(TokenType.STAR)
 
@@ -50,13 +51,15 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         while (!consumeIfPresent(TokenType.SLASH)) {
             stmt()
         }
+        return SkipStmt()
     }
 
 
-    fun singleLineComment() {
+    fun singleLineComment(): Stmt {
         consume(TokenType.SLASH)
         consume(TokenType.SLASH)
         stmt()
+        return SkipStmt()
     }
 
     private fun assertStmt(): Stmt {
@@ -354,6 +357,6 @@ fun main(args: Array<String>) {
         .parseStmts()
         .evaluateAllBy(TreeWalker())*/
 
-    "/* val x = 2; /val m = 2; print m;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+    "/* val x = 2; / print x;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 
 }

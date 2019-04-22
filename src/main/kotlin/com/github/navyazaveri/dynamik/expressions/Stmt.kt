@@ -43,6 +43,13 @@ class FnStmt(val functionName: Tok, val params: List<Tok>, val body: List<Stmt>,
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitFnStatement(this)
 }
 
+class SkipStmt:Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitSkipStatement(this)
+    }
+
+}
+
 class ReturnStmt(val statement: Stmt) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitReturnStatement(this)
 }
@@ -83,4 +90,5 @@ interface StatementVisitor<out T> {
     fun visitWaitStmt(waitStmt: WaitStmt): T
     fun visitGlobalStmt(globalStmt: GlobalStmt): T
     fun visitAssertStmt(assertStmt: AssertStmt): T
+    fun visitSkipStatement(skipStmt: SkipStmt): T
 }

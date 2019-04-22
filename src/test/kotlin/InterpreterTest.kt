@@ -140,12 +140,25 @@ class InterpreterTest {
     @Test
     fun testAssertions() {
         val stmts = ("val x =3; val y = 4; assert (x == y);").tokenize().parseStmts()
-        var errorThrown = true
+        var errorThrown = false
         try {
             repl.eval(stmts)
         } catch (err: AssertionErr) {
             errorThrown = true
         }
         assert(errorThrown) { "assertion error not caught!" };
+    }
+
+    @Test
+    fun testComments() {
+        val stmts = "/* val x = 2; / print x;".tokenize().parseStmts()
+        var errorThrown = false
+        try {
+            repl.eval(stmts)
+        } catch (err: VariableNotInScope) {
+            errorThrown = true
+        }
+        assert(errorThrown) { "comment parsing error!" };
+
     }
 }
