@@ -1,8 +1,7 @@
 @global val filename = "foo.txt";
 
 fn write_to_file() {
-    print("writing to");
-    print(filename);
+    print("writing to "+filename);
 }
 
 write_to_file();

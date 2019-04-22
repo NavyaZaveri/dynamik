@@ -54,7 +54,6 @@ class InterpreterTest {
     @Test
     fun testReturn() {
         val stmts = "fn foo() { return 20;} var d = foo(); d;".tokenize().parseStmts()
-        val repl = Repl()
         val actual = repl.eval(stmts)
         val expected = 20.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
@@ -124,7 +123,6 @@ class InterpreterTest {
         val stmts =
             "var x =3; while (x>2) { x = x -1;} var y = 3; var i = 0;  for (i=0;i<1;i = i+1){ y = y-1; } x==y;"
                 .tokenize().parseStmts()
-        val repl = Repl()
         val actual = repl.eval(stmts)
         val expected = true
         assert(actual == expected) { "actual = $actual, expected = $expected" }
@@ -150,7 +148,6 @@ class InterpreterTest {
         val stmts = ("fn foo() { return x; } @global val x= 3; foo(); val c = foo(); c;")
             .tokenize().parseStmts()
         val expected = 3.0
-        val repl = Repl()
         val actual = repl.eval(stmts)
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
@@ -168,9 +165,10 @@ class InterpreterTest {
 
     @Test
     fun testMultiLineComments() {
+        val stmts = "/* val x = 2; / print x;".tokenize().parseStmts()
         var errorThrown = false
         try {
-            "/* val x = 2; / print x;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+            repl.eval(stmts)
         } catch (err: VariableNotInScope) {
             errorThrown = true
         }

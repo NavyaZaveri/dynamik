@@ -13,7 +13,7 @@ plugins {
 }
 
 
-group 'com.github.dynamik'
+group 'com.github.navyazaveri.dynamik'
 version '1.0-SNAPSHOT'
 apply plugin: 'application'
 apply plugin: 'kotlin'
