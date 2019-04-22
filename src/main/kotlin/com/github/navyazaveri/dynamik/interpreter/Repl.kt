@@ -20,6 +20,10 @@ class Repl {
         return res[statements.size - 1]
     }
 
+    fun clear() {
+        interpreter.clear()
+    }
+
     companion object {
         @JvmStatic
         fun run() {

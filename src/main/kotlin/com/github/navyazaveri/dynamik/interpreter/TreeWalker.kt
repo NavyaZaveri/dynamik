@@ -11,6 +11,11 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+
+    fun clear() {
+        env.clear()
+    }
+
     override fun visitSkipStatement(skipStmt: SkipStmt): Any {
         return Any()
     }
