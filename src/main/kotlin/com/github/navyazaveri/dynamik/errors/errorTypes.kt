@@ -16,4 +16,4 @@ class InvalidToken(message: String) : Exception(message)
 class InvalidArgSize(actual: Int, expected: Int, fname: String) :
     Exception("passed $actual args to $fname, expected $expected")
 
-class AssertionErr(v1:Any) : Exception("Assertion Error")
+class AssertionErr(v1: Any) : Exception("Assertion Error")

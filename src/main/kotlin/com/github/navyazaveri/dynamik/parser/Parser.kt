@@ -24,7 +24,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.PRINT -> return printStmt()
             TokenType.VAR -> return varStmt()
             TokenType.VAL -> return valStmt()
-            TokenType.IDENTIFIER -> if (tokens[current + 1].type == TokenType.EQUAL) return assignStmt()
+            TokenType.IDENTIFIER -> if (!allTokensConsumed() && tokens[current + 1].type == TokenType.EQUAL) return assignStmt()
             TokenType.While -> return whileStatement()
             TokenType.FN -> return fnStmt()
             TokenType.Memo -> return fnStmt()
@@ -35,8 +35,28 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.Wait -> return waitStmt()
             TokenType.GLOBAL -> return globalStmt()
             TokenType.ASSERT -> return assertStmt()
+            TokenType.SLASH -> {
+                if (!allTokensConsumed() && tokens[current + 1].type == TokenType.STAR)  multiLineComment(); return stmt()
+            }
         }
         return exprStmt()
+    }
+
+    fun multiLineComment() {
+        consume(TokenType.SLASH)
+        consume(TokenType.STAR)
+
+        //keep parsing statements until we find the ending slash
+        while (!consumeIfPresent(TokenType.SLASH)) {
+            stmt()
+        }
+    }
+
+
+    fun singleLineComment() {
+        consume(TokenType.SLASH)
+        consume(TokenType.SLASH)
+        stmt()
     }
 
     private fun assertStmt(): Stmt {
@@ -316,7 +336,7 @@ fun List<Tok>.parseExpr(): Expr {
 
 fun main(args: Array<String>) {
 
-
+/*
     (" @memo fn fib(n) {" +
             "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
@@ -332,6 +352,8 @@ fun main(args: Array<String>) {
 
     "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();  print 3;  ".tokenize()
         .parseStmts()
-        .evaluateAllBy(TreeWalker())
+        .evaluateAllBy(TreeWalker())*/
+
+    "/* val x = 2; /val m = 2; print m;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
 
 }

@@ -63,14 +63,15 @@ class InterpreterTest {
     @Test
     fun testRecursiveFibWithMemo() {
         val stmts = ("@memo fn fib(n) {" +
-                "if (n<2) { return 1;}" +
+                "if (n==0) {return 0;}" +
+                "if (n==1) { return 1;}" +
                 " return  fib(n-1) + fib(n-2);" +
                 "}" +
-                "val d = fib(3);" +
+                "val d = fib(7);" +
                 "d;").tokenize()
             .parseStmts()
         val actual = repl.eval(stmts)
-        val expected = 3.0
+        val expected = 13.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
