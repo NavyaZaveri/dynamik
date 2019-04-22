@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.github.ajalt:clikt:1.7.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
 
+
 }
 apply plugin: 'com.github.johnrengelman.shadow'
 
@@ -62,5 +63,16 @@ run {
 jar {
     manifest {
         attributes 'Main-Class': 'com.github.navyazaveri.dynamik.interpreter.MainEntryKt'
+    }
+}
+
+test {
+
+    // Always run tests, even when nothing changed.
+    dependsOn 'cleanTest'
+
+    // Show test results.
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }

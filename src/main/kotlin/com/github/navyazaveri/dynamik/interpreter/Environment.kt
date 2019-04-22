@@ -28,6 +28,11 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         return Environment(identifierToValue.toMutableMap())
     }
 
+    fun clear() {
+        identifierToValue.clear()
+        globals.clear()
+    }
+
     fun globals(): Map<String, Variable> {
         // functions are global
         return identifierToValue.filter { (_, v) -> v.value is Callable }

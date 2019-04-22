@@ -2,16 +2,31 @@ import com.github.navyazaveri.dynamik.errors.AssertionErr
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.interpreter.Repl
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
+import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
 import org.junit.Test
 import com.github.navyazaveri.dynamik.parser.parseExpr
 import com.github.navyazaveri.dynamik.parser.parseStmts
 import com.github.navyazaveri.dynamik.scanner.tokenize
+import org.junit.After
+import org.junit.Before
 
 class InterpreterTest {
-    val repl = Repl()
+    lateinit var repl: Repl
+
+    @Before
+    fun setUp() {
+        repl = Repl()
+    }
+
+    @After
+    fun tearDown() {
+        repl.clear()
+    }
+
 
     @Test
     fun testArithmetic() {
+
         val actual = "3+(5+6)*6".tokenize().parseExpr().evaluateBy(TreeWalker())
         val expected = 69.0
         assert(actual == expected) { "actual = $actual, expected=$expected" }
@@ -70,6 +85,7 @@ class InterpreterTest {
                 "val d = fib(7);" +
                 "d;").tokenize()
             .parseStmts()
+
         val actual = repl.eval(stmts)
         val expected = 13.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
@@ -108,6 +124,7 @@ class InterpreterTest {
         val stmts =
             "var x =3; while (x>2) { x = x -1;} var y = 3; var i = 0;  for (i=0;i<1;i = i+1){ y = y-1; } x==y;"
                 .tokenize().parseStmts()
+        val repl = Repl()
         val actual = repl.eval(stmts)
         val expected = true
         assert(actual == expected) { "actual = $actual, expected = $expected" }
@@ -130,19 +147,19 @@ class InterpreterTest {
 
     @Test
     fun testGlobalVariableExistence() {
-        val stmts = ("fn foo() { return x; } @global val x = 3; foo(); val c = foo(); c;")
+        val stmts = ("fn foo() { return x; } @global val x= 3; foo(); val c = foo(); c;")
             .tokenize().parseStmts()
         val expected = 3.0
+        val repl = Repl()
         val actual = repl.eval(stmts)
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
     @Test
     fun testAssertions() {
-        val stmts = ("val x =3; val y = 4; assert (x == y);").tokenize().parseStmts()
         var errorThrown = false
         try {
-            repl.eval(stmts)
+            "val x =3; val y = 4; assert (x == y);".tokenize().parseStmts().evaluateAllBy(TreeWalker())
         } catch (err: AssertionErr) {
             errorThrown = true
         }
@@ -151,10 +168,9 @@ class InterpreterTest {
 
     @Test
     fun testMultiLineComments() {
-        val stmts = "/* val x = 2; / print x;".tokenize().parseStmts()
         var errorThrown = false
         try {
-            repl.eval(stmts)
+            "/* val x = 2; / print x;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
         } catch (err: VariableNotInScope) {
             errorThrown = true
         }
