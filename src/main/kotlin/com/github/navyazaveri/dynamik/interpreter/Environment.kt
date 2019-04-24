@@ -8,7 +8,7 @@ import com.github.navyazaveri.dynamik.expressions.VariableStatus
 
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {
 
-    fun String.existGlobally(): Boolean {
+    fun String.inGlobalScope(): Boolean {
         return globals.containsKey(this)
     }
 
@@ -49,9 +49,6 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         identifierToValue[name] = Variable(value, VariableStatus.VAR)
     }
 
-    fun existsInCurrentScope(name: String): Boolean = identifierToValue.containsKey(name)
-
-    fun existsGlobally(name: String): Boolean = globals.containsKey(name)
 
     fun status(name: String): VariableStatus = identifierToValue[name]?.status
         ?: throw VariableNotInScope(name, this.identifierToValue.keys)
@@ -60,13 +57,13 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         if (name.inCurrentScope()) {
             return identifierToValue[name]!!.value
         }
-        if (name.existGlobally()) {
+        if (name.inGlobalScope()) {
             return globals[name]!!.value
         }
 
-        val vars = identifierToValue.keys + globals.keys
+        val allExistingVars = identifierToValue.keys + globals.keys
 
-        throw VariableNotInScope(name, this.identifierToValue.keys)
+        throw VariableNotInScope(name, allExistingVars)
     }
 
     companion object {

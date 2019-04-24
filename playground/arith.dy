@@ -1,0 +1,10 @@
+fn add(x, y) { return x + y;}
+fn mul(x, y) { return x * y;}
+
+
+val x = 100;
+val y = 2;
+val z = 20;
+val res = add(mul(y,z), x);
+
+print(res);

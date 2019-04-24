@@ -16,8 +16,8 @@ class CommandLineParser : CliktCommand() {
             Repl.run()
         } else {
             if (file != null) {
-                val stuff = File(file).readText()
-                Repl().eval(stuff)
+                val code = File(file).readText()
+                Repl().eval(code)
             }
         }
     }

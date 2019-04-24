@@ -47,8 +47,9 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitParStatement(parStmt: ParStmt): Any {
 
         GlobalScope.launch {
-            Mutex().withLock {
-                this@TreeWalker.visitCallExpression(parStmt.callExpr, true)
+            when (parStmt.lock) {
+                true -> Mutex().withLock { this@TreeWalker.visitCallExpression(parStmt.callExpr, true) }
+                false -> this@TreeWalker.visitCallExpression(parStmt.callExpr, true)
             }
         }
         return Any()

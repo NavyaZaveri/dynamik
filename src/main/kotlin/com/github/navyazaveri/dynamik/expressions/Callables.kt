@@ -8,7 +8,6 @@ typealias FuncName = String
 typealias Arg = Any
 typealias RetVal = Any
 
-
 interface Callable {
     fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): Any
 }
@@ -56,8 +55,8 @@ class MemoizedCallable(val func: FnStmt) : Callable {
     val defaultCallable by lazy { DynamikCallable(func) }
 
     /**
-     * Invokes the callable if its result has not already been cached. Otherwise the cache value
-     * value is returned
+     * Invokes the callable if its result has not already been cached. Otherwise, the cached value
+     * is returned
      */
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val funcKey = Pair(func.functionName.lexeme, arguments)

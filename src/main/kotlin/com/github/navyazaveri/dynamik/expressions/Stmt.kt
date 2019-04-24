@@ -43,7 +43,7 @@ class FnStmt(val functionName: Tok, val params: List<Tok>, val body: List<Stmt>,
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitFnStatement(this)
 }
 
-class SkipStmt:Stmt() {
+class SkipStmt : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitSkipStatement(this)
     }
@@ -58,7 +58,7 @@ class IfStmt(val condition: Expr, val body: List<Stmt>, val elseBody: List<Stmt>
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitIfStmt(this)
 }
 
-class ParStmt(val callExpr: CallExpr) : Stmt() {
+class ParStmt(val callExpr: CallExpr, val lock: Boolean = false) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitParStatement(this)
 }
 

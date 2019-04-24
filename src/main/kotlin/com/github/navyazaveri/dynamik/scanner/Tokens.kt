@@ -2,14 +2,15 @@ package com.github.navyazaveri.dynamik.scanner
 
 data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0)
 
-// The following tokentypes are ordered by precedence.
 enum class TokenType(val regex: Regex) {
 
     LEFT_PAREN("\\(".toRegex()),
     RIGHT_PAREN("\\)".toRegex()), LEFT_BRACE("\\{".toRegex()), RIGHT_BRACE("}".toRegex()),
-    COMMA(",".toRegex()), DOT("\\.".toRegex()), MINUS("-".toRegex()), PLUS("\\+".toRegex()), SEMICOLON(";".toRegex()), SLASH(
-        "/".toRegex()
-    ),
+    COMMA(",".toRegex()),
+    DOT("\\.".toRegex()),
+    MINUS("-".toRegex()),
+    PLUS("\\+".toRegex()),
+    SEMICOLON(";".toRegex()), SLASH("/".toRegex()),
     NUMBER("\\d+".toRegex()),
 
     STAR("\\*".toRegex()),
@@ -23,6 +24,8 @@ enum class TokenType(val regex: Regex) {
     EQUAL("=".toRegex()),
     LESS_EQUAL("<=".toRegex()),
     GREATER_EQUAL(">=".toRegex()),
+
+    PAR_WITH_LOCK("@par_lock".toRegex()),
 
     GREATER(">".toRegex()),
     LESS("<".toRegex()),

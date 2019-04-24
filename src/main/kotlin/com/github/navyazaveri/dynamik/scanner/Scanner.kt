@@ -24,35 +24,16 @@ class Scanner {
         for (nativeTokType in TokenType.values()) {
             if (tokenMatch.type.name == nativeTokType.toString()) {
                 return when (nativeTokType) {
-                    TokenType.NUMBER -> Tok(
-                        nativeTokType,
-                        tokenMatch.text,
-                        tokenMatch.text.toDouble(),
-                        tokenMatch.row
-                    )
+                    TokenType.NUMBER -> Tok(nativeTokType, tokenMatch.text, tokenMatch.text.toDouble(), tokenMatch.row)
                     TokenType.STRING -> Tok(
                         nativeTokType,
                         tokenMatch.text,
                         tokenMatch.text.substring(1, tokenMatch.text.length - 1),
                         tokenMatch.row
                     )
-                    TokenType.TRUE -> Tok(
-                        nativeTokType,
-                        tokenMatch.text,
-                        true
-                    )
-                    TokenType.False -> Tok(
-                        nativeTokType,
-                        tokenMatch.text,
-                        false,
-                        tokenMatch.row
-                    )
-                    else -> Tok(
-                        nativeTokType,
-                        tokenMatch.text,
-                        tokenMatch.text,
-                        tokenMatch.row
-                    )
+                    TokenType.TRUE -> Tok(nativeTokType, tokenMatch.text, true)
+                    TokenType.False -> Tok(nativeTokType, tokenMatch.text, false, tokenMatch.row)
+                    else -> Tok(nativeTokType, tokenMatch.text, tokenMatch.text, tokenMatch.row)
                 }
             }
         }

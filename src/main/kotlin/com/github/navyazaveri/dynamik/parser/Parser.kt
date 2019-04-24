@@ -39,17 +39,27 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
                 if (!allTokensConsumed() && tokens[current + 1].type == TokenType.STAR) return multiLineComment()
                 return singleLineComment()
             }
+            TokenType.PAR_WITH_LOCK -> return parLockStmt()
         }
         return exprStmt()
+    }
+
+    private fun parLockStmt(): Stmt {
+        consume(TokenType.PAR_WITH_LOCK)
+        val callExpr = call()
+        when (callExpr) {
+            is CallExpr -> return ParStmt(callExpr).also { consume(TokenType.SEMICOLON) }
+            else -> throw RuntimeException("par needs to be followed by a function invocation.")
+        }
     }
 
     fun multiLineComment(): Stmt {
         consume(TokenType.SLASH)
         consume(TokenType.STAR)
 
-        //keep parsing statements until we find the ending slash
+        //keep consuming tokens until we find the ending slash
         while (!consumeIfPresent(TokenType.SLASH)) {
-            stmt()
+            advance()
         }
         return SkipStmt()
     }
@@ -184,7 +194,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         consume(TokenType.FN)
         val name = consume(TokenType.IDENTIFIER)
         consume(TokenType.LEFT_PAREN)
-        var params = mutableListOf<Tok>()
+        val params = mutableListOf<Tok>()
         var argLeftToConsume = true
         while (!match(TokenType.RIGHT_PAREN) && argLeftToConsume) {
             val param = consume(TokenType.IDENTIFIER)
@@ -249,7 +259,7 @@ open class ExprParser(val tokens: List<Tok>) {
         }.also { advance() }
     }
 
-    private fun advance(): Tok = tokens[current].also { current += 1 }
+    fun advance(): Tok = tokens[current].also { current += 1 }
 
     fun consume(tokType: TokenType): Tok {
         if (allTokensConsumed()) {
@@ -339,7 +349,7 @@ fun List<Tok>.parseExpr(): Expr {
 
 fun main(args: Array<String>) {
 
-/*
+
     (" @memo fn fib(n) {" +
             "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
@@ -353,10 +363,8 @@ fun main(args: Array<String>) {
         .evaluateAllBy(TreeWalker())
 
 
-    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();  print 3;  ".tokenize()
+    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par_with_lock hello();  print 3;  ".tokenize()
         .parseStmts()
-        .evaluateAllBy(TreeWalker())*/
-
-    "/* val x = 2; / print x;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+        .evaluateAllBy(TreeWalker())
 
 }
