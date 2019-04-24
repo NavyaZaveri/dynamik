@@ -67,3 +67,9 @@ class MemoizedCallable(val func: FnStmt) : Callable {
         return defaultCallable.invoke(arguments, interpreter).also { cache[funcKey] = it }
     }
 }
+
+class ClassCallable : Callable {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
+        TODO("unimplemented")
+    }
+}

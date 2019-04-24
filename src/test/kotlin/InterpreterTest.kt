@@ -175,4 +175,17 @@ class InterpreterTest {
         }
         assert(errorThrown) { "comment parsing error!" };
     }
+
+    @Test
+    fun testIfStatements() {
+        val stmts =
+            "fn add(x, y) { return x +y;}" +
+                    "val x = 3; " +
+                    "var flag = 0; val res = add(x,4); " +
+                    "if (res==7) {flag = 1;} flag;"
+        val actual = repl.eval(stmts)
+        val expected = 1.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+
+    }
 }

@@ -62,8 +62,8 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     override fun visitIfStmt(ifStmt: IfStmt) {
-        val condition = evaluate(ifStmt.condition)
-        if (isType<Boolean>(condition, throwException = true) && condition as Boolean) {
+        val condition = evaluate(ifStmt.condition) as Boolean
+        if (condition) {
             ifStmt.body.forEach { evaluate(it) }
         } else {
             ifStmt.elseBody.forEach { evaluate(it) }

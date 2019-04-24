@@ -1,6 +1,0 @@
-fn add(x, y) { return x+y;}
-
-val x = 20;
-val y = 100;
-val res = add(x,y);
-assert(res == 120);

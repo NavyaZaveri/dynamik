@@ -48,7 +48,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         consume(TokenType.PAR_WITH_LOCK)
         val callExpr = call()
         when (callExpr) {
-            is CallExpr -> return ParStmt(callExpr).also { consume(TokenType.SEMICOLON) }
+            is CallExpr -> return ParStmt(callExpr, lock = true).also { consume(TokenType.SEMICOLON) }
             else -> throw RuntimeException("par needs to be followed by a function invocation.")
         }
     }
@@ -363,7 +363,7 @@ fun main(args: Array<String>) {
         .evaluateAllBy(TreeWalker())
 
 
-    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par_with_lock hello();  print 3;  ".tokenize()
+    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();    print 3;  ".tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 

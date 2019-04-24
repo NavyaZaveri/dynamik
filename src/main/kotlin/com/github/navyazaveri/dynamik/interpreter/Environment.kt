@@ -6,11 +6,14 @@ import com.github.navyazaveri.dynamik.expressions.Callable
 import com.github.navyazaveri.dynamik.expressions.Variable
 import com.github.navyazaveri.dynamik.expressions.VariableStatus
 
-class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf()) {
+
+
+class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf(), val name: String = "") {
 
     fun String.inGlobalScope(): Boolean {
         return globals.containsKey(this)
     }
+
 
     fun String.inCurrentScope(): Boolean {
         return identifierToValue.containsKey(this)
