@@ -8,7 +8,7 @@ import com.github.navyazaveri.dynamik.expressions.VariableStatus
 
 
 
-class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf(), val name: String = "") {
+class Environment(private val identifierToValue: MutableMap<String, Variable> = mutableMapOf(), val name: String = "") {
 
     fun String.inGlobalScope(): Boolean {
         return globals.containsKey(this)

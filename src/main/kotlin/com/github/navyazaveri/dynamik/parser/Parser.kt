@@ -40,8 +40,25 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
                 return singleLineComment()
             }
             TokenType.PAR_WITH_LOCK -> return parLockStmt()
+            TokenType.CLASS -> return classStmt()
         }
         return exprStmt()
+    }
+
+    private fun classStmt(): Stmt {
+        consume(TokenType.CLASS)
+        val tokenName = consume(TokenType.IDENTIFIER)
+
+        //TODO: parse fields
+
+        consume(TokenType.LEFT_BRACE)
+        val methods = mutableListOf<FnStmt>()
+        while (!consumeIfPresent(TokenType.RIGHT_BRACE)) {
+            methods.add(fnStmt())
+        }
+
+        return ClassStmt(tokenName.lexeme, methods)
+
     }
 
     private fun parLockStmt(): Stmt {
@@ -65,14 +82,14 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     }
 
 
-    fun singleLineComment(): Stmt {
+    fun singleLineComment(): SkipStmt {
         consume(TokenType.SLASH)
         consume(TokenType.SLASH)
         stmt()
         return SkipStmt()
     }
 
-    private fun assertStmt(): Stmt {
+    private fun assertStmt(): AssertStmt {
         consume(TokenType.ASSERT)
         consume(TokenType.LEFT_PAREN)
         val expr = expression()
@@ -113,7 +130,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return ReturnStmt(stmt!!)
     }
 
-    private fun forStmt(): Stmt {
+    private fun forStmt(): ForStmt {
         consume(TokenType.FOR)
         consume(TokenType.LEFT_PAREN)
         val init = stmt()
@@ -135,7 +152,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return body
     }
 
-    private fun ifStmt(): Stmt {
+    private fun ifStmt(): IfStmt {
         consume(TokenType.IF)
         consume(TokenType.LEFT_PAREN)
         val condition = expression()
@@ -149,7 +166,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return IfStmt(condition, body)
     }
 
-    private fun whileStatement(): Stmt {
+    private fun whileStatement(): WhileStmt {
         consume(TokenType.While)
         consume(TokenType.LEFT_PAREN)
         val cond = expression()
@@ -159,14 +176,14 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return WhileStmt(cond, body)
     }
 
-    private fun printStmt(): Stmt {
+    private fun printStmt(): PrintStmt {
         consume(TokenType.PRINT)
         val thingToPrint = expression()
         return PrintStmt(thingToPrint)
             .also { consume(TokenType.SEMICOLON) }
     }
 
-    private fun assignStmt(consumeSemicolon: Boolean = true): Stmt {
+    private fun assignStmt(consumeSemicolon: Boolean = true): AssignStmt {
         val id = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
         val valueAssigned = expression()
@@ -189,7 +206,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             .also { consume(TokenType.SEMICOLON) }
     }
 
-    private fun fnStmt(): Stmt {
+    private fun fnStmt(): FnStmt {
         val memoized = consumeIfPresent(TokenType.Memo)
         consume(TokenType.FN)
         val name = consume(TokenType.IDENTIFIER)
@@ -206,7 +223,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return FnStmt(name, params, body, memoized)
     }
 
-    private fun valStmt(): Stmt {
+    private fun valStmt(): ValStmt {
         consume(TokenType.VAL)
         val name = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
@@ -363,7 +380,7 @@ fun main(args: Array<String>) {
         .evaluateAllBy(TreeWalker())
 
 
-    "fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();    print 3;  ".tokenize()
+    "class Blah{} fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();    print 3;  ".tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 

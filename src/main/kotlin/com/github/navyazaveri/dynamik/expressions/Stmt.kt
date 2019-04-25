@@ -72,7 +72,16 @@ class GlobalStmt(val name: Tok, val value: Expr) : Stmt() {
 
 class AssertStmt(val e1: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitAssertStmt(this)
+}
 
+class ClassStmt(
+    val name: String,
+    val methods: List<FnStmt> = mutableListOf(),
+    val fields: List<Any> = mutableListOf()
+) : Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitClassStmt(this)
+    }
 }
 
 
@@ -91,4 +100,5 @@ interface StatementVisitor<out T> {
     fun visitGlobalStmt(globalStmt: GlobalStmt): T
     fun visitAssertStmt(assertStmt: AssertStmt): T
     fun visitSkipStatement(skipStmt: SkipStmt): T
+    fun visitClassStmt(classStmt: ClassStmt): T
 }

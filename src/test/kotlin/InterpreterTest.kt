@@ -173,7 +173,7 @@ class InterpreterTest {
         } catch (err: VariableNotInScope) {
             errorThrown = true
         }
-        assert(errorThrown) { "comment parsing error!" };
+        assert(errorThrown) { "comment parsing error!" }
     }
 
     @Test
