@@ -12,14 +12,16 @@ import kotlinx.coroutines.sync.withLock
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitClassStmt(classStmt: ClassStmt): Any {
-
-        //TODO
+        val dyn = DynamikInstance()
+        classStmt.methods.forEach { dyn.defineMethod(it.functionName.lexeme, DynamikCallable(it)) }
+        env.define(classStmt.name, dyn, status = VariableStatus.VAL)
         return Any()
     }
 
     fun clear() {
         env.clear()
     }
+
 
     override fun visitSkipStatement(skipStmt: SkipStmt): Any {
         return Any()
