@@ -24,7 +24,10 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.PRINT -> return printStmt()
             TokenType.VAR -> return varStmt()
             TokenType.VAL -> return valStmt()
-            TokenType.IDENTIFIER -> if (!allTokensConsumed() && tokens[current + 1].type == TokenType.EQUAL) return assignStmt()
+            TokenType.IDENTIFIER -> {
+                if (!allTokensConsumed() && tokens[current + 1].type == TokenType.EQUAL) return assignStmt()
+                if (!allTokensConsumed() && tokens[current + 1].type == TokenType.DOT) return methodStmt()
+            }
             TokenType.While -> return whileStatement()
             TokenType.FN -> return fnStmt()
             TokenType.Memo -> return fnStmt()
@@ -43,6 +46,15 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.CLASS -> return classStmt()
         }
         return exprStmt()
+    }
+
+    private fun methodStmt(): MethodStmt {
+        val name = consume(TokenType.IDENTIFIER)
+        consume(TokenType.DOT)
+        val method = consume(TokenType.IDENTIFIER)
+        consume(TokenType.LEFT_PAREN)
+        consume(TokenType.RIGHT_PAREN)
+        return MethodStmt(name.lexeme, method.lexeme).also { consume(TokenType.SEMICOLON) }
     }
 
     private fun classStmt(): Stmt {
@@ -383,5 +395,10 @@ fun main(args: Array<String>) {
     "class Blah{} fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();    print 3;  ".tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
+
+    "class Blah{ fn hello() {} } val x = Blah(); x.hello(); ".tokenize()
+        .parseStmts()
+        .evaluateAllBy(TreeWalker())
+
 
 }

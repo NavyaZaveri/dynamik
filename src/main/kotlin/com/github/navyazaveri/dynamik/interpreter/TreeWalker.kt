@@ -11,10 +11,18 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    override fun visitMethodStmt(methodStmt: MethodStmt): Any {
+        val instance = env.get(methodStmt.clazzName) as DynamikInstance
+        val methodName = methodStmt.method
+        println("visiting method")
+        return Any()
+    }
+
     override fun visitClassStmt(classStmt: ClassStmt): Any {
-        val dyn = DynamikInstance()
-        classStmt.methods.forEach { dyn.defineMethod(it.functionName.lexeme, DynamikCallable(it)) }
-        env.define(classStmt.name, dyn, status = VariableStatus.VAL)
+
+        //instead define against DynamikClass, with an invokes method
+        //that bundles it all up and returns a dynamik instance
+        env.define(classStmt.name, DynamikInstance(classStmt.name, classStmt.methods), VariableStatus.VAL)
         return Any()
     }
 
