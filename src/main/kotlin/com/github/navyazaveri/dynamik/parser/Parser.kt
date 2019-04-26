@@ -396,7 +396,7 @@ fun main(args: Array<String>) {
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 
-    "class Blah{ fn hello() {} } val x = Blah(); x.hello(); ".tokenize()
+    "class Blah{ fn hello() {print 86;} } val x = Blah(); x.hello(); ".tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 

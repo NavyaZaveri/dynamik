@@ -14,7 +14,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitMethodStmt(methodStmt: MethodStmt): Any {
         val instance = env.get(methodStmt.clazzName) as DynamikInstance
         val methodName = methodStmt.method
-        println("visiting method")
+        instance.invokeMethod(methodName, mutableListOf(), this);
         return Any()
     }
 
