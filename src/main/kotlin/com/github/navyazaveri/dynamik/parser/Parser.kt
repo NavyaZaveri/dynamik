@@ -26,7 +26,6 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.VAL -> return valStmt()
             TokenType.IDENTIFIER -> {
                 if (!allTokensConsumed() && tokens[current + 1].type == TokenType.EQUAL) return assignStmt()
-                if (!allTokensConsumed() && tokens[current + 1].type == TokenType.DOT) return methodStmt()
             }
             TokenType.While -> return whileStatement()
             TokenType.FN -> return fnStmt()
@@ -196,6 +195,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     }
 
     private fun assignStmt(consumeSemicolon: Boolean = true): AssignStmt {
+
         val id = consume(TokenType.IDENTIFIER)
         consume(TokenType.EQUAL)
         val valueAssigned = expression()
@@ -364,6 +364,18 @@ open class ExprParser(val tokens: List<Tok>) {
             consume(TokenType.RIGHT_PAREN)
             return CallExpr(name.lexeme, args = args)
         }
+        return method()
+    }
+
+    fun method(): Expr {
+        if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && tokens[current + 1].type == TokenType.DOT) {
+            val className = consume(TokenType.IDENTIFIER).lexeme
+            consume(TokenType.DOT)
+            val method = consume(TokenType.IDENTIFIER).lexeme
+            consume(TokenType.LEFT_PAREN)
+            consume(TokenType.RIGHT_PAREN)
+            return MethodExpr(className, method)
+        }
         return primary()
     }
 }
@@ -378,7 +390,7 @@ fun List<Tok>.parseExpr(): Expr {
 
 fun main(args: Array<String>) {
 
-
+/*
     (" @memo fn fib(n) {" +
             "if (n<2) { return 1;}" +
             " return  fib(n-1) + fib(n-2);" +
@@ -392,13 +404,14 @@ fun main(args: Array<String>) {
         .evaluateAllBy(TreeWalker())
 
 
-    "class Blah{} fn hello() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();    print 3;  ".tokenize()
+    ("class Blah{} fn hell" +
+            "o" +
+            "" +
+            "() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();    print 3;  ").tokenize()
+        .parseStmts()
+        .evaluateAllBy(TreeWalker())*/
+
+    "class Blah{ fn hello() {print 99; return 86;} } val x = Blah(); val c = x.hello(); print c;".tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
-
-    "class Blah{ fn hello() {print 86;} } val x = Blah(); x.hello(); ".tokenize()
-        .parseStmts()
-        .evaluateAllBy(TreeWalker())
-
-
 }

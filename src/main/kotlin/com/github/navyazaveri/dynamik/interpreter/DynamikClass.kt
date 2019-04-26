@@ -25,8 +25,8 @@ class DynamikInstance(val name: String, val functions: List<FnStmt>) : Callable 
          */
         return c.invoke(args, interpreter, this.env)
     }
-
 }
+
 
 fun main(args: Array<String>) {
 
