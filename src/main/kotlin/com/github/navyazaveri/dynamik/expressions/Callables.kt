@@ -12,17 +12,14 @@ interface Callable {
     fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): Any
 }
 
-
 class DynamikCallable(val func: FnStmt) : Callable {
 
     override fun invoke(args: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
 
-
-        //check args size
+        // check args size
         if (args.size != func.params.size) {
             throw InvalidArgSize(expected = func.params.size, actual = args.size, fname = func.functionName.lexeme)
         }
-
 
         // set up args
         func.params.zip(args)
@@ -41,7 +38,6 @@ class DynamikCallable(val func: FnStmt) : Callable {
             return r.value
         }
         return Any()
-
     }
 }
 

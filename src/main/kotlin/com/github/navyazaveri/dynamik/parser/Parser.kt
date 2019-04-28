@@ -7,16 +7,16 @@ import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
 import com.github.navyazaveri.dynamik.scanner.Tok
 import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.scanner.tokenize
-
+import java.util.*
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
     fun parseStmts(): List<Stmt> {
-        val stmt = mutableListOf<Stmt>()
+        val stmts = mutableListOf<Stmt>()
         while (!allTokensConsumed()) {
-            stmt.add(stmt())
+            stmts.add(stmt())
         }
-        return stmt
+        return stmts
     }
 
     private fun stmt(): Stmt {
@@ -47,20 +47,11 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return exprStmt()
     }
 
-    private fun methodStmt(): MethodStmt {
-        val name = consume(TokenType.IDENTIFIER)
-        consume(TokenType.DOT)
-        val method = consume(TokenType.IDENTIFIER)
-        consume(TokenType.LEFT_PAREN)
-        consume(TokenType.RIGHT_PAREN)
-        return MethodStmt(name.lexeme, method.lexeme).also { consume(TokenType.SEMICOLON) }
-    }
-
     private fun classStmt(): Stmt {
         consume(TokenType.CLASS)
         val tokenName = consume(TokenType.IDENTIFIER)
 
-        //TODO: parse fields
+        // TODO: parse fields
 
         consume(TokenType.LEFT_BRACE)
         val methods = mutableListOf<FnStmt>()
@@ -69,7 +60,6 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         }
 
         return ClassStmt(tokenName.lexeme, methods)
-
     }
 
     private fun parLockStmt(): Stmt {
@@ -85,13 +75,12 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         consume(TokenType.SLASH)
         consume(TokenType.STAR)
 
-        //keep consuming tokens until we find the ending slash
+        // keep consuming tokens until we find the ending slash
         while (!consumeIfPresent(TokenType.SLASH)) {
             advance()
         }
         return SkipStmt()
     }
-
 
     fun singleLineComment(): SkipStmt {
         consume(TokenType.SLASH)
@@ -352,15 +341,27 @@ open class ExprParser(val tokens: List<Tok>) {
         return false
     }
 
-    fun call(): Expr {
+    fun consumeArgs(): List<Expr> {
         val args = mutableListOf<Expr>()
-        if (match(TokenType.IDENTIFIER) && tokens[current + 1].type == TokenType.LEFT_PAREN) {
+        while (!match(TokenType.RIGHT_PAREN)) {
+            args.add(expression())
+            consumeIfPresent(TokenType.COMMA)
+        }
+        return args
+    }
+
+    fun lookAhead(): Optional<Tok> {
+        if (current + 1 < tokens.size) {
+            return Optional.of(tokens[current + 1])
+        }
+        return Optional.empty()
+    }
+
+    fun call(): Expr {
+        if (match(TokenType.IDENTIFIER) && lookAhead().filter { it.type == TokenType.LEFT_PAREN }.isPresent) {
             val name = consume(TokenType.IDENTIFIER)
             consume(TokenType.LEFT_PAREN)
-            while (!match(TokenType.RIGHT_PAREN)) {
-                args.add(expression())
-                consumeIfPresent(TokenType.COMMA)
-            }
+            val args = consumeArgs()
             consume(TokenType.RIGHT_PAREN)
             return CallExpr(name.lexeme, args = args)
         }
@@ -368,13 +369,14 @@ open class ExprParser(val tokens: List<Tok>) {
     }
 
     fun method(): Expr {
-        if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && tokens[current + 1].type == TokenType.DOT) {
+        if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && lookAhead().filter { it.type == TokenType.LEFT_PAREN }.isPresent) {
             val className = consume(TokenType.IDENTIFIER).lexeme
             consume(TokenType.DOT)
             val method = consume(TokenType.IDENTIFIER).lexeme
             consume(TokenType.LEFT_PAREN)
+            val args = consumeArgs()
             consume(TokenType.RIGHT_PAREN)
-            return MethodExpr(className, method)
+            return MethodExpr(className, method, args)
         }
         return primary()
     }
@@ -390,28 +392,20 @@ fun List<Tok>.parseExpr(): Expr {
 
 fun main(args: Array<String>) {
 
-/*
-    (" @memo fn fib(n) {" +
-            "if (n<2) { return 1;}" +
-            " return  fib(n-1) + fib(n-2);" +
-            "}" +
-            "@global val x = 3;" +
-            "val c = fib(91);" +
-            "print \"got c\"; " +
-            "val d = fib(90);" +
-            "print d;").tokenize()
-        .parseStmts()
-        .evaluateAllBy(TreeWalker())
 
-
-    ("class Blah{} fn hell" +
-            "o" +
+    ("class Blah { " +
+            "fn hello() " + "{print \"insinde hello\"; return 100;" +
+            "   } " +
             "" +
-            "() { var  i =0; for (i=0;i<10;i = i+1) {print \"hello from par\";}   }  @par hello();    print 3;  ").tokenize()
-        .parseStmts()
-        .evaluateAllBy(TreeWalker())*/
-
-    "class Blah{ fn hello() {print 99; return 86;} } val x = Blah(); val c = x.hello(); print c;".tokenize()
+            "fn add(x, y) { return x+y;} " +
+            "fn mul(x,y) { return x*y;}" +
+            "" +
+            "} " +
+            "" +
+            "val x = Blah();" +
+            " val c = x.hello();" +
+            " print c;" +
+            " val p = x.mul(10,20);").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }

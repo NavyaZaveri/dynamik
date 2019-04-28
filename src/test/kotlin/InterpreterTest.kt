@@ -23,7 +23,6 @@ class InterpreterTest {
         repl.clear()
     }
 
-
     @Test
     fun testArithmetic() {
 
@@ -31,7 +30,6 @@ class InterpreterTest {
         val expected = 69.0
         assert(actual == expected) { "actual = $actual, expected=$expected" }
     }
-
 
     @Test
     fun testArithmeticWithTrickyBrackets() {
@@ -57,7 +55,6 @@ class InterpreterTest {
         val actual = repl.eval(stmts)
         val expected = 20.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
-
     }
 
     @Test
@@ -127,7 +124,6 @@ class InterpreterTest {
         val actual = repl.eval(stmts)
         val expected = true
         assert(actual == expected) { "actual = $actual, expected = $expected" }
-
     }
 
     @Test
@@ -140,8 +136,7 @@ class InterpreterTest {
             leak = true
         }
 
-        assert(leak) { "environment leak not caught!" };
-
+        assert(leak) { "environment leak not caught!" }
     }
 
     @Test
@@ -162,7 +157,7 @@ class InterpreterTest {
         } catch (err: AssertionErr) {
             errorThrown = true
         }
-        assert(errorThrown) { "assertion error not caught!" };
+        assert(errorThrown) { "assertion error not caught!" }
     }
 
     @Test
@@ -186,6 +181,5 @@ class InterpreterTest {
         val actual = repl.eval(stmts)
         val expected = 1.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
-
     }
 }

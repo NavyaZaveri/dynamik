@@ -1,10 +1,24 @@
 fn add(x, y) { return x + y;}
 fn mul(x, y) { return x * y;}
+fn add_and_mul(x, y) {
+    val hello = "helllooo";
+
+    fn sub(x,y) {
+       return x-y;
+    }
+   val wtf = sub(x,y);
+    return wtf;
+}
 
 
 val x = 100;
 val y = 2;
 val z = 20;
 val res = add(mul(y,z), x);
+
+val wtf = add_and_mul(10,20);
+val zero = sub(1,1);
+print(zero);
+print(wtf);
 
 print(res);

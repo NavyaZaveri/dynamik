@@ -2,11 +2,7 @@ package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.errors.ValError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
-import com.github.navyazaveri.dynamik.expressions.Callable
-import com.github.navyazaveri.dynamik.expressions.Variable
-import com.github.navyazaveri.dynamik.expressions.VariableStatus
-
-
+import com.github.navyazaveri.dynamik.expressions.*
 
 class Environment(private val identifierToValue: MutableMap<String, Variable> = mutableMapOf(), val name: String = "") {
 
@@ -14,11 +10,9 @@ class Environment(private val identifierToValue: MutableMap<String, Variable> = 
         return globals.containsKey(this)
     }
 
-
     fun String.inCurrentScope(): Boolean {
         return identifierToValue.containsKey(this)
     }
-
 
     fun define(name: String, value: Any, status: VariableStatus) {
         if (name.inCurrentScope()) {
@@ -38,7 +32,7 @@ class Environment(private val identifierToValue: MutableMap<String, Variable> = 
 
     fun globals(): Map<String, Variable> {
         // functions are global
-        return identifierToValue.filter { (_, v) -> v.value is Callable }
+        return identifierToValue.filter { (_, v) -> v.value is DynamikCallable || v.value is MemoizedCallable }
     }
 
     fun assign(name: String, value: Any) {
@@ -51,7 +45,6 @@ class Environment(private val identifierToValue: MutableMap<String, Variable> = 
 
         identifierToValue[name] = Variable(value, VariableStatus.VAR)
     }
-
 
     fun status(name: String): VariableStatus = identifierToValue[name]?.status
         ?: throw VariableNotInScope(name, this.identifierToValue.keys)
@@ -105,6 +98,3 @@ fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
 
     return cost[lhsLength]
 }
-
-
-

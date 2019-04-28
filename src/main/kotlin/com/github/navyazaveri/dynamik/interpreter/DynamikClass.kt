@@ -2,7 +2,6 @@ package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.expressions.*
 
-
 class DynamikInstance(val name: String, val functions: List<FnStmt>) : Callable {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         return interpreter.env.get(name)
@@ -27,7 +26,5 @@ class DynamikInstance(val name: String, val functions: List<FnStmt>) : Callable 
     }
 }
 
-
 fun main(args: Array<String>) {
-
 }

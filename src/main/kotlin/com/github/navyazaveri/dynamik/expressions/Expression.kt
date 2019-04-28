@@ -2,16 +2,14 @@ package com.github.navyazaveri.dynamik.expressions
 
 import com.github.navyazaveri.dynamik.scanner.Tok
 
-
 abstract class Expr {
     abstract fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T
 }
 
-class MethodExpr(val clazzName: String, val method: String) : Expr() {
+class MethodExpr(val clazzName: String, val method: String, val args: List<Expr>) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
-        return visitor.visitMethodExpression(this);
+        return visitor.visitMethodExpression(this)
     }
-
 }
 
 class CallExpr(val funcName: String, val args: List<Expr>) : Expr() {
@@ -74,3 +72,4 @@ class LiteralExpr(val token: Tok) : Expr() {
         fun create(init: Builder.() -> Unit) = Builder().apply(init).build()
     }
 }
+

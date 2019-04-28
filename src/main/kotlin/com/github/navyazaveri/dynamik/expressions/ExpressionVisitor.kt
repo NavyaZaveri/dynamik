@@ -8,4 +8,3 @@ interface ExpressionVisitor<out T> {
     fun visitCallExpression(callExpr: CallExpr, par: Boolean = false): T
     fun visitMethodExpression(methodExpr: MethodExpr): T
 }
-

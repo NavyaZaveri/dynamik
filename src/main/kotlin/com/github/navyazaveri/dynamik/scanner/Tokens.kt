@@ -1,9 +1,10 @@
 package com.github.navyazaveri.dynamik.scanner
 
-data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0)
+data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0) {
+
+}
 
 enum class TokenType(val regex: Regex) {
-
     LEFT_PAREN("\\(".toRegex()),
     RIGHT_PAREN("\\)".toRegex()), LEFT_BRACE("\\{".toRegex()), RIGHT_BRACE("}".toRegex()),
     COMMA(",".toRegex()),

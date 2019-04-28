@@ -51,9 +51,8 @@ class SkipStmt : Stmt() {
 
 class MethodStmt(val clazzName: String, val method: String) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitMethodStmt(this);
+        return visitor.visitMethodStmt(this)
     }
-
 }
 
 class ReturnStmt(val statement: Stmt) : Stmt() {
@@ -81,13 +80,14 @@ class AssertStmt(val e1: Expr) : Stmt() {
 }
 
 class ClassStmt(
-    val name: String, val methods: List<FnStmt> = mutableListOf(), val fields: List<Any> = mutableListOf()
+    val name: String,
+    val methods: List<FnStmt> = mutableListOf(),
+    val fields: List<Any> = mutableListOf()
 ) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitClassStmt(this)
     }
 }
-
 
 interface StatementVisitor<out T> {
     fun visitPrintStmt(printStmt: PrintStmt): T

@@ -14,21 +14,22 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitMethodExpression(methodExpr: MethodExpr): Any {
         val instance = env.get(methodExpr.clazzName) as DynamikInstance
         val methodName = methodExpr.method
+        val args = methodExpr.args.map { evaluate(it) }
         val mainEnv = this.env
-        return instance.invokeMethod(methodName, mutableListOf(), this)
+        return instance.invokeMethod(methodName, args, this)
             .also { this.env = mainEnv }
     }
 
     override fun visitMethodStmt(methodStmt: MethodStmt): Any {
         val instance = env.get(methodStmt.clazzName) as DynamikInstance
         val methodName = methodStmt.method
-        return instance.invokeMethod(methodName, mutableListOf(), this);
+        return instance.invokeMethod(methodName, mutableListOf(), this)
     }
 
     override fun visitClassStmt(classStmt: ClassStmt): Any {
 
-        //instead define against DynamikClass, with an invokes method
-        //that bundles it all up and returns a dynamik instance
+        // instead define against DynamikClass, with an invokes method
+        // that bundles it all up and returns a dynamik instance
         env.define(classStmt.name, DynamikInstance(classStmt.name, classStmt.methods), VariableStatus.VAL)
         return Any()
     }
@@ -36,7 +37,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     fun clear() {
         env.clear()
     }
-
 
     override fun visitSkipStatement(skipStmt: SkipStmt): Any {
         return Any()
@@ -50,7 +50,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         }
         return true
     }
-
 
     override fun visitGlobalStmt(globalStmt: GlobalStmt): Any {
         env.define(globalStmt.name.lexeme, globalStmt.value, VariableStatus.VAL)
@@ -77,7 +76,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         return Any()
     }
 
-
     override fun visitReturnStatement(returnStmt: ReturnStmt): Any {
         val result = evaluate(returnStmt.statement)
         throw Return(result)
@@ -96,7 +94,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         val callable = env.get(callExpr.funcName) as Callable
         val args = callExpr.args.map { it.evaluateBy(this) }
         val mainEnv = env
-
 
         /** If the function needs to spawned in parallel, simply invoke the
         function against a *new* interpreter instance. So each par function has
@@ -131,10 +128,10 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     override fun visitWhileStatement(whileStmt: WhileStmt) {
-        var condition = evaluate(whileStmt.expr)
-        while (isType<Boolean>(condition, throwException = true) && (condition as Boolean)) {
+        var condition = evaluate(whileStmt.expr) as Boolean
+        while (condition) {
             whileStmt.stmts.forEach { evaluate(it) }
-            condition = evaluate(whileStmt.expr)
+            condition = evaluate(whileStmt.expr) as Boolean
         }
     }
 

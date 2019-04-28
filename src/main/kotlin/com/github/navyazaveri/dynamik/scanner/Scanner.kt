@@ -41,7 +41,6 @@ class Scanner {
     }
 }
 
-
 fun String.tokenize(): List<Tok> {
     return Scanner().tokenize(this)
 }
