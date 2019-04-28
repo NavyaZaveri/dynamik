@@ -182,4 +182,20 @@ class InterpreterTest {
         val expected = 1.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
+
+    @Test
+    fun testBasicClass() {
+        val stmts = ("class Calculator {" +
+                "fn add(x, y) { return x+y;}" +
+                "fn mul(x,y) { return x* y; }" +
+                "}" +
+                "val calc = Calculator();" +
+                "val res = calc.mul(10,20);" + "" +
+                "res;").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 200.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
 }
+

@@ -25,7 +25,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.VAR -> return varStmt()
             TokenType.VAL -> return valStmt()
             TokenType.IDENTIFIER -> {
-                if (!allTokensConsumed() && tokens[current + 1].type == TokenType.EQUAL) return assignStmt()
+                if (nextTokenTypeIs(TokenType.EQUAL)) return assignStmt()
             }
             TokenType.While -> return whileStatement()
             TokenType.FN -> return fnStmt()
@@ -38,7 +38,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.GLOBAL -> return globalStmt()
             TokenType.ASSERT -> return assertStmt()
             TokenType.SLASH -> {
-                if (!allTokensConsumed() && tokens[current + 1].type == TokenType.STAR) return multiLineComment()
+                if (nextTokenTypeIs(TokenType.STAR)) return multiLineComment()
                 return singleLineComment()
             }
             TokenType.PAR_WITH_LOCK -> return parLockStmt()
@@ -368,8 +368,12 @@ open class ExprParser(val tokens: List<Tok>) {
         return method()
     }
 
+    fun nextTokenTypeIs(t: TokenType): Boolean {
+        return lookAhead().filter { it.type == t }.isPresent
+    }
+
     fun method(): Expr {
-        if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && lookAhead().filter { it.type == TokenType.LEFT_PAREN }.isPresent) {
+        if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && nextTokenTypeIs(TokenType.DOT)) {
             val className = consume(TokenType.IDENTIFIER).lexeme
             consume(TokenType.DOT)
             val method = consume(TokenType.IDENTIFIER).lexeme
@@ -393,7 +397,7 @@ fun List<Tok>.parseExpr(): Expr {
 fun main(args: Array<String>) {
 
 
-    ("class Blah { " +
+    ("class Calculator { " +
             "fn hello() " + "{print \"insinde hello\"; return 100;" +
             "   } " +
             "" +
@@ -402,10 +406,9 @@ fun main(args: Array<String>) {
             "" +
             "} " +
             "" +
-            "val x = Blah();" +
-            " val c = x.hello();" +
-            " print c;" +
-            " val p = x.mul(10,20);").tokenize()
+            "val calc = Calculator();" +
+            " val p = calc.mul(10,20);" +
+            "print p;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }

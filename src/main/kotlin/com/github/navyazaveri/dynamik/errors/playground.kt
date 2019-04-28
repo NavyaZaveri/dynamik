@@ -11,6 +11,7 @@ class Foo : Thing {
 fun get_thing(t: Thing) {
     println("using generic thing")
 }
+
 fun get_thing(f: Foo) {
     println("using concrete foo")
 }
