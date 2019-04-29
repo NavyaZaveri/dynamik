@@ -4,13 +4,16 @@ import com.github.navyazaveri.dynamik.errors.AssertionErr
 import com.github.navyazaveri.dynamik.errors.UnexpectedType
 import com.github.navyazaveri.dynamik.expressions.*
 import kotlinx.coroutines.GlobalScope
+;
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import com.github.navyazaveri.dynamik.scanner.TokenType
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    val jobs = mutableListOf<Job>()
     override fun visitMethodExpression(methodExpr: MethodExpr): Any {
         val instance = env.get(methodExpr.clazzName) as DynamikInstance
         val methodName = methodExpr.method
@@ -62,7 +65,14 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     running.
      */
     override fun visitWaitStmt(waitStmt: WaitStmt): Any {
-        return runBlocking { }
+        runBlocking {
+            println("wowoow")
+            jobs.forEach { it.join() }
+            println(jobs.size)
+            jobs.clear()
+        }
+
+        return Any()
     }
 
     override fun visitParStatement(parStmt: ParStmt): Any {

@@ -7,7 +7,7 @@ import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
 import com.github.navyazaveri.dynamik.scanner.Tok
 import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.scanner.tokenize
-import java.util.*
+import java.util.Optional
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
@@ -106,7 +106,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return GlobalStmt(name, valueAssigned).also { consume(TokenType.SEMICOLON) }
     }
 
-    private fun waitStmt(): Stmt {
+    private fun waitStmt(): WaitStmt {
         consume(TokenType.Wait)
         return WaitStmt().also { consume(TokenType.SEMICOLON) }
     }
@@ -409,7 +409,7 @@ fun main(args: Array<String>) {
             "" +
             "val calc = Calculator();" +
             "val p = calc.mul(10,20);" +
-            "calc.thing();"+
+            "calc.thing();" +
             "print p;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())

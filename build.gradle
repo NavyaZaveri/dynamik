@@ -19,6 +19,8 @@ version '1.0-SNAPSHOT'
 apply plugin: 'application'
 apply plugin: 'kotlin'
 apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
 
 
 

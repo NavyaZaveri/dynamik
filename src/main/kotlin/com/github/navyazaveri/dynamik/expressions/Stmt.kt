@@ -1,6 +1,9 @@
 package com.github.navyazaveri.dynamik.expressions
 
 import com.github.navyazaveri.dynamik.scanner.Tok
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import javax.xml.bind.JAXBElement
 
 abstract class Stmt {
     abstract fun <T> evaluateBy(visitor: StatementVisitor<T>): T
@@ -68,7 +71,10 @@ class ParStmt(val callExpr: CallExpr, val lock: Boolean = false) : Stmt() {
 }
 
 class WaitStmt : Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitWaitStmt(this)
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        GlobalScope.launch { visitor.visitWaitStmt(this@WaitStmt) }
+        return visitor.visitSkipStatement(SkipStmt())
+    }
 }
 
 class GlobalStmt(val name: Tok, val value: Expr) : Stmt() {
