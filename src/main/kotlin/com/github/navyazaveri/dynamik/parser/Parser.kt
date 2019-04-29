@@ -402,12 +402,14 @@ fun main(args: Array<String>) {
             "   } " +
             "" +
             "fn add(x, y) { return x+y;} " +
-            "fn mul(x,y) { return x*y;}" +
+            "fn mul(x,y) { val a = 20; return x*y;}" +
+            "fn thing() { print a;}" +
             "" +
             "} " +
             "" +
             "val calc = Calculator();" +
-            " val p = calc.mul(10,20);" +
+            "val p = calc.mul(10,20);" +
+            "calc.thing();"+
             "print p;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())

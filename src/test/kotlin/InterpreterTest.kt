@@ -197,5 +197,20 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
+    @Test
+    fun testNestedFunction() {
+        val stmts = ("fn add_and_inc(x,y) { fn inc(x) {" + "return x+1; }" +
+                " val p = x+y;" +
+                " return inc(p);" +
+                "}" +
+                "val res = add_and_inc(3,4);" +
+                "res;" +
+                "").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 8.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+
+    }
+
 }
 

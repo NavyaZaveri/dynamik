@@ -4,7 +4,7 @@ import com.github.navyazaveri.dynamik.errors.ValError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
 
-class Environment(private val identifierToValue: MutableMap<String, Variable> = mutableMapOf(), val name: String = "") {
+class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf(), val name: String = "") {
 
     fun String.inGlobalScope(): Boolean {
         return globals.containsKey(this)
@@ -28,6 +28,11 @@ class Environment(private val identifierToValue: MutableMap<String, Variable> = 
     fun clear() {
         identifierToValue.clear()
         globals.clear()
+    }
+
+    fun functions(): Map<String, Variable> {
+        return identifierToValue.filter { (_, v) -> v.value is DynamikCallable || v.value is MemoizedCallable }
+
     }
 
     fun globals(): Map<String, Variable> {

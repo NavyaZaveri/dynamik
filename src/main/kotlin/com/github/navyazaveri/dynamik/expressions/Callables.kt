@@ -8,6 +8,10 @@ typealias FuncName = String
 typealias Arg = Any
 typealias RetVal = Any
 
+abstract class FunctionCallable : Callable {
+    abstract override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment);
+}
+
 interface Callable {
     fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): Any
 }
