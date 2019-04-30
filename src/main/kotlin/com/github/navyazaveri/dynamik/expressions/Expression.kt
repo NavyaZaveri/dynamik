@@ -73,3 +73,9 @@ class LiteralExpr(val token: Tok) : Expr() {
     }
 }
 
+class InstanceExpr(val clazzName: String, val expr: Expr) : Expr() {
+    override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
+        return visitor.visitClazzExpression(this);
+    }
+}
+

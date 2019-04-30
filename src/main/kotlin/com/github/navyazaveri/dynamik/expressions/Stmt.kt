@@ -82,7 +82,7 @@ class AssertStmt(val e1: Expr) : Stmt() {
 class ClassStmt(
     val name: String,
     val methods: List<FnStmt> = mutableListOf(),
-    val fields: List<Any> = mutableListOf()
+    val fields: List<String> = mutableListOf()
 ) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitClassStmt(this)

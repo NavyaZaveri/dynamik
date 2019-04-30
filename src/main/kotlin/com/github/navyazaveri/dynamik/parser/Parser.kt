@@ -7,7 +7,7 @@ import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
 import com.github.navyazaveri.dynamik.scanner.Tok
 import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.scanner.tokenize
-import java.util.Optional
+import java.util.*
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
@@ -50,8 +50,12 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     private fun classStmt(): Stmt {
         consume(TokenType.CLASS)
         val tokenName = consume(TokenType.IDENTIFIER)
-
-        // TODO: parse fields
+        val hasFields = consumeIfPresent(TokenType.LEFT_PAREN)
+        var fields = mutableListOf<String>()
+        if (hasFields) {
+            fields = consumeTokens().map { it.lexeme }.toMutableList()
+            consume(TokenType.RIGHT_PAREN)
+        }
 
         consume(TokenType.LEFT_BRACE)
         val methods = mutableListOf<FnStmt>()
@@ -59,7 +63,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             methods.add(fnStmt())
         }
 
-        return ClassStmt(tokenName.lexeme, methods)
+        return ClassStmt(tokenName.lexeme, methods, fields)
     }
 
     private fun parLockStmt(): Stmt {
@@ -341,6 +345,16 @@ open class ExprParser(val tokens: List<Tok>) {
         return false
     }
 
+    fun consumeTokens(): List<Tok> {
+        val args = mutableListOf<Tok>()
+        while (!match(TokenType.RIGHT_PAREN)) {
+            args.add(tokens[current])
+            consumeIfPresent(TokenType.COMMA)
+            current += 1;
+        }
+        return args
+    }
+
     fun consumeArgs(): List<Expr> {
         val args = mutableListOf<Expr>()
         while (!match(TokenType.RIGHT_PAREN)) {
@@ -365,37 +379,23 @@ open class ExprParser(val tokens: List<Tok>) {
             consume(TokenType.RIGHT_PAREN)
             return CallExpr(name.lexeme, args = args)
         }
-        return method()
+        return instance()
     }
 
     fun nextTokenTypeIs(t: TokenType): Boolean {
         return lookAhead().filter { it.type == t }.isPresent
     }
 
-    fun clazz() {
+    fun instance(): Expr {
         if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && nextTokenTypeIs(TokenType.DOT)) {
             val className = consume(TokenType.IDENTIFIER).lexeme
             consume(TokenType.DOT)
             val expr = expression()
-        }
-    }
-
-    fun meth() {
-
-    }
-
-    fun method(): Expr {
-        if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && nextTokenTypeIs(TokenType.DOT)) {
-            val className = consume(TokenType.IDENTIFIER).lexeme
-            consume(TokenType.DOT)
-            val method = consume(TokenType.IDENTIFIER).lexeme
-            consume(TokenType.LEFT_PAREN)
-            val args = consumeArgs()
-            consume(TokenType.RIGHT_PAREN)
-            return MethodExpr(className, method, args)
+            return InstanceExpr(className, expr)
         }
         return primary()
     }
+
 }
 
 fun List<Tok>.parseStmts(): List<Stmt> {
@@ -409,19 +409,18 @@ fun List<Tok>.parseExpr(): Expr {
 fun main(args: Array<String>) {
 
 
-    ("class Calculator { " +
+    ("class Calculator(name) { " +
             "fn hello() " + "{print \"insinde hello\"; return 100;" +
             "   } " +
             "" +
             "fn add(x, y) { return x+y;} " +
             "fn mul(x,y) { val a = 20; return x*y;}" +
-            "fn thing() { print a;}" +
             "" +
             "} " +
             "" +
-            "val calc = Calculator();" +
+            "val calc = Calculator(\"fejp\");" +
             "val p = calc.mul(10,20);" +
-            "calc.thing();" +
+            "print calc.name;" +
             "print p;").tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
