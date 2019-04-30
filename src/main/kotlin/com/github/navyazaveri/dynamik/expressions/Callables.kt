@@ -45,6 +45,8 @@ class DynamikCallable(val func: FnStmt) : Callable {
     }
 }
 
+
+
 class MemoizedCallable(val func: FnStmt) : Callable {
     var hits = 0
 

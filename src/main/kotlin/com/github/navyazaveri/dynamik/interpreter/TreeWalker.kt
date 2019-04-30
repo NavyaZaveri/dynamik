@@ -14,6 +14,8 @@ import kotlinx.coroutines.sync.withLock
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     val jobs = mutableListOf<Job>()
+    var env = Environment()
+
     override fun visitMethodExpression(methodExpr: MethodExpr): Any {
         val instance = env.get(methodExpr.clazzName) as DynamikInstance
         val methodName = methodExpr.method
@@ -23,17 +25,18 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             .also { this.env = mainEnv }
     }
 
-    override fun visitMethodStmt(methodStmt: MethodStmt): Any {
-        val instance = env.get(methodStmt.clazzName) as DynamikInstance
-        val methodName = methodStmt.method
-        return instance.invokeMethod(methodName, mutableListOf(), this)
-    }
 
     override fun visitClassStmt(classStmt: ClassStmt): Any {
 
         // instead define against DynamikClass, with an invokes method
         // that bundles it all up and returns a dynamik instance
-        env.define(classStmt.name, DynamikInstance(classStmt.name, classStmt.methods), VariableStatus.VAL)
+        //env.define(classStmt.name, DynamikInstance(classStmt.name, classStmt.methods), VariableStatus.VAL)
+        val parmas = classStmt.fields.map { it as String }
+        env.define(
+            classStmt.name, DynamikClass(classStmt.name, classStmt.methods, parmas),
+            VariableStatus.VAL
+        )
+
         return Any()
     }
 
@@ -45,7 +48,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         return Any()
     }
 
-    var env = Environment()
     override fun visitAssertStmt(assertStmt: AssertStmt): Any {
         val assertion = evaluate(assertStmt.e1) as Boolean
         if (!assertion) {
@@ -66,9 +68,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
      */
     override fun visitWaitStmt(waitStmt: WaitStmt): Any {
         runBlocking {
-            println("wowoow")
             jobs.forEach { it.join() }
-            println(jobs.size)
             jobs.clear()
         }
 

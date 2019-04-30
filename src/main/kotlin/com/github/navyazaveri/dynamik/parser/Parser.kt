@@ -372,6 +372,18 @@ open class ExprParser(val tokens: List<Tok>) {
         return lookAhead().filter { it.type == t }.isPresent
     }
 
+    fun clazz() {
+        if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && nextTokenTypeIs(TokenType.DOT)) {
+            val className = consume(TokenType.IDENTIFIER).lexeme
+            consume(TokenType.DOT)
+            val expr = expression()
+        }
+    }
+
+    fun meth() {
+
+    }
+
     fun method(): Expr {
         if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && nextTokenTypeIs(TokenType.DOT)) {
             val className = consume(TokenType.IDENTIFIER).lexeme
