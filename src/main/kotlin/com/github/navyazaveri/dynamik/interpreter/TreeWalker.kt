@@ -13,6 +13,14 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    override fun visitInstanceStmt(instanceStmt: InstanceStmt): Any {
+        val instance = env.get(instanceStmt.name) as DynamikInstance
+        //mutable borrows instance environment
+        val oldEnv = this.env
+        this.env = instance.env
+        return evaluate(instanceStmt.stmt).also { this.env = oldEnv; }
+    }
+
     override fun visitClazzExpression(instanceExpr: InstanceExpr): Any {
         val instance = env.get(instanceExpr.clazzName) as DynamikInstance
         //mutable borrows instance environment

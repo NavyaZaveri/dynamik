@@ -5,6 +5,8 @@ data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val li
 }
 
 enum class TokenType(val regex: Regex) {
+    EOF("[\r\n]+".toRegex()),
+
     LEFT_PAREN("\\(".toRegex()),
     RIGHT_PAREN("\\)".toRegex()), LEFT_BRACE("\\{".toRegex()), RIGHT_BRACE("}".toRegex()),
     COMMA(",".toRegex()),
@@ -47,17 +49,16 @@ enum class TokenType(val regex: Regex) {
     NIL("nil".toRegex()),
     TRUE("true".toRegex()),
     False("false".toRegex()),
-    VAR("var".toRegex()),
+    VAR("""\bvar\b""".toRegex()),
     ASSERT("assert".toRegex()),
 
     PRINT("print".toRegex()), RETURN("return".toRegex()),
     LOOP("loop".toRegex()),
-    VAL("val".toRegex()),
+    VAL("""\bval\b""".toRegex()),
     Par("@par".toRegex()),
     While("while".toRegex()),
     Memo("@memo".toRegex()),
     Wait("@wait".toRegex()),
 
-    IDENTIFIER("\\w+".toRegex()),
-    EOF("[\r\n]+".toRegex()),
+    IDENTIFIER("\\w+".toRegex())
 }

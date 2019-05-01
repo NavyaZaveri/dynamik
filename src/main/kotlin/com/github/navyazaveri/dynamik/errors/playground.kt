@@ -27,11 +27,7 @@ fun hello() {
     }
 }
 
-suspend fun main(args: Array<String>) {
-    runBlocking {
-        val job = GlobalScope.launch { hello() }
-        job.join()
-    }
-    print("done")
-
+fun main(args: Array<String>) {
+    val regex = """\bval\b""".toRegex();
+    regex.containsMatchIn("fn foo() { val x = 2;} x;").also { println(it) }
 }

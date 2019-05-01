@@ -19,6 +19,13 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return stmts
     }
 
+    fun instanceStmt(): InstanceStmt {
+        val name = consume(TokenType.IDENTIFIER).lexeme
+        consume(TokenType.DOT)
+        val behavior = stmt()
+        return InstanceStmt(name, behavior)
+    }
+
     private fun stmt(): Stmt {
         when (tokens[current].type) {
             TokenType.PRINT -> return printStmt()
@@ -26,6 +33,8 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.VAL -> return valStmt()
             TokenType.IDENTIFIER -> {
                 if (nextTokenTypeIs(TokenType.EQUAL)) return assignStmt()
+                if (nextTokenTypeIs(TokenType.DOT)) return instanceStmt()
+
             }
             TokenType.While -> return whileStatement()
             TokenType.FN -> return fnStmt()
@@ -59,9 +68,10 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
         consume(TokenType.LEFT_BRACE)
         val methods = mutableListOf<FnStmt>()
-        while (!consumeIfPresent(TokenType.RIGHT_BRACE)) {
+        while (!match(TokenType.RIGHT_BRACE)) {
             methods.add(fnStmt())
         }
+        consume(TokenType.RIGHT_BRACE)
 
         return ClassStmt(tokenName.lexeme, methods, fields)
     }
@@ -395,7 +405,6 @@ open class ExprParser(val tokens: List<Tok>) {
         }
         return primary()
     }
-
 }
 
 fun List<Tok>.parseStmts(): List<Stmt> {
@@ -418,6 +427,7 @@ fun main(args: Array<String>) {
             "" +
             "} " +
             "" +
+            "class Thing(value) {}" +
             "val calc = Calculator(\"fejp\");" +
             "val p = calc.mul(10,20);" +
             "print calc.name;" +
