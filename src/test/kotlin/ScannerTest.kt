@@ -2,6 +2,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import com.github.navyazaveri.dynamik.scanner.Scanner
 import com.github.navyazaveri.dynamik.scanner.TokenType
+import com.github.navyazaveri.dynamik.scanner.tokenize
 
 class ScannerTest {
     private val s = Scanner()
@@ -27,5 +28,11 @@ class ScannerTest {
         val expected = "hello world"
         val actual = tokens[tokens.size - 1].literal
         assertTrue("actual = $actual, expected = $expected", actual == expected)
+    }
+
+    @Test
+    fun testBoundaryMatching() {
+        val toks = "val thing = value".tokenize();
+        assertTrue(toks[toks.size-1].type == TokenType.IDENTIFIER)
     }
 }
