@@ -31,20 +31,36 @@ class DynamikCallable(val func: FnStmt) : Callable {
                 env.define(param.lexeme, arg, status = VariableStatus.VAR)
             }
 
-        // functions are global, put them into the local environment
-        interpreter.env.globals()
+        val oldEnv = interpreter.env
+
+        //make functions visible
+        interpreter.env.functions()
             .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
+
+        //if it's a class environment, then it will have some assoiciated fields. Make these visible.
+        interpreter.env.fields()
+            .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAR) }
+
 
         // now evaluate all statements against the environment supplied to the function
         try {
             interpreter.evaluateStmts(func.body, env = env)
         } catch (r: Return) {
             return r.value
+        } finally {
+            //update fields
+            for ((k, v) in env.identifierToValue) {
+                if (k in oldEnv.fields) {
+                    oldEnv.fields[k] = v
+                    oldEnv.identifierToValue[k] = v
+                }
+            }
+
         }
         return Any()
     }
-}
 
+}
 
 
 class MemoizedCallable(val func: FnStmt) : Callable {

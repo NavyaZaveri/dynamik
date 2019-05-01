@@ -359,10 +359,12 @@ open class ExprParser(val tokens: List<Tok>) {
         val args = mutableListOf<Tok>()
         while (!match(TokenType.RIGHT_PAREN)) {
             args.add(tokens[current])
-            consumeIfPresent(TokenType.COMMA)
-            current += 1;
+            val comma = consumeIfPresent(TokenType.COMMA)
+            if (!comma) {
+                current += 1
+            }
         }
-        return args
+        return args.filter { it.type != TokenType.COMMA }
     }
 
     fun consumeArgs(): List<Expr> {
@@ -418,20 +420,20 @@ fun List<Tok>.parseExpr(): Expr {
 fun main(args: Array<String>) {
 
 
-    ("class Calculator(name) { " +
+    ("class Calculator(name, b) { " +
             "fn hello() " + "{print \"insinde hello\"; return 100;" +
             "   } " +
             "" +
             "fn add(x, y) { return x+y;} " +
-            "fn mul(x,y) { val a = 20; return x*y;}" +
+            "fn mul(x,y) {  name = 10; val a = 20; return x*y;}" +
             "" +
             "} " +
             "" +
-            "class Thing(value) {}" +
-            "val calc = Calculator(\"fejp\");" +
+            "val calc = Calculator(\"my_calcutor\", 999);" +
             "val p = calc.mul(10,20);" +
-            "print calc.name;" +
-            "print p;").tokenize()
+            "print calc.name;" + "" +
+            "print calc.b;"
+            ).tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
 }

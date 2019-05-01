@@ -213,7 +213,7 @@ class InterpreterTest {
     }
 
     @Test
-    fun testClassFieldMutation() {
+    fun testClassFieldMutationFromOuterScope() {
         val stmts = ("class Thing(value) {}" +
                 "val foo = Thing(20);" +
                 "foo.value = 111;" +
@@ -221,6 +221,20 @@ class InterpreterTest {
         val actual = repl.eval(stmts)
         val expected = 111.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testFieldMutationWithinClassMethod() {
+        val stmts = ("class Foo(bar) {" +
+                "fn mut_bar() { bar = 101;}" +
+                "}" +
+                "val f = Foo(20);" +
+                "f.mut_bar();" +
+                "f.bar;").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 101.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+
     }
 
 }

@@ -1,0 +1,20 @@
+class Math(x) {
+    fn mul(){
+        return x*3;
+    }
+    fn hello() {
+        print 20;
+    }
+
+    fn add(a, b) {
+        x = a+b;
+    }
+    fn get_x() {
+     return x;
+      }
+}
+val y=90;
+val m= Math(y);
+m.add(20,30);
+val res = m.get_x();
+print(res);

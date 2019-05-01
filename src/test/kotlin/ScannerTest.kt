@@ -33,6 +33,7 @@ class ScannerTest {
     @Test
     fun testBoundaryMatching() {
         val toks = "val thing = value".tokenize();
-        assertTrue(toks[toks.size-1].type == TokenType.IDENTIFIER)
+        assertTrue(toks[toks.size - 1].type == TokenType.IDENTIFIER)
     }
+
 }

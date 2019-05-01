@@ -30,4 +30,5 @@ fun hello() {
 fun main(args: Array<String>) {
     val regex = """\bval\b""".toRegex();
     regex.containsMatchIn("fn foo() { val x = 2;} x;").also { println(it) }
+
 }

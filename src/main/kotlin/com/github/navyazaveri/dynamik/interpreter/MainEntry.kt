@@ -18,7 +18,7 @@ class CommandLineParser : CliktCommand() {
                 try {
                     Repl().eval(code)
                 } catch (e: Exception) {
-                    println(e.message)
+                    println(e)
                 }
             }
         }

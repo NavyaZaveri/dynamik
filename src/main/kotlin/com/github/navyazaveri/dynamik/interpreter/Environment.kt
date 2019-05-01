@@ -2,9 +2,13 @@ package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.errors.ValError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
-import com.github.navyazaveri.dynamik.expressions.*
+import com.github.navyazaveri.dynamik.expressions.DynamikCallable
+import com.github.navyazaveri.dynamik.expressions.MemoizedCallable
+import com.github.navyazaveri.dynamik.expressions.Variable
+import com.github.navyazaveri.dynamik.expressions.VariableStatus
 
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf(), val name: String = "") {
+    val fields = mutableMapOf<String, Variable>()
 
     fun String.inGlobalScope(): Boolean {
         return globals.containsKey(this)
@@ -40,6 +44,10 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         return identifierToValue.filter { (_, v) -> v.value is DynamikCallable || v.value is MemoizedCallable }
     }
 
+    fun fields(): Map<String, Variable> {
+        return fields
+    }
+
     fun assign(name: String, value: Any) {
         if (!name.inCurrentScope()) {
             throw VariableNotInScope(name, this.identifierToValue.keys)
@@ -61,11 +69,15 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         if (name.inGlobalScope()) {
             return globals[name]!!.value
         }
-
         val allExistingVars = identifierToValue.keys + globals.keys
 
         throw VariableNotInScope(name, allExistingVars)
     }
+
+    fun defineField(name: String, value: Any) {
+        fields[name] = Variable(value, VariableStatus.VAR)
+    }
+
 
     companion object {
         val globals = mutableMapOf<String, Variable>()
@@ -73,6 +85,12 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         fun addGlobal(name: String, value: Any) {
             globals[name] = Variable(value, VariableStatus.VAL)
         }
+    }
+
+    override fun toString(): String {
+        return identifierToValue.toString(
+
+        )
     }
 }
 

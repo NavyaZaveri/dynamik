@@ -1,11 +1,8 @@
 package com.github.navyazaveri.dynamik.scanner
 
-data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0) {
-
-}
+data class Tok(val type: TokenType, val lexeme: String, var literal: Any, val line: Int = 0)
 
 enum class TokenType(val regex: Regex) {
-    EOF("[\r\n]+".toRegex()),
 
     LEFT_PAREN("\\(".toRegex()),
     RIGHT_PAREN("\\)".toRegex()), LEFT_BRACE("\\{".toRegex()), RIGHT_BRACE("}".toRegex()),
@@ -42,7 +39,7 @@ enum class TokenType(val regex: Regex) {
     AND_AND("&".toRegex()),
 
     CLASS("class".toRegex()), ELSE("else".toRegex()),
-    FN("fn".toRegex()),
+    FN("""\bfn\b""".toRegex()),
     FOR("for".toRegex()),
     IF("if".toRegex()),
 
@@ -60,5 +57,7 @@ enum class TokenType(val regex: Regex) {
     Memo("@memo".toRegex()),
     Wait("@wait".toRegex()),
 
-    IDENTIFIER("\\w+".toRegex())
+    IDENTIFIER("\\w+".toRegex()),
+    EOF("[\r\n]+".toRegex()),
+
 }

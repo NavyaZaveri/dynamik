@@ -79,9 +79,16 @@ class AssertStmt(val e1: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitAssertStmt(this)
 }
 
-class InstanceStmt(val name:String, val stmt:Stmt):Stmt() {
+class InstanceStmt(val name: String, val stmt: Stmt) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitInstanceStmt(this)
+    }
+
+}
+
+class MethodStmt(val name: String, val stmt: Stmt) : Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitMethodStmt(this);
     }
 
 }
@@ -113,4 +120,5 @@ interface StatementVisitor<out T> {
     fun visitSkipStatement(skipStmt: SkipStmt): T
     fun visitClassStmt(classStmt: ClassStmt): T
     fun visitInstanceStmt(instanceStmt: InstanceStmt): T
+    fun visitMethodStmt(methodStmt: MethodStmt): T
 }
