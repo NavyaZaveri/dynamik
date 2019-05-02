@@ -1,20 +1,13 @@
-class Math(x) {
-    fn mul(){
-        return x*3;
-    }
-    fn hello() {
-        print 20;
-    }
-
-    fn add(a, b) {
-        x = a+b;
-    }
-    fn get_x() {
-     return x;
-      }
+class Data(x,  y) {
+     fn get_x() {return x;}
+     fn set_x(v) {x =v;}
+     fn get_y() { return y;}
+     fn set_y(v) {y = v;}
 }
-val y=90;
-val m= Math(y);
-m.add(20,30);
-val res = m.get_x();
+
+
+val d = Data(10,20);
+var res = d.get_x();
+d.set_x(2);
+res = d.get_x();
 print(res);
