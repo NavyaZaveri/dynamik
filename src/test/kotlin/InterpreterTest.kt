@@ -251,5 +251,20 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
+    @Test
+    fun testInstanceCreationWithinDifferentClass() {
+        val stmts = ("class Foo(value){} class Bar{" +
+                "fn create_a_foo(v) {" +
+                "return Foo(v);" +
+                "} }" +
+                "val b = Bar();" +
+                "val f = b.create_a_foo(99);" +
+                "f.value;").tokenize().parseStmts()
+        val expected = 99.0
+        val actual = repl.eval(stmts)
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+
+    }
+
 }
 

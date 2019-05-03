@@ -41,7 +41,7 @@ class DynamikCallable(val func: FnStmt) : Callable {
         interpreter.env.fields()
             .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAR) }
 
-        interpreter.env.classes.forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
+       // interpreter.env.classes.forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
         interpreter.env.classes.forEach { k, u ->env.defineClass(k, u.value)  }
 
 

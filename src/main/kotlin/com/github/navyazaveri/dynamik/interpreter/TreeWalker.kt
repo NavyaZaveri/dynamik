@@ -50,12 +50,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
         // instead define against DynamikClass, with an invokes method
         // that bundles it all up and returns a dynamik instance
-        //env.define(classStmt.name, DynamikInstance(classStmt.name, classStmt.methods), VariableStatus.VAL)
         val parmas = classStmt.fields.map { it }
-        env.define(
-            classStmt.name, DynamikClass(classStmt.name, classStmt.methods, parmas),
-            VariableStatus.VAL
-        )
         env.defineClass(classStmt.name, DynamikClass(classStmt.name, classStmt.methods, parmas))
         return Any()
     }

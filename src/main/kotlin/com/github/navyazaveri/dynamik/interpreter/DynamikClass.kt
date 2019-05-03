@@ -33,11 +33,8 @@ class DynamikInstance(
             env.define(it.functionName.lexeme, DynamikCallable(it), VariableStatus.VAL)
         }
 
-        //define fields...might not need the first statement
-        fields.forEach { t, u -> env.define(t, u, VariableStatus.VAR) }
         fields.forEach { t, u -> env.defineField(t, u) }
-        interpreter.env.classes.forEach { t, u -> env.define(t, u.value, status = VariableStatus.VAL) }
-        interpreter.env.classes.forEach { t, u -> env.defineClass(t, u.value) }
+        interpreter.env.classes.forEach { t, u -> env.defineClass(t, u.value as DynamikClass) }
     }
 
 

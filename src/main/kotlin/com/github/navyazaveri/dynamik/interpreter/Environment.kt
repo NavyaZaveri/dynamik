@@ -27,12 +27,11 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         identifierToValue[name] = Variable(status = status, value = value)
     }
 
-    fun clone(): Environment {
-        return Environment(identifierToValue.toMutableMap())
-    }
 
     fun clear() {
         identifierToValue.clear()
+        classes.clear()
+        fields.clear()
         globals.clear()
     }
 
@@ -72,21 +71,19 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
             return globals[name]!!.value
         }
 
-        if (name in classes) {
-            return classes[name]!!.value
-        }
         val allExistingVars = identifierToValue.keys + globals.keys
 
         throw VariableNotInScope(name, allExistingVars)
     }
 
-    //add error handling
     fun defineField(name: String, value: Any) {
         fields[name] = Variable(value, VariableStatus.VAR)
+        define(name, value, VariableStatus.VAR)
     }
 
     fun defineClass(name: String, value: Any) {
-        classes[name] = Variable(value, VariableStatus.VAR)
+        classes[name] = Variable(value, VariableStatus.VAL)
+        define(name, value, VariableStatus.VAL)
     }
 
 
