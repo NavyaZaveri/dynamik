@@ -15,7 +15,9 @@ class Foo(val m: MutableList<Any>) : MutableList<Any> by m, Built {
 
 
 fun do_foo_hello(f: Foo) {
-    val a = f::class.java.getMethod("add").invoke(f, 20);
+
+    val x = (0 until 1).map { Any::class.java }.toTypedArray()
+    val a = f::class.java.getMethod("add", *x).invoke(f, 10)
     println(a)
 }
 
