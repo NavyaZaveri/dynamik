@@ -237,5 +237,19 @@ class InterpreterTest {
 
     }
 
+    @Test
+    fun testChainedMethodCalls() {
+        val stmts = ("class Math {" +
+                "fn add(x,y) { return x+y;}" +
+                "fn mul(x,y) { return x*y;}" +
+                "fn chain(x,y,z) { return mul(x, add(z,y));}" +
+                "}" +
+                " val m = Math();" +
+                "m.chain(1,2,3);").tokenize().parseStmts()
+        val expected = 5.0
+        val actual = repl.eval(stmts)
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
 }
 
