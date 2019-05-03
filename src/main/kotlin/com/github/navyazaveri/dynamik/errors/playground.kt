@@ -1,35 +1,25 @@
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import javax.xml.bind.JAXBElement
+import kotlin.reflect.KClass
 
-interface Thing {
-    fun do_stuff()
+interface HelloBoy {
+    fun hello()
 }
 
-class Foo : Thing {
-    override fun do_stuff() {
-        println("doing foo")
-    }
+interface Built
+
+
+class Foo(val m: MutableList<Any>) : MutableList<Any> by m, Built {
 }
 
-fun get_thing(t: Thing) {
-    println("using generic thing")
-}
 
-fun get_thing(f: Foo) {
-    println("using concrete foo")
-}
-
-fun hello() {
-    for (i in 0..100000) {
-        println("hello")
-    }
+fun do_foo_hello(f: Foo) {
+    val a = f::class.java.getMethod("add").invoke(f, 20);
+    println(a)
 }
 
 
 fun main(args: Array<String>) {
-    val regex = """\bval\b""".toRegex();
-    regex.containsMatchIn("fn foo() { val x = 2;} x;").also { println(it) }
-
+    do_foo_hello(Foo(mutableListOf()))
 }

@@ -26,24 +26,26 @@ class DynamikCallable(val func: FnStmt) : Callable {
             throw InvalidArgSize(expected = func.params.size, actual = args.size, fname = func.functionName.lexeme)
         }
 
+        val outer = interpreter.env
+
         // set up args
         func.params.zip(args)
             .forEach { (param, arg) ->
                 env.define(param.lexeme, arg, status = VariableStatus.VAR)
             }
 
-        val oldEnv = interpreter.env
 
         //make functions visible
-        interpreter.env.functions()
+        outer.functions()
             .forEach { (k, v) -> env.defineFunction(k, v.value as Callable) }
 
         //if it's a class environment, then it will have some associated fields. Make these visible.
-        interpreter.env.fields()
+        outer.fields()
             .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAR) }
 
-        // interpreter.env.classes.forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
-        interpreter.env.classes.forEach { k, u -> env.defineClass(k, u.value as DynamikClass) }
+
+        //makes  classes in out scope visible to current env
+        outer.classes().forEach { k, u -> env.defineClass(k, u.value as DynamikClass) }
 
 
         // now evaluate all statements against the environment supplied to the function
@@ -51,15 +53,15 @@ class DynamikCallable(val func: FnStmt) : Callable {
             interpreter.evaluateStmts(func.body, env = env)
         } catch (r: Return) {
             return r.value
-        } finally {
             // update fields of the original environment and globals (todo)
+        } finally {
+
             for ((k, v) in env.identifierToValue) {
-                if (k in oldEnv.fields) {
-                    oldEnv.fields[k] = v
-                    oldEnv.identifierToValue[k] = v
+                if (k in outer.fields) {
+                    outer.fields[k] = v
+                    outer.identifierToValue[k] = v
                 }
             }
-
         }
         return Any()
     }

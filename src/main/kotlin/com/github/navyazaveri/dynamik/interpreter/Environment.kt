@@ -47,6 +47,10 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         return fields
     }
 
+    fun classes():Map<String, Variable> {
+        return classes
+    }
+
     fun assign(name: String, value: Any) {
         if (!name.inCurrentScope()) {
             throw VariableNotInScope(name, this.identifierToValue.keys)

@@ -6,9 +6,17 @@ import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 import kotlin.collections.List
 
+
+interface DynInstance {
+    fun runMethod(d: DynInstance, methodName: String, args: List<Arg>): Any
+}
+
+interface Builtin
+
+
 class List : Callable {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
-        return ListInstance(mutableListOf());
+        return ListInstance();
     }
 }
 
@@ -20,12 +28,19 @@ class List : Callable {
 //against the consumed instance. Perhaps define method like run method(self, string_method)
 //that matches agianst the required method and actually execute the instance
 
-class ListInstance(b: MutableList<Any>) : MutableList<Any> by b {
+
+//deleate maybe? reflection should be able to pick uo on delegated
+//methods
+class ListInstance : Builtin {
 
 }
 
-fun main(args: Array<String>) {
-    val m = ListInstance(mutableListOf());
-    m.add(20);
-    m.get(0)
+class BuiltinCallable(val b: Builtin, val methodName: String) : Callable {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
+        TODO()
+    }
+
+    fun runMethod(): Any {
+        return b::class.java.getMethod(methodName).invoke(b)
+    }
 }
