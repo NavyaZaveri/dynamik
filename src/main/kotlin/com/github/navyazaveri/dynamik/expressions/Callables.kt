@@ -41,6 +41,9 @@ class DynamikCallable(val func: FnStmt) : Callable {
         interpreter.env.fields()
             .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAR) }
 
+        interpreter.env.classes.forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
+        interpreter.env.classes.forEach { k, u ->env.defineClass(k, u.value)  }
+
 
         // now evaluate all statements against the environment supplied to the function
         try {
@@ -48,7 +51,7 @@ class DynamikCallable(val func: FnStmt) : Callable {
         } catch (r: Return) {
             return r.value
         } finally {
-            // update fields of the original environment.
+            // update fields of the original environment and globals (todo)
             for ((k, v) in env.identifierToValue) {
                 if (k in oldEnv.fields) {
                     oldEnv.fields[k] = v

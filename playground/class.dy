@@ -1,13 +1,22 @@
-class Data(x,  y) {
-     fn get_x() {return x;}
-     fn set_x(v) {x =v;}
-     fn get_y() { return y;}
-     fn set_y(v) {y = v;}
+
+class Blah(x,y) {
+    fn add(){
+        return x+y;
+    }
 }
 
 
-val d = Data(10,20);
-var res = d.get_x();
-d.set_x(2);
-res = d.get_x();
+class Math(x,y){
+    fn add(){
+        return add2(20,30);
+    }
+    fn add2(a,b){
+        val p = Blah(a,b);
+        val c = p.add();
+        return c;
+    }
+}
+
+val d = Math(3,4);
+var res = d.add();
 print(res);

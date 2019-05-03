@@ -9,6 +9,7 @@ import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.scanner.tokenize
 import java.util.*
 
+
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
     fun parseStmts(): List<Stmt> {
@@ -420,17 +421,20 @@ fun List<Tok>.parseExpr(): Expr {
 fun main(args: Array<String>) {
 
 
-    ("class Calculator(name, b) { " +
+    ("" +
+            "class Foo {" +
+            "fn hi() { print \"h1\";} }" +
+            "class Calculator(name, b) { " +
             "fn hello() " + "{print \"insinde hello\"; return 100;" +
             "   } " +
             "" +
             "fn add(x, y) { return x+y;} " +
-            "fn mul(x,y) {  name = 10; val a = 20; return x*y;}" +
+            "fn mul(x,y) { val f = Foo(); f.hi(); name = 10; val a = 20; return x*y;}" +
             "" +
             "} " +
-            "" +
             "val calc = Calculator(\"my_calcutor\", 999);" +
             "val p = calc.mul(10,20);" +
+            "val f = Foo();"+
             "print calc.name;" + "" +
             "print calc.b;"
             ).tokenize()

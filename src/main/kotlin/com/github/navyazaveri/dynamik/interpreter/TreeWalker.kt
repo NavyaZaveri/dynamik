@@ -56,7 +56,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             classStmt.name, DynamikClass(classStmt.name, classStmt.methods, parmas),
             VariableStatus.VAL
         )
-
+        env.defineClass(classStmt.name, DynamikClass(classStmt.name, classStmt.methods, parmas))
         return Any()
     }
 
@@ -121,9 +121,12 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     override fun visitCallExpression(callExpr: CallExpr, par: Boolean): Any {
+        println(env)
+        println(env.classes)
         val callable = env.get(callExpr.funcName) as Callable
         val args = callExpr.args.map { it.evaluateBy(this) }
         val mainEnv = env
+
 
         /** If the function needs to spawned in parallel, simply invoke the
         function against a *new* interpreter instance. So each par function has
@@ -256,6 +259,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
 }
 
-fun List<Stmt>.evaluateAllBy(evaluator: StatementVisitor<*>): Any {
-    return this.forEach { it.evaluateBy(evaluator) }
+fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>): Any {
+    return this.forEach { it.evaluateBy(visitor) }
 }

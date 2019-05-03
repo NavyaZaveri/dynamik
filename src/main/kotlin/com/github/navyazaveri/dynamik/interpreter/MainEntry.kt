@@ -15,11 +15,7 @@ class CommandLineParser : CliktCommand() {
         } else {
             if (file != null) {
                 val code = File(file).readText()
-                try {
-                    Repl().eval(code)
-                } catch (e: Exception) {
-                    println(e)
-                }
+                Repl().eval(code)
             }
         }
     }
