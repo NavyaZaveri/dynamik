@@ -1,13 +1,13 @@
 package com.github.navyazaveri.dynamik.interpreter
 
-import com.github.navyazaveri.dynamik.errors.InvalidContructorArgs
+import com.github.navyazaveri.dynamik.errors.InvalidConstructorArgSize
 import com.github.navyazaveri.dynamik.expressions.*
 
 
 class DynamikClass(val name: String, val functions: List<FnStmt>, val params: List<String>) : Callable {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         if (params.size != arguments.size) {
-            throw InvalidContructorArgs(fname = name, expected = params.size, actual = arguments.size)
+            throw InvalidConstructorArgSize(fname = name, expected = params.size, actual = arguments.size)
         }
         return DynamikInstance(name, functions, params.zip(arguments).toMap(), interpreter = interpreter)
     }
@@ -30,7 +30,7 @@ class DynamikInstance(
 
         //define methods
         functions.forEach {
-            env.define(it.functionName.lexeme, DynamikCallable(it), VariableStatus.VAL)
+            env.defineFunction(it.functionName.lexeme, DynamikCallable(it))
         }
 
         fields.forEach { t, u -> env.defineField(t, u) }

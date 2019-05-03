@@ -103,7 +103,7 @@ class ClassStmt(
     }
 }
 
-interface StatementVisitor<out T> {
+interface StatementVisitor<T> {
     fun visitPrintStmt(printStmt: PrintStmt): T
     fun visitVariableStmt(varStmt: VarStmt): T
     fun visitValStmt(valStmt: ValStmt): T

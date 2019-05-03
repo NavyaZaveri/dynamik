@@ -116,7 +116,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     override fun visitCallExpression(callExpr: CallExpr, par: Boolean): Any {
-        val callable = env.get(callExpr.funcName) as Callable
+        val callable = env.getCallable(callExpr.funcName)
         val args = callExpr.args.map { it.evaluateBy(this) }
         val mainEnv = env
 
@@ -142,14 +142,16 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     override fun visitFnStatement(fnStmt: FnStmt) {
         when (fnStmt.memoize) {
-            true -> env.define(
-                fnStmt.functionName.lexeme,
-                MemoizedCallable(fnStmt), VariableStatus.VAL
-            )
-            false -> env.define(
-                fnStmt.functionName.lexeme,
-                DynamikCallable(fnStmt), VariableStatus.VAL
-            )
+            true ->
+                env.defineFunction(
+                    fnStmt.functionName.lexeme,
+                    MemoizedCallable(fnStmt)
+                )
+            false ->
+                env.defineFunction(
+                    fnStmt.functionName.lexeme,
+                    DynamikCallable(fnStmt)
+                )
         }
     }
 
@@ -252,6 +254,6 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
 }
 
-fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>): Any {
-    return this.forEach { it.evaluateBy(visitor) }
+fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>) {
+    this.forEach { it.evaluateBy(visitor) }
 }

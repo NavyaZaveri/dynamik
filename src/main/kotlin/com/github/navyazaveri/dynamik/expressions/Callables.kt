@@ -1,6 +1,7 @@
 package com.github.navyazaveri.dynamik.expressions
 
 import com.github.navyazaveri.dynamik.errors.InvalidArgSize
+import com.github.navyazaveri.dynamik.interpreter.DynamikClass
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 
@@ -35,14 +36,14 @@ class DynamikCallable(val func: FnStmt) : Callable {
 
         //make functions visible
         interpreter.env.functions()
-            .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
+            .forEach { (k, v) -> env.defineFunction(k, v.value as Callable) }
 
         //if it's a class environment, then it will have some associated fields. Make these visible.
         interpreter.env.fields()
             .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAR) }
 
-       // interpreter.env.classes.forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
-        interpreter.env.classes.forEach { k, u ->env.defineClass(k, u.value)  }
+        // interpreter.env.classes.forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAL) }
+        interpreter.env.classes.forEach { k, u -> env.defineClass(k, u.value as DynamikClass) }
 
 
         // now evaluate all statements against the environment supplied to the function

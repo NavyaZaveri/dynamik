@@ -2,10 +2,8 @@ package com.github.navyazaveri.dynamik.interpreter
 
 import com.github.navyazaveri.dynamik.errors.ValError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
-import com.github.navyazaveri.dynamik.expressions.DynamikCallable
-import com.github.navyazaveri.dynamik.expressions.MemoizedCallable
-import com.github.navyazaveri.dynamik.expressions.Variable
-import com.github.navyazaveri.dynamik.expressions.VariableStatus
+import com.github.navyazaveri.dynamik.expressions.*
+import java.lang.RuntimeException
 
 class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf(), val name: String = "") {
     val fields = mutableMapOf<String, Variable>()
@@ -20,11 +18,11 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         return identifierToValue.containsKey(this)
     }
 
-    fun define(name: String, value: Any, status: VariableStatus) {
+    fun define(name: String, value: Any, status: VariableStatus, type: VarType = VarType.IDENT) {
         if (name.inCurrentScope()) {
             throw ValError(name)
         }
-        identifierToValue[name] = Variable(status = status, value = value)
+        identifierToValue[name] = Variable(status = status, value = value, type = type)
     }
 
 
@@ -36,13 +34,13 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
     }
 
     fun functions(): Map<String, Variable> {
-        return identifierToValue.filter { (_, v) -> v.value is DynamikCallable || v.value is MemoizedCallable }
+        return identifierToValue.filter { (_, v) -> v.type == VarType.FN }
 
     }
 
     fun globals(): Map<String, Variable> {
         // functions are global
-        return identifierToValue.filter { (_, v) -> v.value is DynamikCallable || v.value is MemoizedCallable }
+        return identifierToValue.filter { (_, v) -> v.type == VarType.FN }
     }
 
     fun fields(): Map<String, Variable> {
@@ -76,14 +74,28 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         throw VariableNotInScope(name, allExistingVars)
     }
 
+    fun getCallable(name: String): Callable {
+        val callables = identifierToValue.filter { it.value.type == VarType.FN || it.value.type == VarType.CLASS }
+        if (name !in callables) {
+            throw RuntimeException("$name does not exist");
+        } else {
+            return callables[name]!!.value as Callable //design guarantee
+        }
+    }
+
+
     fun defineField(name: String, value: Any) {
         fields[name] = Variable(value, VariableStatus.VAR)
         define(name, value, VariableStatus.VAR)
     }
 
-    fun defineClass(name: String, value: Any) {
+    fun defineClass(name: String, value: DynamikClass) {
         classes[name] = Variable(value, VariableStatus.VAL)
-        define(name, value, VariableStatus.VAL)
+        define(name, value, VariableStatus.VAL, type = VarType.CLASS)
+    }
+
+    fun defineFunction(name: String, c: Callable) {
+        define(name, c, VariableStatus.VAL, VarType.FN)
     }
 
 
