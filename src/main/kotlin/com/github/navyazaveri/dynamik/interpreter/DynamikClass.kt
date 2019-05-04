@@ -35,7 +35,7 @@ class DynamikInstance(
         }
 
         fields.forEach { t, u -> env.defineField(t, u) }
-        interpreter.env.classes.forEach { t, u -> env.defineClass(t, u.value as DynamikClass) }
+        interpreter.env.classes().forEach { t, u -> env.defineClass(t, u.value as DynamikClass) }
     }
 
 

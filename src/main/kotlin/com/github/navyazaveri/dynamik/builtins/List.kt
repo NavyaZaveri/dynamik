@@ -21,7 +21,7 @@ interface Container : Builtin {
 
 class List : Callable<Builtin> {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): ListInstance {
-        return ListInstance();
+        return ListInstance()
     }
 }
 
@@ -32,7 +32,7 @@ class ListInstance : Builtin {
 
     init {
         env.defineFunction("add", BuiltinCallable<Any>(this, "add", 0))
-        env.defineFunction("get", BuiltinCallable<Any>(this, "get0", 1))
+        env.defineFunction("get", BuiltinCallable<Any>(this, "get", 1))
     }
 
     fun add(item: Any) {
