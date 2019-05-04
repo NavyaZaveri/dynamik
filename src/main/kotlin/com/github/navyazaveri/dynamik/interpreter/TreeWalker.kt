@@ -18,7 +18,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     override fun visitInstanceStmt(instanceStmt: InstanceStmt): Any {
-        val instance = env.get(instanceStmt.name) as DynamikInstance
+        val instance = env.get(instanceStmt.name) as DefaultInstance
         //mutable borrows instance environment
         val oldEnv = this.env
         this.env = instance.env
@@ -26,7 +26,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     override fun visitClazzExpression(instanceExpr: InstanceExpr): Any {
-        val instance = env.get(instanceExpr.clazzName) as DynamikInstance
+        val instance = env.get(instanceExpr.clazzName) as DefaultInstance
         //mutable borrows instance environment
         val oldEnv = this.env
         this.env = instance.env
@@ -37,7 +37,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     var env = Environment()
 
     override fun visitMethodExpression(methodExpr: MethodExpr): Any {
-        val instance = env.get(methodExpr.clazzName) as DynamikInstance
+        val instance = env.get(methodExpr.clazzName) as DefaultInstance
         val methodName = methodExpr.method
         val args = methodExpr.args.map { evaluate(it) }
         val mainEnv = this.env
@@ -48,10 +48,10 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     override fun visitClassStmt(classStmt: ClassStmt): Any {
 
-        // instead define against DynamikClass, with an invokes method
+        // instead define against DefaultClass, with an invokes method
         // that bundles it all up and returns a dynamik instance
         val parmas = classStmt.fields.map { it }
-        env.defineClass(classStmt.name, DynamikClass(classStmt.name, classStmt.methods, parmas))
+        env.defineClass(classStmt.name, DefaultClass(classStmt.name, classStmt.methods, parmas))
         return Any()
     }
 

@@ -8,7 +8,7 @@ import java.lang.RuntimeException
 
 class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mutableMapOf(), val name: String = "") {
     val fields = mutableMapOf<String, Variable<Any>>()
-    val classes = mutableMapOf<String, Variable<DynamikClass>>()
+    val classes = mutableMapOf<String, Variable<DynamikClass<out DynamikInstance>>>()
     val functions = mutableMapOf<String, Variable<DynamikFunction<Any>>>()
 
 
@@ -43,7 +43,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         return fields
     }
 
-    fun classes(): Map<String, Variable<DynamikClass>> {
+    fun classes(): Map<String, Variable<DynamikClass<out DynamikInstance>>> {
         return classes
     }
 
@@ -91,7 +91,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         define(name, value, VariableStatus.VAR)
     }
 
-    fun defineClass(name: String, value: DynamikClass) {
+    fun defineClass(name: String, value: DynamikClass<out DynamikInstance>) {
         classes[name] = Variable(value, VariableStatus.VAL)
         define(name, value, VariableStatus.VAL, type = VarType.CLASS)
     }

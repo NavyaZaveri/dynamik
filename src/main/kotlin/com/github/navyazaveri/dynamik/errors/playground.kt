@@ -23,17 +23,27 @@ fun do_foo_hello(f: Foo) {
 
 
 fun main(args: Array<String>) {
-    do_foo_hello(Foo(mutableListOf()))
-    val c: Wa<*> = Blah()
+    val a = Concrete_A();
+    foo(a);
 
 }
 
-interface Wa<T : Any> {
-    fun wut(): T
+fun foo(thing: Generic_A<out Generic_B>) {
+
 }
 
-class Blah : Wa<Any> {
-    override fun wut(): Any {
-        return println("dwi")
-    }
+abstract class Generic_B {
+
+}
+
+interface Generic_A<Generic_B> {
+
+}
+
+class Concrete_B : Generic_B() {
+
+}
+
+class Concrete_A : Generic_A<Concrete_B> {
+
 }

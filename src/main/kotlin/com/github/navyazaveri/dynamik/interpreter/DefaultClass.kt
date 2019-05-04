@@ -4,13 +4,13 @@ import com.github.navyazaveri.dynamik.errors.InvalidConstructorArgSize
 import com.github.navyazaveri.dynamik.expressions.*
 
 
-class DynamikClass(val name: String, val functions: List<FnStmt>, val params: List<String>) :
-    Callable<DynamikInstance> {
-    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): DynamikInstance {
+class DefaultClass(val name: String, val functions: List<FnStmt>, val params: List<String>) :
+    DynamikClass<DefaultInstance> {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): DefaultInstance {
         if (params.size != arguments.size) {
             throw InvalidConstructorArgSize(fname = name, expected = params.size, actual = arguments.size)
         }
-        return DynamikInstance(name, functions, params.zip(arguments).toMap(), interpreter = interpreter)
+        return DefaultInstance(name, functions, params.zip(arguments).toMap(), interpreter = interpreter)
     }
 
     override fun toString(): String {
@@ -19,13 +19,12 @@ class DynamikClass(val name: String, val functions: List<FnStmt>, val params: Li
 }
 
 
-class DynamikInstance(
+class DefaultInstance(
     val name: String,
     val functions: List<FnStmt>,
     val fields: Map<String, Any>,
     val interpreter: TreeWalker
-) {
-    val env = Environment()
+) : DynamikInstance() {
 
     init {
 
