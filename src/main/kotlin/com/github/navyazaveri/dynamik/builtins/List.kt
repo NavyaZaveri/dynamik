@@ -11,7 +11,12 @@ interface DynInstance {
     fun runMethod(d: DynInstance, methodName: String, args: List<Arg>): Any
 }
 
+//marker interface
 interface Builtin
+
+interface Container : Builtin {
+    fun size()
+}
 
 
 class List : Callable {
@@ -21,26 +26,28 @@ class List : Callable {
 }
 
 
-//init mapping fuction name to builtin callable. The invoke on this callable
-//should basically execute the function. So, perhaps store an instance
-// of the list WITHIN the callble (as constructor args) and the function name.
-//then just use reflection or something I guess to execute the fuction
-//against the consumed instance. Perhaps define method like run method(self, string_method)
-//that matches agianst the required method and actually execute the instance
 
-
-//deleate maybe? reflection should be able to pick uo on delegated
-//methods
 class ListInstance : Builtin {
+    val env = Environment()
+    private val backingList = mutableListOf<Any>();
 
-}
-
-class BuiltinCallable(val b: Builtin, val methodName: String) : Callable {
-    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
-        TODO()
+    init {
+        env.defineFunction("add", BuiltinCallable(this, "add", 0))
+        env.defineFunction("get", BuiltinCallable(this, "get0", 1))
     }
 
-    fun runMethod(): Any {
-        return b::class.java.getMethod(methodName).invoke(b)
+    fun add(item: Any) {
+        backingList.add(item);
+    }
+
+    fun get(i: Int): Any {
+        return backingList[i]
+    }
+}
+
+class BuiltinCallable(val b: Builtin, val methodName: String, val arity: Int) : Callable {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
+        val argTypes = (0 until arity).map { Any::class.java }.toTypedArray()
+        return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray())
     }
 }
