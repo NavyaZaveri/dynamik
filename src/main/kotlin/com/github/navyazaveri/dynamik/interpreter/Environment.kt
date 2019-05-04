@@ -5,9 +5,10 @@ import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
 import java.lang.RuntimeException
 
-class Environment(val identifierToValue: MutableMap<String, Variable> = mutableMapOf(), val name: String = "") {
-    val fields = mutableMapOf<String, Variable>()
-    val classes = mutableMapOf<String, Variable>()
+class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mutableMapOf(), val name: String = "") {
+    val fields = mutableMapOf<String, Variable<Any>>()
+    val classes = mutableMapOf<String, Variable<DynamikClass>>()
+    val functions = mutableMapOf<String, Variable<Callable<*>>>()
 
 
     fun String.inGlobalScope(): Boolean {
@@ -33,21 +34,16 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         globals.clear()
     }
 
-    fun functions(): Map<String, Variable> {
-        return identifierToValue.filter { (_, v) -> v.type == VarType.FN }
+    fun functions(): Map<String, Variable<Callable<*>>> {
+        return functions
 
     }
 
-    fun globals(): Map<String, Variable> {
-        // functions are global
-        return identifierToValue.filter { (_, v) -> v.type == VarType.FN }
-    }
-
-    fun fields(): Map<String, Variable> {
+    fun fields(): Map<String, Variable<Any>> {
         return fields
     }
 
-    fun classes(): Map<String, Variable> {
+    fun classes(): Map<String, Variable<DynamikClass>> {
         return classes
     }
 
@@ -98,13 +94,14 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         define(name, value, VariableStatus.VAL, type = VarType.CLASS)
     }
 
-    fun <T : Any> defineFunction(name: String, c: Callable<T>) {
-        define(name, c, VariableStatus.VAL, VarType.FN)
+    fun defineFunction(name: String, value: Callable<*>) {
+        functions[name] = Variable(value, VariableStatus.VAL)
+        define(name, value,VariableStatus.VAL, type=VarType.FN)
     }
 
 
     companion object {
-        val globals = mutableMapOf<String, Variable>()
+        val globals = mutableMapOf<String, Variable<Any>>()
 
 
         fun addGlobal(name: String, value: Any) {

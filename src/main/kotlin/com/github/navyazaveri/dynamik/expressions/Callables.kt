@@ -34,7 +34,7 @@ class DynamikCallable(val func: FnStmt) : Callable<Any> {
 
         //make functions visible
         outer.functions()
-            .forEach { (k, v) -> env.defineFunction(k, v.value as Callable<*>) }
+            .forEach { (k, v) -> env.defineFunction(k, v.value) }
 
         //if it's a class environment, then it will have some associated fields. Make these visible.
         outer.fields()
@@ -42,7 +42,7 @@ class DynamikCallable(val func: FnStmt) : Callable<Any> {
 
 
         //makes  classes in out scope visible to current env
-        outer.classes().forEach { k, u -> env.defineClass(k, u.value as DynamikClass) }
+        outer.classes().forEach { k, u -> env.defineClass(k, u.value) }
 
 
         // now evaluate all statements against the environment supplied to the function

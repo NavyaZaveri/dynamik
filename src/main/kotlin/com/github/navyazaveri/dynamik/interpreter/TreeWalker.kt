@@ -128,7 +128,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
          */
         if (par) {
             val newInterpreter = TreeWalker()
-            this.env.globals()
+            this.env.functions()
                 .forEach { (k, v) -> newInterpreter.env.define(k, v.value, VariableStatus.VAL) }
 
             return callable.invoke(args, newInterpreter)
