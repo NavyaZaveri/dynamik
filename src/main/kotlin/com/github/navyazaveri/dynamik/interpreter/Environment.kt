@@ -47,7 +47,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         return fields
     }
 
-    fun classes():Map<String, Variable> {
+    fun classes(): Map<String, Variable> {
         return classes
     }
 
@@ -78,12 +78,12 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         throw VariableNotInScope(name, allExistingVars)
     }
 
-    fun getCallable(name: String): Callable {
+    fun getCallable(name: String): Callable<*> {
         val callables = identifierToValue.filter { it.value.type == VarType.FN || it.value.type == VarType.CLASS }
         if (name !in callables) {
             throw RuntimeException("$name does not exist");
         } else {
-            return callables[name]!!.value as Callable //design guarantee
+            return callables[name]!!.value as Callable<*> //design guarantee
         }
     }
 
@@ -98,7 +98,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable> = mutableM
         define(name, value, VariableStatus.VAL, type = VarType.CLASS)
     }
 
-    fun defineFunction(name: String, c: Callable) {
+    fun <T : Any> defineFunction(name: String, c: Callable<T>) {
         define(name, c, VariableStatus.VAL, VarType.FN)
     }
 

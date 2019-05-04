@@ -4,8 +4,9 @@ import com.github.navyazaveri.dynamik.errors.InvalidConstructorArgSize
 import com.github.navyazaveri.dynamik.expressions.*
 
 
-class DynamikClass(val name: String, val functions: List<FnStmt>, val params: List<String>) : Callable {
-    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
+class DynamikClass(val name: String, val functions: List<FnStmt>, val params: List<String>) :
+    Callable<DynamikInstance> {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): DynamikInstance {
         if (params.size != arguments.size) {
             throw InvalidConstructorArgSize(fname = name, expected = params.size, actual = arguments.size)
         }
@@ -39,7 +40,7 @@ class DynamikInstance(
 
 
     fun invokeMethod(name: String, args: List<Any>, interpreter: TreeWalker): Any {
-        val c = env.get(name) as Callable
+        val c = env.get(name) as Callable<*>
         return c.invoke(args, interpreter, this.env)
     }
 

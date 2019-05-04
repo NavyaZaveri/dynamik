@@ -9,15 +9,12 @@ typealias FuncName = String
 typealias Arg = Any
 typealias RetVal = Any
 
-abstract class FunctionCallable : Callable {
-    abstract override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment);
+
+interface Callable<T : Any> {
+    fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): T
 }
 
-interface Callable {
-    fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): Any
-}
-
-class DynamikCallable(val func: FnStmt) : Callable {
+class DynamikCallable(val func: FnStmt) : Callable<Any> {
 
     override fun invoke(args: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
 
@@ -37,7 +34,7 @@ class DynamikCallable(val func: FnStmt) : Callable {
 
         //make functions visible
         outer.functions()
-            .forEach { (k, v) -> env.defineFunction(k, v.value as Callable) }
+            .forEach { (k, v) -> env.defineFunction(k, v.value as Callable<*>) }
 
         //if it's a class environment, then it will have some associated fields. Make these visible.
         outer.fields()
@@ -69,7 +66,7 @@ class DynamikCallable(val func: FnStmt) : Callable {
 }
 
 
-class MemoizedCallable(val func: FnStmt) : Callable {
+class MemoizedCallable(val func: FnStmt) : Callable<Any> {
     var hits = 0
 
     companion object {
@@ -92,8 +89,3 @@ class MemoizedCallable(val func: FnStmt) : Callable {
     }
 }
 
-class ClassCallable : Callable {
-    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
-        TODO("unimplemented")
-    }
-}

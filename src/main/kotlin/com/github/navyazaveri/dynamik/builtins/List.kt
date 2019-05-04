@@ -19,12 +19,11 @@ interface Container : Builtin {
 }
 
 
-class List : Callable {
-    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
+class List : Callable<Builtin> {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): ListInstance {
         return ListInstance();
     }
 }
-
 
 
 class ListInstance : Builtin {
@@ -32,8 +31,8 @@ class ListInstance : Builtin {
     private val backingList = mutableListOf<Any>();
 
     init {
-        env.defineFunction("add", BuiltinCallable(this, "add", 0))
-        env.defineFunction("get", BuiltinCallable(this, "get0", 1))
+        env.defineFunction("add", BuiltinCallable<Any>(this, "add", 0))
+        env.defineFunction("get", BuiltinCallable<Any>(this, "get0", 1))
     }
 
     fun add(item: Any) {
@@ -45,9 +44,9 @@ class ListInstance : Builtin {
     }
 }
 
-class BuiltinCallable(val b: Builtin, val methodName: String, val arity: Int) : Callable {
-    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
+class BuiltinCallable<T : Any>(val b: Builtin, val methodName: String, val arity: Int) : Callable<T> {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): T {
         val argTypes = (0 until arity).map { Any::class.java }.toTypedArray()
-        return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray())
+        return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray()) as T
     }
 }
