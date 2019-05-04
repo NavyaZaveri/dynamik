@@ -2,6 +2,7 @@ package com.github.navyazaveri.dynamik.builtins
 
 import com.github.navyazaveri.dynamik.expressions.Arg
 import com.github.navyazaveri.dynamik.expressions.Callable
+import com.github.navyazaveri.dynamik.expressions.DynamikFunction
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 import kotlin.collections.List
@@ -19,7 +20,7 @@ interface Container : Builtin {
 }
 
 
-class List : Callable<Builtin> {
+class List : Callable<ListInstance> {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): ListInstance {
         return ListInstance()
     }
@@ -31,8 +32,8 @@ class ListInstance : Builtin {
     private val backingList = mutableListOf<Any>();
 
     init {
-        env.defineFunction("add", BuiltinCallable<Any>(this, "add", 0))
-        env.defineFunction("get", BuiltinCallable<Any>(this, "get", 1))
+        env.defineFunction("add", BuiltinCallable(this, "add", 0))
+        env.defineFunction("get", BuiltinCallable(this, "get", 1))
     }
 
     fun add(item: Any) {
@@ -44,9 +45,9 @@ class ListInstance : Builtin {
     }
 }
 
-class BuiltinCallable<T : Any>(val b: Builtin, val methodName: String, val arity: Int) : Callable<T> {
-    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): T {
+class BuiltinCallable(val b: Builtin, val methodName: String, val arity: Int) : DynamikFunction<Any> {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val argTypes = (0 until arity).map { Any::class.java }.toTypedArray()
-        return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray()) as T
+        return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray())!!
     }
 }

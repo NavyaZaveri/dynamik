@@ -129,7 +129,7 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         if (par) {
             val newInterpreter = TreeWalker()
             this.env.functions()
-                .forEach { (k, v) -> newInterpreter.env.define(k, v.value, VariableStatus.VAL) }
+                .forEach { (k, v) -> newInterpreter.env.defineFunction(k, v.value) }
 
             return callable.invoke(args, newInterpreter)
         }
@@ -145,12 +145,12 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
             true ->
                 env.defineFunction(
                     fnStmt.functionName.lexeme,
-                    MemoizedCallable(fnStmt)
+                    MemoizedFunction(fnStmt)
                 )
             false ->
                 env.defineFunction(
                     fnStmt.functionName.lexeme,
-                    DynamikCallable(fnStmt)
+                    DefaultFunction(fnStmt)
                 )
         }
     }

@@ -31,16 +31,16 @@ class DynamikInstance(
 
         //define methods
         functions.forEach {
-            env.defineFunction(it.functionName.lexeme, DynamikCallable(it))
+            env.defineFunction(it.functionName.lexeme, DefaultFunction(it))
         }
 
         fields.forEach { t, u -> env.defineField(t, u) }
-        interpreter.env.classes().forEach { t, u -> env.defineClass(t, u.value as DynamikClass) }
+        interpreter.env.classes().forEach { t, u -> env.defineClass(t, u.value) }
     }
 
 
     fun invokeMethod(name: String, args: List<Any>, interpreter: TreeWalker): Any {
-        val c = env.get(name) as Callable<*>
+        val c = env.getCallable(name)
         return c.invoke(args, interpreter, this.env)
     }
 

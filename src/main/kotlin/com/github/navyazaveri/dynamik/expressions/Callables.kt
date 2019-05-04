@@ -1,7 +1,6 @@
 package com.github.navyazaveri.dynamik.expressions
 
 import com.github.navyazaveri.dynamik.errors.InvalidArgSize
-import com.github.navyazaveri.dynamik.interpreter.DynamikClass
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 
@@ -14,7 +13,10 @@ interface Callable<T : Any> {
     fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): T
 }
 
-class DynamikCallable(val func: FnStmt) : Callable<Any> {
+
+interface DynamikFunction<T : Any> : Callable<T>
+
+class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
 
     override fun invoke(args: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
 
@@ -38,7 +40,7 @@ class DynamikCallable(val func: FnStmt) : Callable<Any> {
 
         //if it's a class environment, then it will have some associated fields. Make these visible.
         outer.fields()
-            .forEach { (k, v) -> env.define(k, v.value, VariableStatus.VAR) }
+            .forEach { (k, v) -> env.defineField(k, v.value) }
 
 
         //makes  classes in out scope visible to current env
@@ -66,14 +68,14 @@ class DynamikCallable(val func: FnStmt) : Callable<Any> {
 }
 
 
-class MemoizedCallable(val func: FnStmt) : Callable<Any> {
+class MemoizedFunction(val func: FnStmt) : DynamikFunction<Any> {
     var hits = 0
 
     companion object {
         val cache = mutableMapOf<Pair<FuncName, List<Arg>>, Any>()
     }
 
-    val defaultCallable by lazy { DynamikCallable(func) }
+    val defaultCallable by lazy { DefaultFunction(func) }
 
     /**
      * Invokes the callable if its result has not already been cached. Otherwise, the cached value

@@ -3,12 +3,13 @@ package com.github.navyazaveri.dynamik.interpreter
 import com.github.navyazaveri.dynamik.errors.ValError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
+import com.github.navyazaveri.dynamik.expressions.DynamikFunction
 import java.lang.RuntimeException
 
 class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mutableMapOf(), val name: String = "") {
     val fields = mutableMapOf<String, Variable<Any>>()
     val classes = mutableMapOf<String, Variable<DynamikClass>>()
-    val functions = mutableMapOf<String, Variable<Callable<*>>>()
+    val functions = mutableMapOf<String, Variable<DynamikFunction<Any>>>()
 
 
     fun String.inGlobalScope(): Boolean {
@@ -34,9 +35,8 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         globals.clear()
     }
 
-    fun functions(): Map<String, Variable<Callable<*>>> {
+    fun functions(): Map<String, Variable<DynamikFunction<Any>>> {
         return functions
-
     }
 
     fun fields(): Map<String, Variable<Any>> {
@@ -75,12 +75,14 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
     }
 
     fun getCallable(name: String): Callable<*> {
-        val callables = identifierToValue.filter { it.value.type == VarType.FN || it.value.type == VarType.CLASS }
-        if (name !in callables) {
-            throw RuntimeException("$name does not exist");
-        } else {
-            return callables[name]!!.value as Callable<*> //design guarantee
+        if (name in functions) {
+            return functions[name]!!.value
         }
+        if (name in classes) {
+            return classes[name]!!.value
+        }
+        throw RuntimeException("$name does not exist");
+
     }
 
 
@@ -94,9 +96,9 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         define(name, value, VariableStatus.VAL, type = VarType.CLASS)
     }
 
-    fun defineFunction(name: String, value: Callable<*>) {
+    fun defineFunction(name: String, value: DynamikFunction<Any>) {
         functions[name] = Variable(value, VariableStatus.VAL)
-        define(name, value,VariableStatus.VAL, type=VarType.FN)
+        define(name, value, VariableStatus.VAL, type = VarType.FN)
     }
 
 
