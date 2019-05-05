@@ -1,21 +1,25 @@
+val food = 0;
 
-class Blah(x,y) {
-    fn add(){
+class Math {
+    fn add(x,y) {
         return x+y;
     }
 }
 
-class Math(x,y){
-    fn add(){
-        return add2(20,30);
-    }
-    fn add2(a,b){
-        val p = Blah(a,b);
-        val c = p.add();
-        return c;
-    }
+val m = Math();
+var res = m.add(food, 20);
+print(res);
+
+val l = list();
+l.add(1);
+l.add(2);
+var index = 0;
+while (index < 2) {
+    print(l.get(index));
+    index = index +1;
 }
 
-val d = Math(3,4);
-var res = d.add();
-print(res);
+
+
+
+

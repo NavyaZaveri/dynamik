@@ -263,6 +263,23 @@ class InterpreterTest {
         val expected = 99.0
         val actual = repl.eval(stmts)
         assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testListSum() {
+        val stmts = ("val l = list(); " +
+                "l.add(10);" +
+                "l.add(2);" +
+                "var start = 0;" +
+                "var sum  = 0;" +
+                "while (start < 2) {" +
+                "sum = sum + l.get(start);" +
+                "start = start+1;" +
+                "}" +
+                "sum;").tokenize().parseStmts()
+        val expected = repl.eval(stmts)
+        val actual = 12.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
 
     }
 

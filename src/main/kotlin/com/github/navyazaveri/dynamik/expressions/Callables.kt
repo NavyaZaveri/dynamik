@@ -15,11 +15,12 @@ interface Callable<T : Any> {
 
 
 interface DynamikFunction<T : Any> : Callable<T>
+interface DynamikClass<T : DynamikInstance> : Callable<T>
+
 abstract class DynamikInstance {
     val env = Environment()
 }
 
-interface DynamikClass<T : DynamikInstance> : Callable<T>
 
 class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
 

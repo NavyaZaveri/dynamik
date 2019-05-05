@@ -1,7 +1,9 @@
 package com.github.navyazaveri.dynamik.interpreter
 
+import com.github.navyazaveri.dynamik.builtins.DynamikList
 import com.github.navyazaveri.dynamik.errors.AssertionErr
 import com.github.navyazaveri.dynamik.errors.UnexpectedType
+import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
 import kotlinx.coroutines.GlobalScope
 ;
@@ -12,13 +14,22 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
+class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>, StatementVisitor<Any> {
+
+    val jobs = mutableListOf<Job>()
+
+    init {
+        env.defineClass("list", DynamikList())
+    }
+
+    val peek = this.env
+
     override fun visitMethodStmt(methodStmt: MethodStmt): Any {
         TODO()
     }
 
     override fun visitInstanceStmt(instanceStmt: InstanceStmt): Any {
-        val instance = env.get(instanceStmt.name) as DefaultInstance
+        val instance = env.get(instanceStmt.name) as DynamikInstance
         //mutable borrows instance environment
         val oldEnv = this.env
         this.env = instance.env
@@ -26,15 +37,13 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
     }
 
     override fun visitClazzExpression(instanceExpr: InstanceExpr): Any {
-        val instance = env.get(instanceExpr.clazzName) as DefaultInstance
+        val instance = env.get(instanceExpr.clazzName) as DynamikInstance
         //mutable borrows instance environment
+
         val oldEnv = this.env
         this.env = instance.env
         return evaluate(instanceExpr.expr).also { this.env = oldEnv; }
     }
-
-    val jobs = mutableListOf<Job>()
-    var env = Environment()
 
     override fun visitMethodExpression(methodExpr: MethodExpr): Any {
         val instance = env.get(methodExpr.clazzName) as DefaultInstance
@@ -117,7 +126,12 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     override fun visitCallExpression(callExpr: CallExpr, par: Boolean): Any {
         val callable = env.getCallable(callExpr.funcName)
-        val args = callExpr.args.map { it.evaluateBy(this) }
+        var args: MutableList<Any> = try {
+            callExpr.args.map { this.evaluate(it) }.toMutableList()
+        } catch (r: VariableNotInScope) {
+            callExpr.args.map { this.evaluate(it, peek) }.toMutableList()
+        }
+
         val mainEnv = env
 
 
@@ -199,9 +213,15 @@ class TreeWalker : ExpressionVisitor<Any>, StatementVisitor<Any> {
         println("${evaluate(printStmt.expr)}")
     }
 
-    fun evaluate(expr: Expr): Any = expr.evaluateBy(this)
+    fun evaluate(expr: Expr, env: Environment = this.env): Any {
+        this.env = env
+        return expr.evaluateBy(this)
+    }
 
-    fun evaluate(stmt: Stmt): Any = stmt.evaluateBy(this)
+    fun evaluate(stmt: Stmt, env: Environment = this.env): Any {
+        this.env = env
+        return stmt.evaluateBy(this)
+    }
 
     private fun concatOrAdd(left: Any, right: Any): Any {
         if (isType<String>(left, right)) {

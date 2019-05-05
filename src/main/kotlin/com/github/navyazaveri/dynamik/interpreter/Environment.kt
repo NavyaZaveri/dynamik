@@ -21,7 +21,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
     }
 
     fun define(name: String, value: Any, status: VariableStatus, type: VarType = VarType.IDENT) {
-        if (name.inCurrentScope()) {
+        if (name.inCurrentScope() && identifierToValue[name]!!.status == VariableStatus.VAL) {
             throw ValError(name)
         }
         identifierToValue[name] = Variable(status = status, value = value, type = type)
@@ -41,6 +41,10 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
 
     fun fields(): Map<String, Variable<Any>> {
         return fields
+    }
+
+    fun clone(): Environment {
+        return Environment(this.identifierToValue.toMutableMap())
     }
 
     fun classes(): Map<String, Variable<DynamikClass<out DynamikInstance>>> {
@@ -81,7 +85,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         if (name in classes) {
             return classes[name]!!.value
         }
-        throw RuntimeException("$name does not exist");
+        throw RuntimeException("$name does not exist")
 
     }
 

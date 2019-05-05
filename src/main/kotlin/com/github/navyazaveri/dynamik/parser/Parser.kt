@@ -421,22 +421,16 @@ fun List<Tok>.parseExpr(): Expr {
 fun main(args: Array<String>) {
 
 
-    ("" +
-            "class Foo {" +
-            "fn hi() { print \"h1\";} }" +
-            "class Calculator(name, b) { " +
-            "fn hello() " + "{print \"insinde hello\"; return 100;" +
-            "   } " +
-            "" +
-            "fn add(x, y) { return x+y;} " +
-            "fn mul(x,y) { val f = Foo(); f.hi(); name = 10; val a = 20; return x*y;}" +
-            "" +
-            "} " +
-            "val calc = Calculator(\"my_calcutor\", 999);" +
-            "val p = calc.mul(10,20);" +
-            "val f = Foo();"+
-            "print calc.name;" + "" +
-            "print calc.b;"
+    ("class Math { fn add(x,y) { return x+y;}" +
+            " }" +
+            "val m = Math();" +
+            "val foo = 10;" +
+            "val result = m.add(foo, 20);" +
+            "print(result);" +
+            "val l = list();" +
+            "l.add(10);" +
+            "val index = 0;" +
+            "print(l.get(0));"
             ).tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
