@@ -86,12 +86,6 @@ class InstanceStmt(val name: String, val stmt: Stmt) : Stmt() {
 
 }
 
-class MethodStmt(val name: String, val stmt: Stmt) : Stmt() {
-    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitMethodStmt(this);
-    }
-
-}
 
 class ClassStmt(
     val name: String,
@@ -120,5 +114,4 @@ interface StatementVisitor<T> {
     fun visitSkipStatement(skipStmt: SkipStmt): T
     fun visitClassStmt(classStmt: ClassStmt): T
     fun visitInstanceStmt(instanceStmt: InstanceStmt): T
-    fun visitMethodStmt(methodStmt: MethodStmt): T
 }

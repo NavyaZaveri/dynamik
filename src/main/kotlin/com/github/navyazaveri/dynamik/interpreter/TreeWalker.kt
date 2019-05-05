@@ -22,26 +22,21 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         env.defineClass("list", DynamikList())
     }
 
-    val peek = this.env
-
-    override fun visitMethodStmt(methodStmt: MethodStmt): Any {
-        TODO()
-    }
-
     override fun visitInstanceStmt(instanceStmt: InstanceStmt): Any {
         val instance = env.get(instanceStmt.name) as DynamikInstance
         //mutable borrows instance environment
         val oldEnv = this.env
         this.env = instance.env
+        this.env.outer = oldEnv.identifierToValue.toMutableMap()
         return evaluate(instanceStmt.stmt).also { this.env = oldEnv; }
     }
 
     override fun visitClazzExpression(instanceExpr: InstanceExpr): Any {
         val instance = env.get(instanceExpr.clazzName) as DynamikInstance
         //mutable borrows instance environment
-
         val oldEnv = this.env
         this.env = instance.env
+        this.env.outer = oldEnv.identifierToValue.toMutableMap()
         return evaluate(instanceExpr.expr).also { this.env = oldEnv; }
     }
 
@@ -81,8 +76,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     }
 
     override fun visitGlobalStmt(globalStmt: GlobalStmt): Any {
-        env.define(globalStmt.name.lexeme, globalStmt.value, VariableStatus.VAL)
-        Environment.addGlobal(globalStmt.name.lexeme, evaluate(globalStmt.value))
+        val value = evaluate(globalStmt.value)
+        env.define(globalStmt.name.lexeme, value, VariableStatus.VAL)
+        Environment.addGlobal(globalStmt.name.lexeme, value)
         return Any()
     }
 
@@ -126,11 +122,8 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 
     override fun visitCallExpression(callExpr: CallExpr, par: Boolean): Any {
         val callable = env.getCallable(callExpr.funcName)
-        var args: MutableList<Any> = try {
+        var args: MutableList<Any> =
             callExpr.args.map { this.evaluate(it) }.toMutableList()
-        } catch (r: VariableNotInScope) {
-            callExpr.args.map { this.evaluate(it, peek) }.toMutableList()
-        }
 
         val mainEnv = env
 
@@ -193,7 +186,17 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         stmts.forEach { evaluate(it) }
     }
 
-    override fun visitVariableExpr(variableExpr: VariableExpr): Any = env.get(variableExpr.token.lexeme)
+    override fun visitVariableExpr(variableExpr: VariableExpr): Any {
+        try {
+            return env.get(variableExpr.token.lexeme)
+
+        } catch (v: VariableNotInScope) { //refactor this mess
+            return env.outer[variableExpr.token.lexeme]?.value ?: throw VariableNotInScope(
+                variableExpr.token.lexeme,
+                setOf()
+            )
+        }
+    }
 
     override fun visitVariableStmt(varStmt: VarStmt) {
         env.define(varStmt.name.lexeme, evaluate(varStmt.expr), VariableStatus.VAR)

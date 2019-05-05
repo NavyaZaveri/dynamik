@@ -49,7 +49,7 @@ enum class TokenType(val regex: Regex) {
     VAR("""\bvar\b""".toRegex()),
     ASSERT("assert".toRegex()),
 
-    PRINT("print".toRegex()), RETURN("return".toRegex()),
+    PRINT("""\bprint\b""".toRegex()), RETURN("return".toRegex()),
     LOOP("loop".toRegex()),
     VAL("""\bval\b""".toRegex()),
     Par("@par".toRegex()),

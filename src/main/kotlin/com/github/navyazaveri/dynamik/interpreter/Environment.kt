@@ -10,6 +10,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
     val fields = mutableMapOf<String, Variable<Any>>()
     val classes = mutableMapOf<String, Variable<DynamikClass<out DynamikInstance>>>()
     val functions = mutableMapOf<String, Variable<DynamikFunction<Any>>>()
+    var outer = mutableMapOf<String, Variable<Any>>()
 
 
     fun String.inGlobalScope(): Boolean {
