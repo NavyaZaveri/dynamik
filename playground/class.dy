@@ -25,11 +25,9 @@ m.add(2);
 val it = Item(2);
 it.printAll();
 print(it.test());
+/*
+print(m.len());
+*/
+print(m.contains(1));
+print(m);
 
-fn foo()  {
-    class Omrna(){
-        fn name(){
-            print ("Omran");
-        }
-    }
-}

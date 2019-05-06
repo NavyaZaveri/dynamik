@@ -25,6 +25,9 @@ class DefaultInstance(
     val fields: Map<String, Any>,
     val interpreter: TreeWalker
 ) : DynamikInstance() {
+    override fun toHash(): Int {
+        return this.toHash()
+    }
 
     init {
 

@@ -3,6 +3,7 @@ package com.github.navyazaveri.dynamik.expressions
 import com.github.navyazaveri.dynamik.errors.InvalidArgSize
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
+import com.github.navyazaveri.dynamik.stdlib.BuiltinCallable
 
 typealias FuncName = String
 typealias Arg = Any
@@ -19,6 +20,8 @@ interface DynamikClass<T : DynamikInstance> : Callable<T>
 
 abstract class DynamikInstance {
     val env = Environment()
+    abstract override fun toString(): String
+    abstract fun toHash(): Int
 }
 
 

@@ -14,7 +14,6 @@ enum class TokenType(val regex: Regex) {
     NUMBER("\\d+".toRegex()),
 
     STAR("\\*".toRegex()),
-    QUESTION("\\?".toRegex()),
     WHITESPACE("\\s+".toRegex()),
 
     BANG_EQUAL("!=".toRegex()),
@@ -36,7 +35,7 @@ enum class TokenType(val regex: Regex) {
     STRING("\".*?\"".toRegex()),
 
     AND("&".toRegex()),
-    AND_AND("&".toRegex()),
+    AND_AND("&&".toRegex()),
 
     CLASS("class".toRegex()), ELSE("else".toRegex()),
     FN("""\bfn\b""".toRegex()),
@@ -49,11 +48,10 @@ enum class TokenType(val regex: Regex) {
     VAR("""\bvar\b""".toRegex()),
     ASSERT("assert".toRegex()),
 
-    PRINT("""\bprint\b""".toRegex()), RETURN("return".toRegex()),
-    LOOP("loop".toRegex()),
+    PRINT("""\bprint\b""".toRegex()), RETURN("""\breturn\b""".toRegex()),
     VAL("""\bval\b""".toRegex()),
     Par("@par".toRegex()),
-    While("while".toRegex()),
+    While("""\bwhile\b""".toRegex()),
     Memo("@memo".toRegex()),
     Wait("@wait".toRegex()),
 

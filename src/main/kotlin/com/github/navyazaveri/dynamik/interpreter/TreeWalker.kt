@@ -1,6 +1,6 @@
 package com.github.navyazaveri.dynamik.interpreter
 
-import com.github.navyazaveri.dynamik.builtins.DynamikList
+import com.github.navyazaveri.dynamik.stdlib.DynamikList
 import com.github.navyazaveri.dynamik.errors.AssertionErr
 import com.github.navyazaveri.dynamik.errors.UnexpectedType
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
@@ -76,9 +76,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     }
 
     override fun visitGlobalStmt(globalStmt: GlobalStmt): Any {
-        val value = evaluate(globalStmt.value)
-        env.define(globalStmt.name.lexeme, value, VariableStatus.VAL)
-        Environment.addGlobal(globalStmt.name.lexeme, value)
+        val globalValue = evaluate(globalStmt.value)
+        env.define(globalStmt.name.lexeme, globalValue, VariableStatus.VAL)
+        Environment.addGlobal(globalStmt.name.lexeme, globalValue)
         return Any()
     }
 

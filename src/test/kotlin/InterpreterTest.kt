@@ -283,5 +283,29 @@ class InterpreterTest {
 
     }
 
+    @Test
+    fun testGlobalVarAccessFromWithinClass() {
+        val stmts = ("@global val g = 10; class Foo{ fn get_global() {return g;} }" +
+                "val thing = Foo();" +
+                "thing.get_global();" +
+                "").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 10.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testListModificationFromWithinClass() {
+        val stmts = ("@global val lst = list(); " +
+                "class Foo() { fn add(x) { lst.add(x); }}" +
+                "val f = Foo();" + "" +
+                "f.add(11);" +
+                "lst.get(0);").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 11.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+
 }
 
