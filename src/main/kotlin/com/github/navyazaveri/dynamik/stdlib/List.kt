@@ -6,10 +6,6 @@ import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 import kotlin.collections.List
 
 
-interface DynInstance {
-    fun runMethod(d: DynInstance, methodName: String, args: List<Arg>): Any
-}
-
 //marker interface
 interface Builtin
 
@@ -18,6 +14,7 @@ interface Container : Builtin {
     override fun toString(): String
     fun toHash(): Int
 }
+
 
 abstract class ContainerInstance : Container, DynamikInstance() {
     /*
@@ -42,19 +39,19 @@ class DynamikList : DynamikClass<ListInstance> {
 
 class ListInstance : ContainerInstance() {
     override fun toHash(): Int {
-        return backingList.hashCode()
+        return _list.hashCode()
     }
 
     override fun toString(): String {
-        return backingList.toString()
+        return _list.toString()
     }
 
     override fun len(): Int {
-        return backingList.size
+        return _list.size
     }
 
 
-    private val backingList = mutableListOf<Any>()
+    private val _list = mutableListOf<Any>()
 
     init {
         env.defineFunction("add", BuiltinCallable(this, "add", 1))
@@ -63,15 +60,15 @@ class ListInstance : ContainerInstance() {
     }
 
     fun add(item: Any): Any {
-        return backingList.add(item)
+        return _list.add(item)
     }
 
     fun get(i: Any): Any {
-        return backingList[(i as Double).toInt()]
+        return _list[(i as Double).toInt()]
     }
 
     fun contains(thing: Any): Boolean {
-        return backingList.contains(thing)
+        return _list.contains(thing)
     }
 }
 

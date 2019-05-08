@@ -6,7 +6,6 @@ import com.github.navyazaveri.dynamik.errors.UnexpectedType
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
 import kotlinx.coroutines.GlobalScope
-;
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import com.github.navyazaveri.dynamik.scanner.TokenType
@@ -125,7 +124,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 
     override fun visitCallExpression(callExpr: CallExpr, par: Boolean): Any {
         val callable = env.getCallable(callExpr.funcName)
-        var args: MutableList<Any> =
+        val args: MutableList<Any> =
             callExpr.args.map { this.evaluate(it) }.toMutableList()
 
         val mainEnv = env
@@ -229,7 +228,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         return stmt.evaluateBy(this)
     }
 
-    private fun concatOrAdd(left:Any, right: Any): Any {
+    private fun concatOrAdd(left: Any, right: Any): Any {
         if (isType<String>(left, right)) {
             return left as String + right as String
         }

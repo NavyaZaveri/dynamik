@@ -6,6 +6,13 @@ import com.github.navyazaveri.dynamik.expressions.*
 import com.github.navyazaveri.dynamik.expressions.DynamikFunction
 import java.lang.RuntimeException
 
+/**
+ *An environment instance held by the interpreter
+ *@property name name of the environment
+ *@property identifierToValue captures the value of a given variable
+ *@Constructor Creates an environment
+ */
+
 class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mutableMapOf(), val name: String = "") {
     val fields = mutableMapOf<String, Variable<Any>>()
     val classes = mutableMapOf<String, Variable<DynamikClass<out DynamikInstance>>>()
