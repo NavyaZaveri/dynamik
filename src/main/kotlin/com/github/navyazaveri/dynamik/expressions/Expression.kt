@@ -2,6 +2,7 @@ package com.github.navyazaveri.dynamik.expressions
 
 import com.github.navyazaveri.dynamik.scanner.Tok
 
+
 abstract class Expr {
     abstract fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T
 }

@@ -9,11 +9,17 @@ typealias FuncName = String
 typealias Arg = Any
 typealias RetVal = Any
 
-
+/*
+Types that can be invoked implement Callable. Eg: Functions, Classes, class methods
+ */
 interface Callable<T : Any> {
     fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): T
 }
 
+
+/*
+A couple of marker traits to distinguish between functions and classes
+ */
 
 interface DynamikFunction<T : Any> : Callable<T>
 interface DynamikClass<T : DynamikInstance> : Callable<T>
@@ -52,7 +58,7 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
             .forEach { (k, v) -> env.defineField(k, v.value) }
 
 
-        //makes  classes in out scope visible to current env
+        //makes classes in out scope visible to current env
         outer.classes().forEach { k, u -> env.defineClass(k, u.value) }
 
 
@@ -61,8 +67,9 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
             interpreter.evaluateStmts(func.body, env = env)
         } catch (r: Return) {
             return r.value
-            // update fields of the original environment and globals (todo)
-        } finally {
+
+
+        } finally {  // update fields of the original environment and globals (todo)
 
             for ((k, v) in env.identifierToValue) {
                 if (k in outer.fields) {
@@ -76,7 +83,11 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
 
 }
 
-
+/*
+A special type of functions that caches the results of a functions
+against its inputs. Should be used ONLY for pure functions. As such,
+the language does not allow class methods to be memoizable.
+*/
 class MemoizedFunction(val func: FnStmt) : DynamikFunction<Any> {
     var hits = 0
 
@@ -86,10 +97,6 @@ class MemoizedFunction(val func: FnStmt) : DynamikFunction<Any> {
 
     val defaultCallable by lazy { DefaultFunction(func) }
 
-    /**
-     * Invokes the callable if its result has not already been cached. Otherwise, the cached value
-     * is returned
-     */
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val funcKey = Pair(func.functionName.lexeme, arguments)
 

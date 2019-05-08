@@ -20,6 +20,10 @@ interface Container : Builtin {
 }
 
 abstract class ContainerInstance : Container, DynamikInstance() {
+    /*
+    Classes inherinting Container instance should just define relevant
+  api calls
+     */
     init {
         env.defineFunction("len", BuiltinCallable(this, "len", 0))
         env.defineFunction("toString", BuiltinCallable(this, "toString", 0))

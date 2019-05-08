@@ -27,13 +27,16 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         //mutable borrows instance environment
         val oldEnv = this.env
         this.env = instance.env
+
+        /* we temporarily give the instance environment access to
+        the enclosing environment. This is in order to evaluate the
+        arguments passed the method invocation.  */
         this.env.outer = oldEnv.identifierToValue.toMutableMap()
         return evaluate(instanceStmt.stmt).also { this.env = oldEnv; }
     }
 
     override fun visitClazzExpression(instanceExpr: InstanceExpr): Any {
         val instance = env.get(instanceExpr.clazzName) as DynamikInstance
-        //mutable borrows instance environment
         val oldEnv = this.env
         this.env = instance.env
         this.env.outer = oldEnv.identifierToValue.toMutableMap()
@@ -226,7 +229,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         return stmt.evaluateBy(this)
     }
 
-    private fun concatOrAdd(left: Any, right: Any): Any {
+    private fun concatOrAdd(left:Any, right: Any): Any {
         if (isType<String>(left, right)) {
             return left as String + right as String
         }
