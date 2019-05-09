@@ -288,7 +288,7 @@ open class ExprParser(val tokens: List<Tok>) {
             TokenType.IDENTIFIER -> VariableExpr(token = tokens[current])
             TokenType.TRUE -> LiteralExpr(token = tokens[current])
             TokenType.False -> LiteralExpr(token = tokens[current])
-            else -> throw InvalidToken("could not recognize ${tokens[current]}")
+            else -> throw InvalidToken("could not recognize ${tokens[current]} at line ${tokens[current].line}")
         }.also { advance() }
     }
 
@@ -299,7 +299,7 @@ open class ExprParser(val tokens: List<Tok>) {
             throw RuntimeException("expecting  $tokType after ${tokens[current - 1].lexeme}")
         }
         if (tokens[current].type != tokType) {
-            throw RuntimeException("expecting $tokType, found ${tokens[current].type} instead")
+            throw RuntimeException("expecting $tokType, found ${tokens[current].type} instead at line ${tokens[current].line}")
         }
         return tokens[current].also { current += 1 }
     }

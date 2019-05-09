@@ -306,6 +306,17 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
-
+    @Test
+    fun testCustomMathClass() {
+        val stmts = ("class Math { fn add(x,y) { return x+y;}" +
+                "fn abs(x) {return -x;}}" +
+                "val m = Math();" +
+                "val foo = -10;" +
+                "val result = m.abs(foo);" +
+                "result;").tokenize().parseStmts()
+        val expected = 10.0
+        val actual = repl.eval(stmts)
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
 }
 
