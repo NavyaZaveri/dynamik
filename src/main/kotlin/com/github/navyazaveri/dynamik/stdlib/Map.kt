@@ -10,7 +10,6 @@ class DynamikMap : DynamikClass<MapInstance> {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): MapInstance {
         return MapInstance()
     }
-
 }
 
 class MapInstance : ContainerInstance() {

@@ -27,9 +27,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         val oldEnv = this.env
         this.env = instance.env
 
-        /* we temporarily give the instance environment access to
-        the enclosing environment. This is in order to evaluate the
-        arguments passed the method invocation.  */
+        // we temporarily give the instance environment access to
+        // the enclosing environment. This is in order to evaluate the
+        // arguments passed to the method invocation.
         this.env.outer = oldEnv.identifierToValue.toMutableMap()
         return evaluate(instanceStmt.stmt).also { this.env = oldEnv; }
     }
@@ -143,9 +143,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
             return callable.invoke(args, newInterpreter)
         }
 
-        /** Invokes the function with a new environment. .
-         * The original environment is preserved  and assigned to `env` when the function ends.
-         */
+        // Invokes the function with a new environment. .
+        // The original environment is preserved  and assigned to `env` when the function ends.
+
         return callable.invoke(args, this).also { this.env = mainEnv }
     }
 
@@ -172,7 +172,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         }
     }
 
-    inline fun <reified T> isType(vararg objects: Any, throwException: Boolean = false): Boolean {
+    private inline fun <reified T> isType(vararg objects: Any, throwException: Boolean = false): Boolean {
         val allTypesMatch = objects.all { it is T }
         if (allTypesMatch) {
             return true

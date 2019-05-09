@@ -8,8 +8,9 @@ enum class TokenType(val regex: Regex) {
     RIGHT_PAREN("\\)".toRegex()), LEFT_BRACE("\\{".toRegex()), RIGHT_BRACE("}".toRegex()),
     COMMA(",".toRegex()),
     DOT("\\.".toRegex()),
-    MINUS("-".toRegex()),
     PLUS("\\+".toRegex()),
+    MINUS("-".toRegex()),
+
     SEMICOLON(";".toRegex()), SLASH("/".toRegex()),
     NUMBER("\\d+".toRegex()),
 
@@ -56,6 +57,7 @@ enum class TokenType(val regex: Regex) {
     Wait("@wait".toRegex()),
 
     IDENTIFIER("\\w+".toRegex()),
+
     EOF("[\r\n]+".toRegex()),
 
 }

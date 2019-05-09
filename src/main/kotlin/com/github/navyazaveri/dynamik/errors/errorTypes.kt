@@ -20,5 +20,5 @@ class InvalidArgSize(actual: Int, expected: Int, fname: String) :
 
 class AssertionErr(v1: Any) : Exception("Assertion Error")
 class InvalidConstructorArgSize(actual: Int, expected: Int, fname: String) :
-    Exception("Passed  assed $actual args to $fname, expected $expected")
+    Exception("Passed actual args to $fname, expected $expected")
 

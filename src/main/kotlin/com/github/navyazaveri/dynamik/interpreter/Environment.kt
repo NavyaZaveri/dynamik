@@ -3,8 +3,6 @@ package com.github.navyazaveri.dynamik.interpreter
 import com.github.navyazaveri.dynamik.errors.ValError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
-import com.github.navyazaveri.dynamik.expressions.DynamikFunction
-import java.lang.RuntimeException
 
 /**
  *An environment instance held by the interpreter
@@ -28,6 +26,10 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         return identifierToValue.containsKey(this)
     }
 
+    /**
+     * Assigns [value] to [name]
+     *@throws ValError when variable has been previously defined with <code> val </code>
+     */
     fun define(name: String, value: Any, status: VariableStatus, type: VarType = VarType.IDENT) {
         if (name.inCurrentScope() && identifierToValue[name]!!.status == VariableStatus.VAL) {
             throw ValError(name)
@@ -36,6 +38,9 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
     }
 
 
+    /**
+     * Clears all scopes.
+     */
     fun clear() {
         identifierToValue.clear()
         classes.clear()
@@ -73,6 +78,9 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
     fun status(name: String): VariableStatus = identifierToValue[name]?.status
         ?: throw VariableNotInScope(name, this.identifierToValue.keys)
 
+    /**
+     * @throws VariableNotInScope
+     */
     fun get(name: String): Any {
         if (name.inCurrentScope()) {
             return identifierToValue[name]!!.value
@@ -86,6 +94,9 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         throw VariableNotInScope(name, allExistingVars)
     }
 
+    /**
+     * @throws VariableNotInScope
+     */
     fun getCallable(name: String): Callable<*> {
         if (name in functions) {
             return functions[name]!!.value
@@ -93,11 +104,14 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         if (name in classes) {
             return classes[name]!!.value
         }
-        throw RuntimeException("$name does not exist")
-
+        throw VariableNotInScope(name, this.identifierToValue.keys)
     }
 
 
+    /**
+     * @throws VariableNotInScope
+     * @throws ValError
+     */
     fun defineField(name: String, value: Any) {
         fields[name] = Variable(value, VariableStatus.VAR)
         define(name, value, VariableStatus.VAR)
@@ -116,19 +130,21 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
 
     companion object {
         val globals = mutableMapOf<String, Variable<Any>>()
-
-
         fun addGlobal(name: String, value: Any) {
             globals[name] = Variable(value, VariableStatus.VAL)
         }
     }
 
     override fun toString(): String {
-        return identifierToValue.toString(
-        )
+        return identifierToValue.toString()
     }
 }
 
+
+/**
+ * [levenshtein] finds the minimum edits required to convert [lhs] to [rhs]
+ *
+ */
 fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
     val lhsLength = lhs.length
     val rhsLength = rhs.length

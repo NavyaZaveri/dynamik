@@ -1,21 +1,13 @@
-/*
-fn add(x, y) { return x + y;}
-fn mul(x, y) { return x * y;}
-fn add_and_mul(x, y) {
-    val hello = "helllooo";
+class Math() {
+    fn abs(x) {
+        if (x<=0) { return -x;}
+        return x;
+     }
 
-    fn sub(x,y) {
-       return x-y;
-    }
-   val wtf = sub(x,y);
-    return wtf;
-} */
-
-
-fn cc(x){
-val y=4;
-return x;
+     fn add(x,y) { return x+y;}
+     fn sub(x,y) {return x-y;}
 }
-print cc(3);
 
-
+val math = Math();
+val pos_one = math.abs(-1);
+print(pos_one);

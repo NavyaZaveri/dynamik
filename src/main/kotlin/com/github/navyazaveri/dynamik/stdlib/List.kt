@@ -6,28 +6,7 @@ import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 import kotlin.collections.List
 
 
-//marker interface
 interface Builtin
-
-interface Container : Builtin {
-    fun len(): Int
-    override fun toString(): String
-    fun toHash(): Int
-}
-
-
-abstract class ContainerInstance : Container, DynamikInstance() {
-    /*
-    Classes inherinting Container instance should just define relevant
-  api calls
-     */
-    init {
-        env.defineFunction("len", BuiltinCallable(this, "len", 0))
-        env.defineFunction("toString", BuiltinCallable(this, "toString", 0))
-        env.defineFunction("toHash", BuiltinCallable(this, "toHash", 0))
-    }
-
-}
 
 
 class DynamikList : DynamikClass<ListInstance> {
@@ -74,6 +53,11 @@ class ListInstance : ContainerInstance() {
 
 
 class BuiltinCallable(val b: Builtin, val methodName: String, val arity: Int) : DynamikFunction<Any> {
+
+
+    /**
+    Uses reflection to invoke the builtin method.
+     */
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val argTypes = (0 until arity).map { Any::class.java }.toTypedArray()
         return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray())

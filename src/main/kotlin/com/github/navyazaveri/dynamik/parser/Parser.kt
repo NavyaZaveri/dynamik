@@ -330,11 +330,12 @@ open class ExprParser(val tokens: List<Tok>) {
     }
 
     private fun unary(): Expr {
-        val expr = brackets()
-        if (match(TokenType.BANG)) {
-            return UnaryExpr(advance(), expr)
+        if (match(TokenType.BANG, TokenType.MINUS)) {
+            val minusOrBang = advance()
+            val expr = brackets()
+            return UnaryExpr(minusOrBang, expr)
         }
-        return expr
+        return brackets()
     }
 
     fun brackets(): Expr {
@@ -422,7 +423,8 @@ fun main(args: Array<String>) {
 
 
     ("class Math { fn add(x,y) { return x+y;}" +
-            " }" +
+            " " +
+            "fn abs(x) {return -x;}}" +
             "val m = Math();" +
             "val foo = 10;" +
             "val result = m.add(foo, 20);" +
