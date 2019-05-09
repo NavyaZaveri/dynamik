@@ -6,8 +6,18 @@ class Math() {
 
      fn add(x,y) { return x+y;}
      fn sub(x,y) {return x-y;}
+     fn sum_list(lst) {
+        var i = 0;
+        var sum = 0;
+        while (i<lst.len()) {sum = sum+lst.get(i); i = i+1;}
+        return sum;
+     }
 }
 
 val math = Math();
 val pos_one = math.abs(-1);
+val lst = list();
+lst.add(1);
+lst.add(-10);
 print(pos_one);
+print(math.sum_list(lst));

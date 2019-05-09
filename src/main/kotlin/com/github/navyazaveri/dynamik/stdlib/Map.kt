@@ -27,8 +27,8 @@ class MapInstance : ContainerInstance() {
         return backingMap.toString()
     }
 
-    override fun len(): Int {
-        return backingMap.size
+    override fun len(): Double{
+        return backingMap.size.toDouble()
     }
 
     fun insert(k: Any, v: Any) {

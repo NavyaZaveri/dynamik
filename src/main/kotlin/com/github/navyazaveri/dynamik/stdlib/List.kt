@@ -25,8 +25,8 @@ class ListInstance : ContainerInstance() {
         return _list.toString()
     }
 
-    override fun len(): Int {
-        return _list.size
+    override fun len(): Double {
+        return _list.size.toDouble()
     }
 
 
