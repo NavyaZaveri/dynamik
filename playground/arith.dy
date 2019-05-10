@@ -3,7 +3,6 @@ class Math() {
         if (x<=0) { return -x;}
         return x;
      }
-
      fn add(x,y) { return x+y;}
      fn sub(x,y) {return x-y;}
      fn sum_list(lst) {
@@ -13,6 +12,7 @@ class Math() {
         return sum;
      }
 }
+
 
 val math = Math();
 val pos_one = math.abs(-1);

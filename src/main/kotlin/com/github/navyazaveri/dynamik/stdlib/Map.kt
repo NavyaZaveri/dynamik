@@ -16,26 +16,32 @@ class MapInstance : ContainerInstance() {
     init {
         env.defineFunction("insert", BuiltinCallable(this, "len", 2))
         env.defineFunction("get", BuiltinCallable(this, "get", 1))
+        env.defineFunction("contains", BuiltinCallable(this, "contains", 1))
+
     }
 
-    val backingMap = mutableMapOf<Any, Any>()
+    val _map = mutableMapOf<Any, Any>()
     override fun toHash(): Int {
-        return backingMap.hashCode()
+        return _map.hashCode()
     }
 
     override fun toString(): String {
-        return backingMap.toString()
+        return _map.toString()
     }
 
-    override fun len(): Double{
-        return backingMap.size.toDouble()
+    override fun len(): Double {
+        return _map.size.toDouble()
     }
 
     fun insert(k: Any, v: Any) {
-        backingMap[k] = v;
+        _map[k] = v
     }
 
     fun get(k: Any): Any {
-        return backingMap[k]!!
+        return _map[k]!!
+    }
+
+    fun contains(item: Any): Boolean {
+        return _map.contains(item)
     }
 }

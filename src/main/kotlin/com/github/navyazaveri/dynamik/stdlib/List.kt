@@ -56,8 +56,7 @@ class BuiltinCallable(val b: Builtin, val methodName: String, val arity: Int) : 
 
 
     /**
-    Uses reflection to invoke the builtin method.
-     */
+     * Uses reflection to invoke the builtin method.*/
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val argTypes = (0 until arity).map { Any::class.java }.toTypedArray()
         return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray())
