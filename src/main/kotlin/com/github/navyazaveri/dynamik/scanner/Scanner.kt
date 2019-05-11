@@ -37,7 +37,7 @@ class Scanner {
                 }
             }
         }
-        throw InvalidToken("${tokenMatch.text} is not a valid token")
+        throw InvalidToken("${tokenMatch.text} is not a valid token at line ${tokenMatch.row}")
     }
 }
 

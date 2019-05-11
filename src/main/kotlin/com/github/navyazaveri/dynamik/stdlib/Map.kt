@@ -14,10 +14,9 @@ class DynamikMap : DynamikClass<MapInstance> {
 
 class MapInstance : ContainerInstance() {
     init {
-        env.defineFunction("insert", BuiltinCallable(this, "len", 2))
+        env.defineFunction("insert", BuiltinCallable(this, "insert", 2))
         env.defineFunction("get", BuiltinCallable(this, "get", 1))
         env.defineFunction("contains", BuiltinCallable(this, "contains", 1))
-
     }
 
     val _map = mutableMapOf<Any, Any>()
@@ -33,8 +32,9 @@ class MapInstance : ContainerInstance() {
         return _map.size.toDouble()
     }
 
-    fun insert(k: Any, v: Any) {
-        _map[k] = v
+    fun insert(k: Any, v: Any): Any {
+        _map [k] = v
+        return Any()
     }
 
     fun get(k: Any): Any {

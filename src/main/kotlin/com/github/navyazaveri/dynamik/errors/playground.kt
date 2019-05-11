@@ -10,22 +10,24 @@ interface HelloBoy {
 interface Built
 
 
-class Foo(val m: MutableList<Any>) : MutableList<Any> by m, Built {
+class Foo {
+
+    fun add(a: Any, b: Any) {
+        println("adding things");
+    }
 }
 
 
 fun do_foo_hello(f: Foo) {
-
-    val argTypes = (0 until 1).map { Any::class.java }.toTypedArray()
-    val a = f::class.java.getMethod("add", *argTypes).invoke(f, 10)
-    f::class.java.getMethod("size").invoke(f).also { println(it) }
+    val lst: List<Any> = listOf(1, 2);
+    val argTypes = (0 until 2).map { Any::class.java }.toTypedArray()
+    val a = f::class.java.getMethod("add", *argTypes).invoke(f, *lst.toTypedArray())
 }
 
 
 fun main(args: Array<String>) {
-    val a = Concrete_A();
-    foo(a);
-
+    val f = Foo();
+    do_foo_hello(f);
 }
 
 fun foo(thing: Generic_A<out Generic_B>) {

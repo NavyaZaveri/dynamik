@@ -4,7 +4,7 @@ import com.github.navyazaveri.dynamik.expressions.DynamikInstance
 
 
 interface Container : Builtin {
-    fun len(): Double //compatibility reasns
+    fun len(): Double //compatibility reasons
     override fun toString(): String
     fun toHash(): Int
 }

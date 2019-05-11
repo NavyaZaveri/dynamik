@@ -13,11 +13,7 @@ class Math() {
      }
 }
 
-
-val math = Math();
-val pos_one = math.abs(-1);
-val lst = list();
-lst.add(1);
-lst.add(-10);
-print(pos_one);
-print(math.sum_list(lst));
+val m = map();
+m.insert(1,2);
+val p = m.get(1);
+print(p);
