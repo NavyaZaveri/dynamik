@@ -266,7 +266,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
             TokenType.GREATER_EQUAL -> return (left as Double) >= (right as Double)
         }
 
-        throw UnexpectedType("${expr.operand.type}  not recognized")
+        throw UnexpectedType("${expr.operand.type}  not recognized at line ${expr.operand.line}")
     }
 
     override fun visitUnaryExpression(expr: UnaryExpr): Any {
@@ -275,7 +275,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
             TokenType.MINUS -> return -(l as Double)
             TokenType.BANG -> return !(l as Boolean)
         }
-        throw UnexpectedType("could not evaluate ${expr.token.type} for unary $l")
+        throw UnexpectedType("could not evaluate ${expr.token.type} for unary $l at line ${expr.token.line}")
     }
 
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal

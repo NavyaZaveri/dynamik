@@ -11,7 +11,7 @@ interface Container : Builtin {
 }
 
 /**
- * All containers inheriting this instannce must defined their
+ * All containers inheriting this instance must defined their
  * functions in the instance env, with a BuiltinCallable.
  * @code  env.defineFunction("len", BuiltinCallable(this, "len", 0))
  *

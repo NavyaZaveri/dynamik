@@ -29,7 +29,7 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 
 - [x] Synchronization with wait 
 
-- [ ] Collections (list, map)
+- [x] Collections (list, map)
 
 - [ ] Importing file scopes
 

@@ -10,17 +10,15 @@ typealias Arg = Any
 typealias RetVal = Any
 
 
-/*
-Types that can be invoked implement Callable. Eg: Functions, Classes, class methods
+/**
+ * Types that can be invoked implement [Callable]. Eg: Functions, Classes, class methods
  */
 interface Callable<T : Any> {
     fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): T
 }
 
 
-/*
-A couple of marker traits to distinguish between functions and classes
- */
+//marker traits to distinguish between functions and classes
 
 interface DynamikFunction<T : Any> : Callable<T>
 interface DynamikClass<T : DynamikInstance> : Callable<T>
@@ -54,12 +52,12 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
         outer.functions()
             .forEach { (k, v) -> env.defineFunction(k, v.value) }
 
-        //if it's a class environment, then it will have some associated fields. Make these visible.
+        //if it's a class environment, it will have some associated fields. Make these visible.
         outer.fields()
             .forEach { (k, v) -> env.defineField(k, v.value) }
 
 
-        //makes classes in out scope visible to current env
+        //makes all existing classes visible to current env
         outer.classes().forEach { k, u -> env.defineClass(k, u.value) }
 
 
