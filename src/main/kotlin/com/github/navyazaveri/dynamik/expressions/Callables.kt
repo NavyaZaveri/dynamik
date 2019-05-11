@@ -3,11 +3,12 @@ package com.github.navyazaveri.dynamik.expressions
 import com.github.navyazaveri.dynamik.errors.InvalidArgSize
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
-import com.github.navyazaveri.dynamik.stdlib.BuiltinCallable
+import com.github.navyazaveri.dynamik.stdlib.Builtin
 
 typealias FuncName = String
 typealias Arg = Any
 typealias RetVal = Any
+
 
 /*
 Types that can be invoked implement Callable. Eg: Functions, Classes, class methods
@@ -104,6 +105,17 @@ class MemoizedFunction(val func: FnStmt) : DynamikFunction<Any> {
             return cache[funcKey]!!.also { /* println("cache hit!"); */ hits += 1 }
         }
         return defaultCallable.invoke(arguments, interpreter).also { cache[funcKey] = it }
+    }
+}
+
+class BuiltinCallable(val b: Builtin, val methodName: String, val arity: Int) : DynamikFunction<Any> {
+
+
+    /**
+     * Uses reflection to invoke the builtin method.*/
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
+        val argTypes = (0 until arity).map { Any::class.java }.toTypedArray()
+        return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray())
     }
 }
 

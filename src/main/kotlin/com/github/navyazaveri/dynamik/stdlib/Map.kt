@@ -1,6 +1,7 @@
 package com.github.navyazaveri.dynamik.stdlib
 
 import com.github.navyazaveri.dynamik.expressions.Arg
+import com.github.navyazaveri.dynamik.expressions.BuiltinCallable
 import com.github.navyazaveri.dynamik.expressions.DynamikClass
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker

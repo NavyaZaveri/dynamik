@@ -51,15 +51,3 @@ class ListInstance : ContainerInstance() {
     }
 }
 
-
-class BuiltinCallable(val b: Builtin, val methodName: String, val arity: Int) : DynamikFunction<Any> {
-
-
-    /**
-     * Uses reflection to invoke the builtin method.*/
-    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
-        println(arguments)
-        val argTypes = (0 until arity).map { Any::class.java }.toTypedArray()
-        return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray())
-    }
-}

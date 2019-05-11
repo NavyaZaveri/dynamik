@@ -1,5 +1,6 @@
 package com.github.navyazaveri.dynamik.stdlib
 
+import com.github.navyazaveri.dynamik.expressions.BuiltinCallable
 import com.github.navyazaveri.dynamik.expressions.DynamikInstance
 
 
