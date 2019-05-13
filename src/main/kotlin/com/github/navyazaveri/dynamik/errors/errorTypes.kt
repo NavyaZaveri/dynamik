@@ -1,15 +1,9 @@
 package com.github.navyazaveri.dynamik.errors
 
-import com.github.navyazaveri.dynamik.interpreter.levenshtein
 
 class VariableNotInScope(varName: String, candidates: Set<String>) :
-    Exception("$varName does not exist in the current scope, did you mean " + candidates.minBy {
-        levenshtein(
-            it,
-            varName
-                    + "?"
-        )
-    })
+    Exception("$varName does not exist, did you mean +${closestMatch(varName, candidates)}+")
+
 
 class UnexpectedType(message: String) : Exception(message)
 
@@ -21,4 +15,9 @@ class InvalidArgSize(actual: Int, expected: Int, fname: String) :
 class AssertionErr(v1: Any) : Exception("Assertion Error")
 class InvalidConstructorArgSize(actual: Int, expected: Int, fname: String) :
     Exception("Passed actual args to $fname, expected $expected")
+
+class CallableDoesNotExist(varName: String, candidates: Set<String>) :
+    Exception("$varName does not exist, did you mean +${closestMatch(varName, candidates)}+")
+
+
 

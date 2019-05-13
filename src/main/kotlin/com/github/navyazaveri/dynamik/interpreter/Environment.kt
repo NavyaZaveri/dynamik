@@ -1,5 +1,6 @@
 package com.github.navyazaveri.dynamik.interpreter
 
+import com.github.navyazaveri.dynamik.errors.CallableDoesNotExist
 import com.github.navyazaveri.dynamik.errors.ValError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
@@ -104,7 +105,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         if (name in classes) {
             return classes[name]!!.value
         }
-        throw VariableNotInScope(name, this.identifierToValue.keys)
+        throw CallableDoesNotExist(name, this.identifierToValue.keys)
     }
 
 
@@ -140,35 +141,3 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
     }
 }
 
-
-/**
- * [levenshtein] finds the minimum edits required to convert [lhs] to [rhs]
- *
- */
-fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
-    val lhsLength = lhs.length
-    val rhsLength = rhs.length
-
-    var cost = IntArray(lhsLength + 1) { it }
-    var newCost = IntArray(lhsLength + 1) { 0 }
-
-    for (i in 1..rhsLength) {
-        newCost[0] = i
-
-        for (j in 1..lhsLength) {
-            val editCost = if (lhs[j - 1] == rhs[i - 1]) 0 else 1
-
-            val costReplace = cost[j - 1] + editCost
-            val costInsert = cost[j] + 1
-            val costDelete = newCost[j - 1] + 1
-
-            newCost[j] = minOf(costInsert, costDelete, costReplace)
-        }
-
-        val swap = cost
-        cost = newCost
-        newCost = swap
-    }
-
-    return cost[lhsLength]
-}

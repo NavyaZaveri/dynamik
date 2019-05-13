@@ -1,4 +1,5 @@
 import com.github.navyazaveri.dynamik.errors.AssertionErr
+import com.github.navyazaveri.dynamik.errors.CallableDoesNotExist
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.interpreter.Repl
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
@@ -317,6 +318,18 @@ class InterpreterTest {
         val expected = 10.0
         val actual = repl.eval(stmts)
         assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testInvalidMethodOnList() {
+        val stmts = "val lst = list(); l.ad(2);".tokenize().parseStmts()
+        var correctAssertRaised = false
+        try {
+            repl.eval(stmts)
+        } catch (e:VariableNotInScope) {
+            correctAssertRaised = true
+        }
+        assert(correctAssertRaised, { "assertion not raised when caling invalid method" })
     }
 }
 

@@ -1,6 +1,6 @@
 package com.github.navyazaveri.dynamik.expressions
 
-interface ExpressionVisitor<out T> {
+interface ExpressionVisitor<T> {
     fun visitBinaryExpression(expr: BinaryExpr): T
     fun visitUnaryExpression(expr: UnaryExpr): T
     fun visitLiteralExpression(expr: LiteralExpr): T

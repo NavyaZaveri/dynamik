@@ -14,6 +14,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+
+/**
+ * A tree-walking interpreter that visits the AST using methods defined in [ExpressionVisitor] and [StatementVisitor].
+ */
 class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>, StatementVisitor<Any> {
 
     val jobs = mutableListOf<Job>()
@@ -151,6 +155,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         return callable.invoke(args, this).also { this.env = mainEnv }
     }
 
+    /**
+     * Creates a function and puts in [env].
+     */
     override fun visitFnStatement(fnStmt: FnStmt) {
         when (fnStmt.memoize) {
             true ->
@@ -193,8 +200,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     override fun visitVariableExpr(variableExpr: VariableExpr): Any {
         try {
             return env.get(variableExpr.token.lexeme)
-
-        } catch (v: VariableNotInScope) { //refactor this mess
+        } catch (v: VariableNotInScope) { //if it doesn't exist in the current, look into outer scope.
             return env.outer[variableExpr.token.lexeme]?.value ?: throw VariableNotInScope(
                 variableExpr.token.lexeme,
                 setOf()
