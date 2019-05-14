@@ -22,6 +22,6 @@ foo=5;
 val p = m.get(23);
 print(m.len());
 print(p);
-m.clear();
+//m.clear();
 print(m.len());
 

@@ -49,7 +49,8 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.ASSERT -> return assertStmt()
             TokenType.SLASH -> {
                 if (nextTokenTypeIs(TokenType.STAR)) return multiLineComment()
-                return singleLineComment()
+                if (nextTokenTypeIs(TokenType.SLASH)) return singleLineComment()
+
             }
             TokenType.PAR_WITH_LOCK -> return parLockStmt()
             TokenType.CLASS -> return classStmt()
@@ -98,9 +99,12 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     }
 
     fun singleLineComment(): SkipStmt {
+        val currentLine = tokens[current].line
         consume(TokenType.SLASH)
         consume(TokenType.SLASH)
-        stmt()
+        while (!allTokensConsumed() && tokens[current].line == currentLine) {
+            advance()
+        }
         return SkipStmt()
     }
 
