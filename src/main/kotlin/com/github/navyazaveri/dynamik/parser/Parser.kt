@@ -20,7 +20,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return stmts
     }
 
-    fun instanceStmt(): InstanceStmt {
+    private fun instanceStmt(): InstanceStmt {
         val name = consume(TokenType.IDENTIFIER).lexeme
         consume(TokenType.DOT)
         val behavior = stmt()
@@ -35,7 +35,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.IDENTIFIER -> {
                 if (nextTokenTypeIs(TokenType.EQUAL)) return assignStmt()
                 if (nextTokenTypeIs(TokenType.DOT)) return instanceStmt()
-
+                return exprStmt()
             }
             TokenType.While -> return whileStatement()
             TokenType.FN -> return fnStmt()
@@ -50,12 +50,12 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.SLASH -> {
                 if (nextTokenTypeIs(TokenType.STAR)) return multiLineComment()
                 if (nextTokenTypeIs(TokenType.SLASH)) return singleLineComment()
-
+                throw InvalidToken("${tokens[current].lexeme} cannot be placed after ${tokens[current - 1].lexeme}")
             }
             TokenType.PAR_WITH_LOCK -> return parLockStmt()
             TokenType.CLASS -> return classStmt()
+            else -> return exprStmt()
         }
-        return exprStmt()
     }
 
     private fun classStmt(): Stmt {
@@ -87,7 +87,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         }
     }
 
-    fun multiLineComment(): Stmt {
+    private fun multiLineComment(): Stmt {
         consume(TokenType.SLASH)
         consume(TokenType.STAR)
 
@@ -98,7 +98,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return SkipStmt()
     }
 
-    fun singleLineComment(): SkipStmt {
+    private fun singleLineComment(): SkipStmt {
         val currentLine = tokens[current].line
         consume(TokenType.SLASH)
         consume(TokenType.SLASH)
@@ -264,7 +264,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return equality()
     }
 
-    fun equality(): Expr {
+    private fun equality(): Expr {
         var expr = comparison()
         while (match(TokenType.EQUAL_EQUAL, TokenType.BANG_EQUAL)) {
             val operand = advance()
@@ -274,7 +274,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return expr
     }
 
-    fun comparison(): Expr {
+    private fun comparison(): Expr {
         var expr = addition()
         while (match(TokenType.LESS_EQUAL, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.GREATER)) {
             val operand = advance()
@@ -342,7 +342,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return brackets()
     }
 
-    fun brackets(): Expr {
+    private fun brackets(): Expr {
         return if (match(TokenType.LEFT_PAREN)) {
             consume(TokenType.LEFT_PAREN)
             val expr = expression()
@@ -373,7 +373,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return args.filter { it.type != TokenType.COMMA }
     }
 
-    fun consumeArgs(): List<Expr> {
+    private fun consumeArgs(): List<Expr> {
         val args = mutableListOf<Expr>()
         while (!match(TokenType.RIGHT_PAREN)) {
             args.add(expression())
@@ -382,7 +382,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return args
     }
 
-    fun lookAhead(): Optional<Tok> {
+    private fun lookAhead(): Optional<Tok> {
         if (current + 1 < tokens.size) {
             return Optional.of(tokens[current + 1])
         }
@@ -404,7 +404,7 @@ open class ExprParser(val tokens: List<Tok>) {
         return lookAhead().filter { it.type == t }.isPresent
     }
 
-    fun instance(): Expr {
+    private fun instance(): Expr {
         if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && nextTokenTypeIs(TokenType.DOT)) {
             val className = consume(TokenType.IDENTIFIER).lexeme
             consume(TokenType.DOT)

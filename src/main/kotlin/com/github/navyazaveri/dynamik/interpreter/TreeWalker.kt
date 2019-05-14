@@ -14,6 +14,7 @@ import com.github.navyazaveri.dynamik.stdlib.clockCallable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.lang.RuntimeException
 
 
 /**
@@ -24,6 +25,8 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     val jobs = mutableListOf<Job>()
 
     init {
+
+        //define global builtins (maube make this static?)
         env.defineClass("list", DynamikList(), global = true)
         env.defineClass("map", DynamikMap(), global = true)
         env.defineFunction("clock", clockCallable(), global = true)
@@ -272,9 +275,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
             TokenType.LESS_EQUAL -> return (left as Double) <= (right as Double)
             TokenType.GREATER -> return (left as Double) > (right as Double)
             TokenType.GREATER_EQUAL -> return (left as Double) >= (right as Double)
+            else -> throw UnexpectedType("${expr.operand.type}  not recognized at line ${expr.operand.line}")
         }
-
-        throw UnexpectedType("${expr.operand.type}  not recognized at line ${expr.operand.line}")
+        throw RuntimeException("unreachable")
     }
 
     override fun visitUnaryExpression(expr: UnaryExpr): Any {
@@ -282,8 +285,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         when (expr.token.type) {
             TokenType.MINUS -> return -(l as Double)
             TokenType.BANG -> return !(l as Boolean)
+            else -> throw UnexpectedType("could not evaluate ${expr.token.type} for unary $l at line ${expr.token.line}")
+
         }
-        throw UnexpectedType("could not evaluate ${expr.token.type} for unary $l at line ${expr.token.line}")
     }
 
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal

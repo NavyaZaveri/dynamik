@@ -40,7 +40,7 @@ class MapInstance : ContainerInstance() {
 }
 
 /**
- * A simple FFI that allows kotlin to power some of Dynmaik's builtin
+ * A simple FFI that allows kotlin to power some of Dynamik's builtin
  * functions
  */
 class NativeCallable<T : Any>(
