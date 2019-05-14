@@ -9,6 +9,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import com.github.navyazaveri.dynamik.scanner.TokenType
+import com.github.navyazaveri.dynamik.stdlib.Clock
 import com.github.navyazaveri.dynamik.stdlib.DynamikMap
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.sync.Mutex
@@ -25,6 +26,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     init {
         env.defineClass("list", DynamikList())
         env.defineClass("map", DynamikMap())
+        env.defineFunction("clock", Clock())
     }
 
     override fun visitInstanceStmt(instanceStmt: InstanceStmt): Any {

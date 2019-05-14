@@ -35,5 +35,4 @@ class ScannerTest {
         val toks = "val thing = value".tokenize();
         assertTrue(toks[toks.size - 1].type == TokenType.IDENTIFIER)
     }
-
 }

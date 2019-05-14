@@ -15,7 +15,7 @@ import com.github.navyazaveri.dynamik.expressions.*
 class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mutableMapOf(), val name: String = "") {
     val fields = mutableMapOf<String, Variable<Any>>()
     val classes = mutableMapOf<String, Variable<DynamikClass<out DynamikInstance>>>()
-    val functions = mutableMapOf<String, Variable<DynamikFunction<Any>>>()
+    val functions = mutableMapOf<String, Variable<DynamikFunction<out Any>>>()
     var outer = mutableMapOf<String, Variable<Any>>()
 
 
@@ -49,7 +49,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         globals.clear()
     }
 
-    fun functions(): Map<String, Variable<DynamikFunction<Any>>> {
+    fun functions(): Map<String, Variable<DynamikFunction<out Any>>> {
         return functions
     }
 
@@ -123,7 +123,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         define(name, value, VariableStatus.VAL, type = VarType.CLASS)
     }
 
-    fun defineFunction(name: String, value: DynamikFunction<Any>) {
+    fun defineFunction(name: String, value: DynamikFunction<out Any>) {
         functions[name] = Variable(value, VariableStatus.VAL)
         define(name, value, VariableStatus.VAL, type = VarType.FN)
     }

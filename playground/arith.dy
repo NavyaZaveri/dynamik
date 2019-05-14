@@ -1,9 +1,8 @@
 class Math() {
     fn abs(x) {
-        if (x<=0) { return -x;}
-       return x; }
-     fn add(x,y) { return x+y;}
-     fn sub(x,y) {return x-y;}
+        if (x<=0) { return -x;} return x; }
+    fn add(x,y) { return x+y;}
+    fn sub(x,y) {return x-y;}
 
      fn sum_list(lst) {
         var i = 0;
@@ -16,6 +15,10 @@ class Math() {
 
 
 val m = map();
-m.insert(23,1111);
-val p = m.geti(23);
+var foo = 1;
+val doo = 2;
+m.insert(23,foo+doo);
+foo=5;
+val p = m.get(23);
 print(p);
+
