@@ -118,14 +118,20 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         define(name, value, VariableStatus.VAR)
     }
 
-    fun defineClass(name: String, value: DynamikClass<out DynamikInstance>) {
+    fun defineClass(name: String, value: DynamikClass<out DynamikInstance>, global: Boolean = false) {
         classes[name] = Variable(value, VariableStatus.VAL)
         define(name, value, VariableStatus.VAL, type = VarType.CLASS)
+        if (global) {
+            addGlobal(name, value)
+        }
     }
 
-    fun defineFunction(name: String, value: DynamikFunction<out Any>) {
+    fun defineFunction(name: String, value: DynamikFunction<out Any>, global: Boolean = false) {
         functions[name] = Variable(value, VariableStatus.VAL)
         define(name, value, VariableStatus.VAL, type = VarType.FN)
+        if (global) {
+            addGlobal(name, value)
+        }
     }
 
 

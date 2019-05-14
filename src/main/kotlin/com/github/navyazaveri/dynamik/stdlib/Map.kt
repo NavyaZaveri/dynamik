@@ -1,8 +1,10 @@
 package com.github.navyazaveri.dynamik.stdlib
 
+import com.github.navyazaveri.dynamik.errors.InvalidArgSize
 import com.github.navyazaveri.dynamik.expressions.Arg
-import com.github.navyazaveri.dynamik.expressions.BuiltinCallable
 import com.github.navyazaveri.dynamik.expressions.DynamikClass
+import com.github.navyazaveri.dynamik.expressions.DynamikFunction
+import com.github.navyazaveri.dynamik.expressions.DynamikInstance
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 
@@ -14,16 +16,19 @@ class DynamikMap : DynamikClass<MapInstance> {
 }
 
 class MapInstance : ContainerInstance() {
+    val _map = java.util.HashMap<Any, Any>()
+
     init {
-        env.defineFunction("insert", BuiltinCallable(this, "insert", 2))
-        env.defineFunction("get", BuiltinCallable(this, "get", 1))
-        env.defineFunction("contains", BuiltinCallable(this, "contains", 1))
+        env.defineFunction("clear", NativeCallable("map.clear", 0) { _map.clear() })
+        env.defineFunction("insert", NativeCallable("map.insert", 2) { _map[it[0]] = it[1] })
+        env.defineFunction("get", NativeCallable("map.get", 1) { _map[it[0]]!! })
+        env.defineFunction("contains", NativeCallable("map.contains", 1) { _map.containsKey(it[0]) })
     }
 
-    val _map = mutableMapOf<Any, Any>()
     override fun toHash(): Int {
         return _map.hashCode()
     }
+
 
     override fun toString(): String {
         return _map.toString()
@@ -32,17 +37,25 @@ class MapInstance : ContainerInstance() {
     override fun len(): Double {
         return _map.size.toDouble()
     }
+}
 
-    fun insert(k: Any, v: Any): Any {
-        _map [k] = v
-        return Any()
-    }
-
-    fun get(k: Any): Any {
-        return _map[k]!!
-    }
-
-    fun contains(item: Any): Boolean {
-        return _map.contains(item)
+/**
+ * A simple FFI that allows kotlin to power some of Dynmaik's builtin
+ * functions
+ */
+class NativeCallable<T : Any>(
+    private val name: String,
+    private val expectedArgSize: Int,
+    private val op: (List<Arg>) -> T
+) : DynamikFunction<T> {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): T {
+        if (expectedArgSize != arguments.size) {
+            throw InvalidArgSize(arguments.size, expectedArgSize, name)
+        }
+        return op(arguments)
     }
 }
+
+
+
+
