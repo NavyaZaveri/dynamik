@@ -7,7 +7,7 @@ import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
 import com.github.navyazaveri.dynamik.scanner.Tok
 import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.scanner.tokenize
-import java.util.*
+import java.util.Optional
 
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {

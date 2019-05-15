@@ -12,11 +12,11 @@ import com.github.navyazaveri.dynamik.expressions.*
  *@Constructor Creates an environment
  */
 
-class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mutableMapOf(), val name: String = "") {
-    val fields = mutableMapOf<String, Variable<Any>>()
-    val classes = mutableMapOf<String, Variable<DynamikClass<out DynamikInstance>>>()
-    val functions = mutableMapOf<String, Variable<DynamikFunction<out Any>>>()
-    var outer = mutableMapOf<String, Variable<Any>>()
+class Environment(val identifierToValue: MutableMap<String, ValueWrapper<Any>> = mutableMapOf(), val name: String = "") {
+    val fields = mutableMapOf<String, ValueWrapper<Any>>()
+    val classes = mutableMapOf<String, ValueWrapper<DynamikClass<out DynamikInstance>>>()
+    val functions = mutableMapOf<String, ValueWrapper<DynamikFunction<out Any>>>()
+    var outer = mutableMapOf<String, ValueWrapper<Any>>()
 
 
     fun String.inGlobalScope(): Boolean {
@@ -35,7 +35,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         if (name.inCurrentScope() && identifierToValue[name]!!.status == VariableStatus.VAL) {
             throw ValError(name)
         }
-        identifierToValue[name] = Variable(status = status, value = value, type = type)
+        identifierToValue[name] = ValueWrapper(status = status, value = value, type = type)
     }
 
 
@@ -49,11 +49,11 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         globals.clear()
     }
 
-    fun functions(): Map<String, Variable<DynamikFunction<out Any>>> {
+    fun functions(): Map<String, ValueWrapper<DynamikFunction<out Any>>> {
         return functions
     }
 
-    fun fields(): Map<String, Variable<Any>> {
+    fun fields(): Map<String, ValueWrapper<Any>> {
         return fields
     }
 
@@ -61,7 +61,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
         return Environment(this.identifierToValue.toMutableMap())
     }
 
-    fun classes(): Map<String, Variable<DynamikClass<out DynamikInstance>>> {
+    fun classes(): Map<String, ValueWrapper<DynamikClass<out DynamikInstance>>> {
         return classes
     }
 
@@ -73,7 +73,7 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
             throw ValError(name)
         }
 
-        identifierToValue[name] = Variable(value, VariableStatus.VAR)
+        identifierToValue[name] = ValueWrapper(value, VariableStatus.VAR)
     }
 
     fun status(name: String): VariableStatus = identifierToValue[name]?.status
@@ -114,12 +114,12 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
      * @throws ValError
      */
     fun defineField(name: String, value: Any) {
-        fields[name] = Variable(value, VariableStatus.VAR)
+        fields[name] = ValueWrapper(value, VariableStatus.VAR)
         define(name, value, VariableStatus.VAR)
     }
 
     fun defineClass(name: String, value: DynamikClass<out DynamikInstance>, global: Boolean = false) {
-        classes[name] = Variable(value, VariableStatus.VAL)
+        classes[name] = ValueWrapper(value, VariableStatus.VAL)
         define(name, value, VariableStatus.VAL, type = VarType.CLASS)
         if (global) {
             addGlobal(name, value)
@@ -127,18 +127,17 @@ class Environment(val identifierToValue: MutableMap<String, Variable<Any>> = mut
     }
 
     fun defineFunction(name: String, value: DynamikFunction<out Any>, global: Boolean = false) {
-        functions[name] = Variable(value, VariableStatus.VAL)
+        functions[name] = ValueWrapper(value, VariableStatus.VAL)
         define(name, value, VariableStatus.VAL, type = VarType.FN)
         if (global) {
             addGlobal(name, value)
         }
     }
 
-
     companion object {
-        val globals = mutableMapOf<String, Variable<Any>>()
+        val globals = mutableMapOf<String, ValueWrapper<Any>>()
         fun addGlobal(name: String, value: Any) {
-            globals[name] = Variable(value, VariableStatus.VAL)
+            globals[name] = ValueWrapper(value, VariableStatus.VAL)
         }
     }
 

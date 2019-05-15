@@ -13,4 +13,4 @@ enum class VarType {
     CLASS_FIELD
 }
 
-data class Variable<T : Any>(var value: T, val status: VariableStatus, val type: VarType = VarType.IDENT)
+data class ValueWrapper<T : Any>(var value: T, val status: VariableStatus, val type: VarType = VarType.IDENT)

@@ -1,3 +1,5 @@
+
+/*
 class Math() {
     fn abs(x) {
         if (x<=0) { return -x;} return x; }
@@ -12,16 +14,10 @@ class Math() {
      }
 }
 
+*/
 
 
-val m = map();
-var foo = 1;
-val doo = 2;
-m.insert(23,foo+doo);
-foo=5;
-val p = m.get(23);
-print(m.len());
-print(p);
-//m.clear();
-print(m.len());
-
+val mymap = map();
+mymap.insert(1, 100);
+val result = mymap.get(1);
+print(result);

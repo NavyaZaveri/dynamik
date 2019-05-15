@@ -28,8 +28,6 @@ class ListInstance : ContainerInstance() {
     override fun len(): Double {
         return _list.size.toDouble()
     }
-
-
     private val _list = mutableListOf<Any>()
 
     init {
