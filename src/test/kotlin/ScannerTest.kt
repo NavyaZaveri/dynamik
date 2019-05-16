@@ -53,5 +53,4 @@ class ScannerTest {
         }
         assert(invalid)
     }
-
 }
