@@ -21,8 +21,8 @@ class DefaultClass(val name: String, val functions: List<FnStmt>, val params: Li
 
 class DefaultInstance(
     val name: String,
-    val functions: List<FnStmt>,
-    val fields: Map<String, Any>,
+    functions: List<FnStmt>,
+    fields: Map<String, Any>,
     val interpreter: TreeWalker
 ) : DynamikInstance() {
     override fun toHash(): Int {

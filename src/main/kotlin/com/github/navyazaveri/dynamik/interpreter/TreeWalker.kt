@@ -52,16 +52,6 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         return evaluate(instanceExpr.expr).also { this.env = oldEnv; }
     }
 
-    override fun visitMethodExpression(methodExpr: MethodExpr): Any {
-        val instance = env.get(methodExpr.clazzName) as DefaultInstance
-        val methodName = methodExpr.method
-        val args = methodExpr.args.map { evaluate(it) }
-        val mainEnv = this.env
-        return instance.invokeMethod(methodName, args, this)
-            .also { this.env = mainEnv }
-    }
-
-
     override fun visitClassStmt(classStmt: ClassStmt): Any {
 
         // instead define against DefaultClass, with an invokes method

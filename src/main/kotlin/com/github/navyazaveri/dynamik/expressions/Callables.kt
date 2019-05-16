@@ -69,7 +69,7 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
         } catch (r: Return) {
             return r.value
 
-        } finally {  // update fields of the original environment and globals (todo)
+        } finally {  // update fields of the original environment
 
             for ((k, v) in env.identifierToValue) {
                 if (k in outer.fields) {

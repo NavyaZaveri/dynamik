@@ -7,12 +7,6 @@ abstract class Expr {
     abstract fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T
 }
 
-class MethodExpr(val clazzName: String, val method: String, val args: List<Expr>) : Expr() {
-    override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
-        return visitor.visitMethodExpression(this)
-    }
-}
-
 class CallExpr(val funcName: String, val args: List<Expr>) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitCallExpression(this)

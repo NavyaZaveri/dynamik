@@ -363,5 +363,15 @@ class InterpreterTest {
         val actual = true
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
+
+    @Test
+    fun testGlobalUpdates() {
+        val stmts = ("@global val global_list = list(); fn add_to_g_list() { global_list.add(444);} " +
+                "add_to_g_list();" +
+                "global_list.get(0);").tokenize().parseStmts()
+        val expected = repl.eval(stmts)
+        val actual = 444.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
 }
 
