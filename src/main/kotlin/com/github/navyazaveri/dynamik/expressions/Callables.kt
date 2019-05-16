@@ -33,17 +33,17 @@ abstract class DynamikInstance {
 
 class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
 
-    override fun invoke(args: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
+    override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
 
         // check args size
-        if (args.size != func.params.size) {
-            throw InvalidArgSize(expected = func.params.size, actual = args.size, name = func.functionName.lexeme)
+        if (arguments.size != func.params.size) {
+            throw InvalidArgSize(expected = func.params.size, actual = arguments.size, name = func.functionName.lexeme)
         }
 
         val outer = interpreter.env
 
         // set up args
-        func.params.zip(args)
+        func.params.zip(arguments)
             .forEach { (param, arg) ->
                 env.define(param.lexeme, arg, status = VariableStatus.VAR)
             }
