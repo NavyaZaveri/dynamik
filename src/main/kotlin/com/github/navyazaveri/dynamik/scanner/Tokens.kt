@@ -29,7 +29,6 @@ enum class TokenType(val regex: Regex) {
     MINUS("-".toRegex()),
     GREATER(">".toRegex()),
     LESS("<".toRegex()),
-    AND("&".toRegex()),
     AND_AND("&&".toRegex()),
 
     STRING("\".*?\"".toRegex()),

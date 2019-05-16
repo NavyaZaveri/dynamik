@@ -21,19 +21,21 @@ class ListInstance : ContainerInstance() {
         return _list.hashCode()
     }
 
+    override fun equals(other: Any?): Boolean {
+        return (other is ListInstance) && this._list == other._list
+    }
+
     override fun toString(): String {
         return _list.toString()
     }
 
-    override fun len(): Double {
-        return _list.size.toDouble()
-    }
     private val _list = mutableListOf<Any>()
 
     init {
         env.defineFunction("add", NativeCallable("list.add", 1) { _list.add(it[0]) })
         env.defineFunction("get", NativeCallable("list.get", 1) { _list[(it[0] as Double).toInt()] })
         env.defineFunction("contains", NativeCallable("list.contains", 1) { _list.contains(it[0]) })
+        env.defineFunction("len", NativeCallable("list.len", 0) { _list.size })
     }
 
     fun contains(thing: Any): Boolean {

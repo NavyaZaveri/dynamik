@@ -5,7 +5,6 @@ import com.github.navyazaveri.dynamik.expressions.DynamikInstance
 
 
 interface Container : Builtin {
-    fun len(): Double //compatibility reasons
     override fun toString(): String
     fun toHash(): Int
 }
@@ -28,7 +27,6 @@ abstract class DynmaikContainer<T : Collection<Any>> : DynamikInstance() {
  */
 abstract class ContainerInstance : Container, DynamikInstance() {
     init {
-        env.defineFunction("len", BuiltinCallable(this, "len", 0))
         env.defineFunction("toString", BuiltinCallable(this, "toString", 0))
         env.defineFunction("toHash", BuiltinCallable(this, "toHash", 0))
     }

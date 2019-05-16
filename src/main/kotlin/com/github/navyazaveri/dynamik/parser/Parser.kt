@@ -7,7 +7,7 @@ import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
 import com.github.navyazaveri.dynamik.scanner.Tok
 import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.scanner.tokenize
-import java.util.Optional
+import java.util.*
 
 
 class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
@@ -261,7 +261,17 @@ open class ExprParser(val tokens: List<Tok>) {
     }
 
     fun expression(): Expr {
-        return equality()
+        return booleanOp()
+    }
+
+    fun booleanOp(): Expr {
+        val left = equality()
+        while (match(TokenType.AND_AND)) {
+            val op = consume(TokenType.AND_AND)
+            val right = equality()
+            val left = BinaryExpr(left, op, right)
+        }
+        return left
     }
 
     private fun equality(): Expr {

@@ -1,15 +1,14 @@
 import com.github.navyazaveri.dynamik.errors.AssertionErr
-import com.github.navyazaveri.dynamik.errors.CallableDoesNotExist
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.interpreter.Repl
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
-import org.junit.Test
 import com.github.navyazaveri.dynamik.parser.parseExpr
 import com.github.navyazaveri.dynamik.parser.parseStmts
 import com.github.navyazaveri.dynamik.scanner.tokenize
 import org.junit.After
 import org.junit.Before
+import org.junit.Test
 
 class InterpreterTest {
     lateinit var repl: Repl
@@ -326,10 +325,43 @@ class InterpreterTest {
         var correctAssertRaised = false
         try {
             repl.eval(stmts)
-        } catch (e:VariableNotInScope) {
+        } catch (e: VariableNotInScope) {
             correctAssertRaised = true
         }
         assert(correctAssertRaised, { "assertion not raised when caling invalid method" })
+    }
+
+    @Test
+    fun testClosureVisibility() {
+        val stmts = "fn foo(){  fn bar() { return 1;}  return bar();} foo();".tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 1.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testMutationOfClassWithinClass() {
+        val stmts =
+            ("class Foo(x) {} class Bar(a_foo) {" +
+                    "fn update(value) {a_foo.x = value;} " +
+                    "fn get_foo_value() { " + "return a_foo.x;" + "}" +
+                    " }" +
+                    "val f = Foo(20);" +
+                    "val bar = Bar(f);" +
+                    "bar.update(99);" +
+                    "bar.get_foo_value();").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 99.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testListEquality() {
+        val stmts = "val a = list(); a.add(1); val b=list(); val c = list(); b.add(1); a  ==  b && a!=c;".tokenize()
+            .parseStmts()
+        val expected = repl.eval(stmts)
+        val actual = true
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 }
 

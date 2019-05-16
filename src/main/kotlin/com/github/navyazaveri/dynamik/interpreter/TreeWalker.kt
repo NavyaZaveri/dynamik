@@ -1,20 +1,19 @@
 package com.github.navyazaveri.dynamik.interpreter
 
-import com.github.navyazaveri.dynamik.stdlib.DynamikList
 import com.github.navyazaveri.dynamik.errors.AssertionErr
 import com.github.navyazaveri.dynamik.errors.UnexpectedType
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import com.github.navyazaveri.dynamik.scanner.TokenType
+import com.github.navyazaveri.dynamik.stdlib.DynamikList
 import com.github.navyazaveri.dynamik.stdlib.DynamikMap
 import com.github.navyazaveri.dynamik.stdlib.clockCallable
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.lang.RuntimeException
 
 
 /**
@@ -262,13 +261,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
             TokenType.SLASH -> return left as Double / right as Double
             TokenType.STAR -> return left as Double * right as Double
             TokenType.EQUAL_EQUAL -> return left == right
-            TokenType.AND -> {
+            TokenType.AND_AND -> {
                 if (isType<Boolean>(left, right, throwException = true))
                     return left as Boolean && right as Boolean
-            }
-            TokenType.AND_AND -> {
-                isType<Boolean>(left, right, throwException = true)
-                return left as Boolean && right as Boolean
             }
             TokenType.BANG_EQUAL -> return left != right
             TokenType.LESS -> return (left as Double) < (right as Double)

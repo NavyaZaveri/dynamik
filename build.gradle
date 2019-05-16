@@ -58,8 +58,6 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.4'
     implementation 'com.github.ajalt:clikt:1.7.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0'
-
-
 }
 
 

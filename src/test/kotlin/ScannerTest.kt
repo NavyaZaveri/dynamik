@@ -1,8 +1,8 @@
-import org.junit.Assert.assertTrue
-import org.junit.Test
 import com.github.navyazaveri.dynamik.scanner.Scanner
 import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.scanner.tokenize
+import org.junit.Assert.assertTrue
+import org.junit.Test
 
 class ScannerTest {
     private val s = Scanner()
@@ -34,5 +34,11 @@ class ScannerTest {
     fun testBoundaryMatching() {
         val toks = "val thing = value".tokenize();
         assertTrue(toks[toks.size - 1].type == TokenType.IDENTIFIER)
+    }
+
+    @Test
+    fun testFnExtraction() {
+        val toks = "print(1);fn blah{}".tokenize()
+        assertTrue(toks.map { it.type }.contains(TokenType.FN))
     }
 }

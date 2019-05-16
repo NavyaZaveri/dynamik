@@ -12,6 +12,7 @@ typealias RetVal = Any
 
 /**
  * Types that can be invoked implement [Callable]. Eg: Functions, Classes, class methods
+ * @param T the type of value returned by the callable
  */
 interface Callable<T : Any> {
     fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment = Environment()): T
@@ -64,9 +65,9 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
         // now evaluate all statements against the environment supplied to the function
         try {
             interpreter.evaluateStmts(func.body, env = env)
+
         } catch (r: Return) {
             return r.value
-
 
         } finally {  // update fields of the original environment and globals (todo)
 

@@ -4,7 +4,6 @@ import com.github.navyazaveri.dynamik.errors.InvalidArgSize
 import com.github.navyazaveri.dynamik.expressions.Arg
 import com.github.navyazaveri.dynamik.expressions.DynamikClass
 import com.github.navyazaveri.dynamik.expressions.DynamikFunction
-import com.github.navyazaveri.dynamik.expressions.DynamikInstance
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 
@@ -17,6 +16,10 @@ class DynamikMap : DynamikClass<MapInstance> {
 
 class MapInstance : ContainerInstance() {
     val _map = java.util.HashMap<Any, Any>()
+
+    override fun equals(other: Any?): Boolean {
+        return (other is MapInstance) && this._map == other._map
+    }
 
     init {
         env.defineFunction("clear", NativeCallable("map.clear", 0) { _map.clear() })
@@ -32,10 +35,6 @@ class MapInstance : ContainerInstance() {
 
     override fun toString(): String {
         return _map.toString()
-    }
-
-    override fun len(): Double {
-        return _map.size.toDouble()
     }
 }
 

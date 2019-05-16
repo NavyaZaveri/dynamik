@@ -5,6 +5,7 @@ import com.github.navyazaveri.dynamik.errors.ValError
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
 
+
 /**
  *An environment instance held by the interpreter
  *@property name name of the environment
@@ -12,20 +13,28 @@ import com.github.navyazaveri.dynamik.expressions.*
  *@Constructor Creates an environment
  */
 
-class Environment(val identifierToValue: MutableMap<String, ValueWrapper<Any>> = mutableMapOf(), val name: String = "") {
+class Environment(
+    val identifierToValue: MutableMap<String, ValueWrapper<Any>> = mutableMapOf(),
+    val name: String = ""
+) {
     val fields = mutableMapOf<String, ValueWrapper<Any>>()
     val classes = mutableMapOf<String, ValueWrapper<DynamikClass<out DynamikInstance>>>()
     val functions = mutableMapOf<String, ValueWrapper<DynamikFunction<out Any>>>()
     var outer = mutableMapOf<String, ValueWrapper<Any>>()
 
-
     fun String.inGlobalScope(): Boolean {
         return globals.containsKey(this)
+    }
+
+    //TODO
+    fun add(new: Environment) {
+        this.classes.putAll(new.classes)
     }
 
     fun String.inCurrentScope(): Boolean {
         return identifierToValue.containsKey(this)
     }
+
 
     /**
      * Assigns [value] to [name]
