@@ -38,7 +38,7 @@ class Environment(
 
     /**
      * Assigns [value] to [name]
-     * @throws ValError when variable has been previously defined with <code> val </code>
+     * @throws ValError when variable h as been previously defined with <code> val </code>
      */
     fun define(name: String, value: Any, status: VariableStatus, type: VarType = VarType.IDENT) {
         if (name.inCurrentScope() && identifierToValue[name]!!.status == VariableStatus.VAL) {

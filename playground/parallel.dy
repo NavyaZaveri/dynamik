@@ -3,11 +3,11 @@
  fn hello() {
   var  i =0;
 
-for (i=0;i<181;i = i+1) {
+for (i=0;i<18;i = i+1) {
      print "hello from par";
     }
  }
 
- @par_lock hello();
-
+ @par hello();
+ @wait;
  print 3;

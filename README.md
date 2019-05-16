@@ -6,28 +6,12 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 ### Features
 
 - [x] Expressions with Strings and Integers (implicitly converted to Doubles for simplicity) 
-
-- [x] Code execution from .dy files 
-
-- [x] Comments
-
-- [x] (Im)mutable bindings 
-
+- [x] (Im)mutable variable bindings with val/var
 - [x] If/Else statements
-
 - [x] For/While loops
-
 - [x] Functions 
-
+- [x] Comments
 - [x] Memoization builtin
-
-- [x] Type checks
-
-- [x] Par statements 
-
-- [x] Optional resource safeguarding (with Mutex)
-
-- [x] Synchronization with wait 
 
 - [x] Collections (list, map)
 

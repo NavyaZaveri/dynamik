@@ -37,7 +37,7 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
 
         // check args size
         if (args.size != func.params.size) {
-            throw InvalidArgSize(expected = func.params.size, actual = args.size, fname = func.functionName.lexeme)
+            throw InvalidArgSize(expected = func.params.size, actual = args.size, name = func.functionName.lexeme)
         }
 
         val outer = interpreter.env

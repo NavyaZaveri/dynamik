@@ -1,8 +1,7 @@
 
 /*
 class Math() {
-    fn abs(x) {
-        if (x<=0) { return -x;} return x; }
+    fn abs(x) {if (x<=0) { return -x;} return x; }
     fn add(x,y) { return x+y;}
     fn sub(x,y) {return x-y;}
 

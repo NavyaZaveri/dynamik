@@ -8,8 +8,8 @@ class VariableNotInScope(varName: String, candidates: Set<String>) :
 class UnexpectedType(message: String) : Exception(message)
 class ValError(varName: String) : Exception("$varName is val, cannot reassign.")
 class InvalidToken(message: String) : Exception(message)
-class InvalidArgSize(actual: Int, expected: Int, fname: String) :
-    Exception("passed $actual args to $fname, expected $expected")
+class InvalidArgSize(actual: Int, expected: Int, name: String) :
+    Exception("passed $actual args to $name, expected $expected")
 
 class AssertionErr(v1: Any) : Exception("Assertion Error")
 class InvalidConstructorArgSize(actual: Int, expected: Int, fname: String) :

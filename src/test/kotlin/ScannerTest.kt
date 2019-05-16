@@ -1,3 +1,4 @@
+import com.github.navyazaveri.dynamik.parser.parseStmts
 import com.github.navyazaveri.dynamik.scanner.Scanner
 import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.scanner.tokenize
@@ -41,4 +42,16 @@ class ScannerTest {
         val toks = "print(1);fn blah{}".tokenize()
         assertTrue(toks.map { it.type }.contains(TokenType.FN))
     }
+
+    @Test
+    fun testInvalidValDeclaration() {
+        var invalid = false
+        try {
+            val toks = "fn hello(){val, x = 20};".tokenize().parseStmts()
+        } catch (r: Exception) {
+            invalid = true
+        }
+        assert(invalid)
+    }
+
 }

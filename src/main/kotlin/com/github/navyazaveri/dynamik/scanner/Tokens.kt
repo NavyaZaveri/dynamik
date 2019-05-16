@@ -43,19 +43,19 @@ enum class TokenType(val regex: Regex) {
     GLOBAL("@global".toRegex()),
     PRINT("""\bprint\b""".toRegex()),
     RETURN("""\breturn\b""".toRegex()),
-    VAL("""\bval\b""".toRegex()),
-    VAR("""\bvar\b""".toRegex()),
+    VAL("""\bval\s+""".toRegex()),
+    VAR("""\bvar\s+""".toRegex()),
+    PAR_WITH_LOCK("@par_lock".toRegex()),
     Par("@par".toRegex()),
+
     While("""\bwhile\b""".toRegex()),
     Memo("@memo".toRegex()),
     Wait("@wait".toRegex()),
     ASSERT("assert".toRegex()),
     CLASS("class".toRegex()), ELSE("else".toRegex()),
-    FN("""\bfn\b""".toRegex()),
+    FN("""\bfn\s+""".toRegex()),
     FOR("for".toRegex()),
-    IF("if".toRegex()),
-
-    PAR_WITH_LOCK("@par_lock".toRegex()),
+    IF("""\bif""".toRegex()),
 
 
     IDENTIFIER("\\w+".toRegex()),
