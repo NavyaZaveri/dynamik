@@ -45,9 +45,6 @@ class Environment(
         if (name in identifierToValue && (identifierToValue[name]!!.status == VariableStatus.VAL)) {
             throw ValError(name)
         }
-        if (name in identifierToValue && identifierToValue[name]!!.status == VariableStatus.VAR) {
-            throw RuntimeException("already created a var with ${name}. Reassign the original ${name}, instead of declaring  a new")
-        }
 
         if (name in identifierToValue && identifierToValue[name]!!.type == VarType.CLASS_FIELD) {
             throw java.lang.RuntimeException("ambiguous");

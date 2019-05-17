@@ -398,16 +398,6 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
-    @Test
-    fun testMultipleVars() {
-        val stmts = "var x = 3; var x =100;".tokenize().parseStmts()
-        var exceptionHandled = false
-        try {
-            repl.eval(stmts)
-        } catch (r: RuntimeException) {
-            exceptionHandled = true
-        }
-        assert(exceptionHandled)
-    }
+
 }
 
