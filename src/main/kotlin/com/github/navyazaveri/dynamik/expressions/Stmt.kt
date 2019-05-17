@@ -32,6 +32,7 @@ class ValStmt(val name: Tok, val expr: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitValStmt(this)
 }
 
+
 class ExprStmt(val expr: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitExpressionsStatement(this)
 }
@@ -82,7 +83,12 @@ class InstanceStmt(val name: String, val stmt: Stmt) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitInstanceStmt(this)
     }
+}
 
+class ThisStmt(val stmt: Stmt) : Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitThisStmt(this);
+    }
 }
 
 

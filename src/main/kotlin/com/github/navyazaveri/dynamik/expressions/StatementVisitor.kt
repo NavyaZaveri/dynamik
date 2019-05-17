@@ -18,4 +18,5 @@ interface StatementVisitor<T> {
     fun visitSkipStatement(skipStmt: SkipStmt): T
     fun visitClassStmt(classStmt: ClassStmt): T
     fun visitInstanceStmt(instanceStmt: InstanceStmt): T
+    fun visitThisStmt(thisStmt: ThisStmt): T
 }

@@ -34,7 +34,6 @@ enum class TokenType(val regex: Regex) {
     STRING("\".*?\"".toRegex()),
 
 
-    NIL("nil".toRegex()),
     TRUE("true".toRegex()),
     False("false".toRegex()),
 
@@ -47,7 +46,7 @@ enum class TokenType(val regex: Regex) {
     VAR("""\bvar\s+""".toRegex()),
     PAR_WITH_LOCK("@par_lock".toRegex()),
     Par("@par".toRegex()),
-    THIS("""\b"this""".toRegex()),
+    THIS("""\bthis""".toRegex()),
     While("""\bwhile\b""".toRegex()),
     Memo("@memo".toRegex()),
     Wait("@wait".toRegex()),

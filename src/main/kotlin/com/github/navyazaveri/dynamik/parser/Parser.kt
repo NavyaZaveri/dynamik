@@ -54,8 +54,16 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             }
             TokenType.PAR_WITH_LOCK -> return parLockStmt()
             TokenType.CLASS -> return classStmt()
+            TokenType.THIS -> return thisStmt()
             else -> return exprStmt()
         }
+    }
+
+    fun thisStmt(): Stmt {
+        consume(TokenType.THIS)
+        consume(TokenType.DOT)
+        val behavior = stmt()
+        return ThisStmt(behavior)
     }
 
     private fun classStmt(): Stmt {
@@ -436,17 +444,9 @@ fun List<Tok>.parseExpr(): Expr {
 fun main(args: Array<String>) {
 
 
-    ("class Math { fn add(x,y) { return x+y;}" +
-            " " +
-            "fn abs(x) {return -x;}}" +
-            "val m = Math();" +
-            "val foo = 10;" +
-            "val result = m.add(foo, 20);" +
-            "print(result);" +
-            "val l = list();" +
-            "l.add(10);" +
-            "val index = 0;" +
-            "print(l.get(0));"
+    ("class Math { fn hello() { print  1;} fn bar() { this.hello();} }" +
+            "val m = Math();"
+            + "m.bar();"
             ).tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())

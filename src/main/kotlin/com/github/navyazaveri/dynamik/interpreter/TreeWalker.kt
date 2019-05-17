@@ -7,8 +7,8 @@ import com.github.navyazaveri.dynamik.expressions.*
 import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.stdlib.DynamikList
 import com.github.navyazaveri.dynamik.stdlib.DynamikMap
-import com.github.navyazaveri.dynamik.stdlib.clockCallable
 import kotlinx.coroutines.GlobalScope
+import com.github.navyazaveri.dynamik.stdlib.clockCallable
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -20,6 +20,20 @@ import kotlinx.coroutines.sync.withLock
  * A tree-walking interpreter that visits the AST using methods defined in [ExpressionVisitor] and [StatementVisitor].
  */
 class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    override fun visitThisStmt(thisStmt: ThisStmt): Any {
+        if (thisStmt.stmt is ExprStmt) {
+            val exprStmt = thisStmt.stmt
+            if (exprStmt.expr is CallExpr) {
+                return evaluate(exprStmt.expr)
+            }
+        }
+        if (thisStmt.stmt is AssignStmt) {
+            //TODO
+            val field = env.getField(thisStmt.stmt.token.lexeme)
+
+        }
+        return Any()
+    }
 
     val jobs = mutableListOf<Job>()
 

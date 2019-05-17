@@ -104,6 +104,14 @@ class Environment(
         throw VariableNotInScope(name, allExistingVars)
     }
 
+    fun getField(name: String): Any {
+        if (name in identifierToValue) {
+            return identifierToValue[name]!!.value
+        }
+        throw RuntimeException("no such field");
+    }
+
+
     /**
      * @throws VariableNotInScope
      */
