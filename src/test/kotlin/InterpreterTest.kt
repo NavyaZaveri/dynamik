@@ -164,7 +164,7 @@ class InterpreterTest {
     fun testMultiLineComments() {
         var errorThrown = false
         try {
-            "/* val x = 2; / print x;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
+            "/* val x = 2; */ print x;".tokenize().parseStmts().evaluateAllBy(TreeWalker())
         } catch (err: VariableNotInScope) {
             errorThrown = true
         }
@@ -398,6 +398,28 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
+    @Test
+    fun testFunctionParamWithVal() {
+        val stmts = "fn foo(x) { x = 20;} foo(10);".tokenize().parseStmts()
+        var excpetionDetected = false
+        try {
+            repl.eval(stmts)
+        } catch (r: Exception) {
+            excpetionDetected = true
+        }
+        assert(excpetionDetected)
+    }
 
+    @Test
+    fun testMethodIndirectionWithThisKeyword() {
+        val stmts = ("class Foo(x) { fn get_x() { print this.x; return x;} fn bar() { return this.get_x();} }" +
+                "val f = Foo(100);" +
+                "f.x = 20;" +
+                "f.bar();").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 20.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+
+    }
 }
 

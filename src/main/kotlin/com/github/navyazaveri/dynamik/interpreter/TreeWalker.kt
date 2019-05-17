@@ -23,9 +23,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     override fun visitThisStmt(thisStmt: ThisStmt): Any {
         if (thisStmt.stmt is ExprStmt) {
             val exprStmt = thisStmt.stmt
-            if (exprStmt.expr is CallExpr) {
-                return evaluate(exprStmt.expr)
-            }
+            return evaluate(exprStmt.expr)
         }
         if (thisStmt.stmt is AssignStmt) {
             val field = env.getField(thisStmt.stmt.token.lexeme)
@@ -230,7 +228,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     override fun visitExpressionsStatement(exprStmt: ExprStmt): Any = evaluate(exprStmt.expr)
 
     override fun visitPrintStmt(printStmt: PrintStmt) {
-        println("${evaluate(printStmt.expr)}")
+        println("${evaluate(printStmt.stmt)}")
     }
 
     fun evaluate(expr: Expr, env: Environment = this.env): Any {
@@ -290,7 +288,8 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
 }
 
-fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>) {        println(this)
+fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>) {
+    println(this)
 
     this.forEach { it.evaluateBy(visitor) }
 }

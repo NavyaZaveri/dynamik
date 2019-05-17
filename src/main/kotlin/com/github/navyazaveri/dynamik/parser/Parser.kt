@@ -205,9 +205,9 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
     private fun printStmt(): PrintStmt {
         consume(TokenType.PRINT)
-        val thingToPrint = expression()
+        val thingToPrint = stmt()
         return PrintStmt(thingToPrint)
-            .also { consume(TokenType.SEMICOLON) }
+            .also { consumeIfPresent(TokenType.SEMICOLON) }
     }
 
     private fun assignStmt(consumeSemicolon: Boolean = true): AssignStmt {
@@ -221,7 +221,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
     private fun exprStmt(): Stmt {
         return ExprStmt(expression())
-            .also { consume(TokenType.SEMICOLON) }
+            .also { consumeIfPresent(TokenType.SEMICOLON) }
     }
 
     private fun varStmt(): Stmt {

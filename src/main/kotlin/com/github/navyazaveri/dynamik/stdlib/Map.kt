@@ -32,7 +32,6 @@ class MapInstance : ContainerInstance() {
         return _map.hashCode()
     }
 
-
     override fun toString(): String {
         return _map.toString()
     }

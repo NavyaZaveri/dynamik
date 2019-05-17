@@ -49,7 +49,8 @@ class Environment(
         if (name in identifierToValue && identifierToValue[name]!!.type == VarType.CLASS_FIELD) {
             throw java.lang.RuntimeException("ambiguous");
         }
-        identifierToValue[name] = ValueWrapper(status = status, value = value, type = type)
+
+        identifierToValue[name] = valWrapper
     }
 
 
@@ -86,8 +87,8 @@ class Environment(
         if (status(name) == VariableStatus.VAL) {
             throw ValError(name)
         }
-
-        identifierToValue[name] = ValueWrapper(value, VariableStatus.VAR)
+        println("assigingin");
+        identifierToValue[name]!!.value = value
     }
 
     fun status(name: String): VariableStatus = identifierToValue[name]?.status
@@ -146,8 +147,18 @@ class Environment(
      * @throws ValError
      */
     fun defineField(name: String, value: Any) {
-        fields[name] = ValueWrapper(value, VariableStatus.VAR)
-        define(name, value, VariableStatus.VAR, type = VarType.CLASS_FIELD)
+        val valWrapper = ValueWrapper(value, VariableStatus.VAR, type = VarType.CLASS_FIELD)
+        if (name in identifierToValue && (identifierToValue[name]!!.status == VariableStatus.VAL)) {
+            throw ValError(name)
+        }
+        if (name in identifierToValue && identifierToValue[name]!!.type == VarType.CLASS_FIELD) {
+            throw java.lang.RuntimeException("ambiguous");
+        }
+        fields[name] = valWrapper
+
+        identifierToValue[name] = valWrapper
+
+        // define(name, valWrapper, VariableStatus.VAR, type = VarType.CLASS_FIELD)
     }
 
     fun defineClass(name: String, value: DynamikClass<out DynamikInstance>, global: Boolean = false) {

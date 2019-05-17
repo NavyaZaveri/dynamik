@@ -47,7 +47,6 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
             .forEach { (param, arg) ->
                 env.define(param.lexeme, arg, status = VariableStatus.VAL)
             }
-        println(env)
 
 
         //make functions visible
@@ -57,8 +56,6 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
         //if it's a class environment, it will have some associated fields. Make these visible.
         outer.fields()
             .forEach { (k, v) -> env.defineField(k, v.value) }
-
-        println(env)
 
 
         //makes all existing classes visible to current env

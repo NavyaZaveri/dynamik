@@ -8,7 +8,7 @@ abstract class Stmt {
     abstract fun <T> evaluateBy(visitor: StatementVisitor<T>): T
 }
 
-class PrintStmt(val expr: Expr) : Stmt() {
+class PrintStmt(val stmt: Stmt) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitPrintStmt(this)
 }
 
