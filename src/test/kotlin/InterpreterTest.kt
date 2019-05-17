@@ -373,5 +373,41 @@ class InterpreterTest {
         val actual = 444.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
+
+    @Test
+    fun testVarNameAmbiguity() {
+        val stmts = ("class Foo(value) { fn modify(_value) { this.value =_value;} }" +
+                "val f = Foo(10);" +
+                "f.modify(20);" +
+                "f.value; ").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 20.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testMutationOnSharedRef() {
+        val stmts = ("class MyList(lst) {}" +
+                "val lst = list();" + "" +
+                "val m = MyList(lst);" +
+                "lst.add(999);" +
+                "val c = m.lst.get(0);" +
+                "c;").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 999.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testMultipleVars() {
+        val stmts = "var x = 3; var x =100;".tokenize().parseStmts()
+        var exceptionHandled = false
+        try {
+            repl.eval(stmts)
+        } catch (r: RuntimeException) {
+            exceptionHandled = true
+        }
+        assert(exceptionHandled)
+    }
 }
 

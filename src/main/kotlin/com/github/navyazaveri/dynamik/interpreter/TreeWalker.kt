@@ -7,8 +7,8 @@ import com.github.navyazaveri.dynamik.expressions.*
 import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.stdlib.DynamikList
 import com.github.navyazaveri.dynamik.stdlib.DynamikMap
-import kotlinx.coroutines.GlobalScope
 import com.github.navyazaveri.dynamik.stdlib.clockCallable
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -28,9 +28,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
             }
         }
         if (thisStmt.stmt is AssignStmt) {
-            //TODO
             val field = env.getField(thisStmt.stmt.token.lexeme)
-
+            val value = thisStmt.stmt.expr.evaluateBy(this)
+            env.setField(thisStmt.stmt.token.lexeme, value)
         }
         return Any()
     }
@@ -38,8 +38,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     val jobs = mutableListOf<Job>()
 
     init {
-
-        //define global builtins (maube make this static?)
+        //define global builtins (TODO: make this static?)
         env.defineClass("list", DynamikList(), global = true)
         env.defineClass("map", DynamikMap(), global = true)
         env.defineFunction("clock", clockCallable(), global = true)
@@ -291,6 +290,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
 }
 
-fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>) {
+fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>) {        println(this)
+
     this.forEach { it.evaluateBy(visitor) }
 }

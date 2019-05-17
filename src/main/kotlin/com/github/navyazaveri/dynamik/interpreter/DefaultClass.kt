@@ -43,12 +43,6 @@ class DefaultInstance(
         interpreter.env.classes().forEach { t, u -> env.defineClass(t, u.value) }
     }
 
-
-    fun invokeMethod(name: String, args: List<Any>, interpreter: TreeWalker): Any {
-        val c = env.getCallable(name)
-        return c.invoke(args, interpreter, this.env)
-    }
-
     override fun toString(): String {
         return name + " instance"
     }

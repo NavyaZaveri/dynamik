@@ -41,8 +41,16 @@ class Environment(
      * @throws ValError when variable h as been previously defined with <code> val </code>
      */
     fun define(name: String, value: Any, status: VariableStatus, type: VarType = VarType.IDENT) {
-        if (name.inCurrentScope() && identifierToValue[name]!!.status == VariableStatus.VAL) {
+        val valWrapper = ValueWrapper(status = status, value = value, type = type)
+        if (name in identifierToValue && (identifierToValue[name]!!.status == VariableStatus.VAL)) {
             throw ValError(name)
+        }
+        if (name in identifierToValue && identifierToValue[name]!!.status == VariableStatus.VAR) {
+            throw RuntimeException("already created a var with ${name}. Reassign the original ${name}, instead of declaring  a new")
+        }
+
+        if (name in identifierToValue && identifierToValue[name]!!.type == VarType.CLASS_FIELD) {
+            throw java.lang.RuntimeException("ambiguous");
         }
         identifierToValue[name] = ValueWrapper(status = status, value = value, type = type)
     }
@@ -105,10 +113,20 @@ class Environment(
     }
 
     fun getField(name: String): Any {
-        if (name in identifierToValue) {
-            return identifierToValue[name]!!.value
+        val fields = identifierToValue.filter { it.value.type == VarType.CLASS_FIELD }
+        if (name in fields) {
+            return fields[name]!!.value
         }
         throw RuntimeException("no such field");
+    }
+
+    fun setField(name: String, value: Any) {
+        val fields = identifierToValue.filter { it.value.type == VarType.CLASS_FIELD }
+        if (name in fields) {
+            fields[name]!!.value = value
+        } else {
+            throw java.lang.RuntimeException("no such field");
+        }
     }
 
 
@@ -132,7 +150,7 @@ class Environment(
      */
     fun defineField(name: String, value: Any) {
         fields[name] = ValueWrapper(value, VariableStatus.VAR)
-        define(name, value, VariableStatus.VAR)
+        define(name, value, VariableStatus.VAR, type = VarType.CLASS_FIELD)
     }
 
     fun defineClass(name: String, value: DynamikClass<out DynamikInstance>, global: Boolean = false) {

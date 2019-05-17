@@ -444,9 +444,10 @@ fun List<Tok>.parseExpr(): Expr {
 fun main(args: Array<String>) {
 
 
-    ("class Math { fn hello() { print  1;} fn bar() { this.hello();} }" +
-            "val m = Math();"
-            + "m.bar();"
+    ("class Math(x) { fn hello() { print  1;} fn bar() { this.hello(); this.x = 100;} }" +
+            "val m = Math(20);"
+            + "m.bar();" +
+            "print m.x;"
             ).tokenize()
         .parseStmts()
         .evaluateAllBy(TreeWalker())
