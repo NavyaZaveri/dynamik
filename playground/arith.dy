@@ -1,22 +1,8 @@
-
-/*
-class Math() {
-    fn abs(x) {if (x<=0) { return -x;} return x; }
-    fn add(x,y) { return x+y;}
-    fn sub(x,y) {return x-y;}
-
-     fn sum_list(lst) {
-        var i = 0;
-        var sum = 0;
-        while (i<lst.len()) {sum = sum+lst.get(i); i = i+1;}
-        return sum;
-     }
+class Foo(x) {
+    fn bar(x) {
+        print(x);
+       }
 }
 
-*/
-
-
-val mymap = map();
-mymap.insert(1, 100);
-val result = mymap.get(1);
-print(result);
+val f = Foo(10);
+f.bar(2);
