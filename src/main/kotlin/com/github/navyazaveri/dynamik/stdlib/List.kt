@@ -21,6 +21,10 @@ class ListInstance : ContainerInstance() {
         return _list.hashCode()
     }
 
+    override fun hashCode(): Int {
+        return _list.hashCode()
+    }
+
     override fun equals(other: Any?): Boolean {
         return (other is ListInstance) && this._list == other._list
     }

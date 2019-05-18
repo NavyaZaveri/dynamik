@@ -1,7 +1,11 @@
 class Foo(x, y) {
     fn bar() {
         this.x =  this.x+100;
+        this.woo();
       }
+    fn woo() {
+        print("woot woot");
+    }
 }
 
 val f = Foo(10,20);

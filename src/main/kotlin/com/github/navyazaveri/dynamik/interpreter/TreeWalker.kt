@@ -298,7 +298,5 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 }
 
 fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>) {
-    println(this)
-
     this.forEach { it.evaluateBy(visitor) }
 }
