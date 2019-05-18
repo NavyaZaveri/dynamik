@@ -265,7 +265,7 @@ open class ExprParser(val tokens: List<Tok>) {
     var current = 0
 
     fun parse(): Expr {
-        return expression()
+        return assignExpr()
     }
 
     fun assignExpr(): Expr {
