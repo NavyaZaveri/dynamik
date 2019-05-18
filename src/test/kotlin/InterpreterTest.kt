@@ -419,6 +419,17 @@ class InterpreterTest {
         val actual = repl.eval(stmts)
         val expected = 20.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testExpressionWithThisKeyword() {
+        val stmts = ("class Foo(x, y) { fn add(){ this.x = this.x+this.y; return this.x;} } " +
+                " val f = Foo(10,11);" +
+                "f.add();" +
+                "f.x;").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 21.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
 
     }
 }

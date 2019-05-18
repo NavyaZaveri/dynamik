@@ -1,5 +1,5 @@
 class Foo(x, y) {
-    fn bar() {
+    fn bar(l) {
         this.x =  this.x+100;
         this.woo();
       }
@@ -8,6 +8,8 @@ class Foo(x, y) {
     }
 }
 
+
+
 val f = Foo(10,20);
-f.bar();
+f.bar(9);
 print f.x;

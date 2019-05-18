@@ -1,7 +1,8 @@
-package com.github.navyazaveri.dynamik.stdlib
+package com.github.navyazaveri.dynamik.stdlib.containers
 
 import com.github.navyazaveri.dynamik.expressions.BuiltinCallable
 import com.github.navyazaveri.dynamik.expressions.DynamikInstance
+import com.github.navyazaveri.dynamik.stdlib.NativeCallable
 
 
 interface Container : Builtin {
