@@ -8,8 +8,6 @@ class Foo(x, y) {
     }
 }
 
-
-
 val f = Foo(10,20);
 f.bar(9);
 print f.x;
