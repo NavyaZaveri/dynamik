@@ -53,6 +53,18 @@ class VariableExpr(val token: Tok) : Expr() {
     }
 }
 
+class ThisExpr(val expr: Expr) : Expr() {
+    override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
+        return visitor.visitThisExpr(this);
+    }
+}
+
+class AssignExpr(val tok: Tok, val expr: Expr) : Expr() {
+    override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
+        return visitor.visitAssignExpr(this)
+    }
+}
+
 class LiteralExpr(val token: Tok) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitLiteralExpression(this)

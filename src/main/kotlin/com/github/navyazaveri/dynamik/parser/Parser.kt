@@ -50,7 +50,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.SLASH -> {
                 if (nextTokenTypeIs(TokenType.STAR)) return multiLineComment()
                 if (nextTokenTypeIs(TokenType.SLASH)) return singleLineComment()
-                throw InvalidToken("${tokens[current].lexeme} cannot be placed after ${tokens[current - 1].lexeme}")
+                throw InvalidToken("${tokens[current].lexeme} cannot be placed after ${previous().lexeme}")
             }
             TokenType.PAR_WITH_LOCK -> return parLockStmt()
             TokenType.CLASS -> return classStmt()
@@ -268,6 +268,16 @@ open class ExprParser(val tokens: List<Tok>) {
         return expression()
     }
 
+    fun assignExpr(): Expr {
+        if (tokens[current].type == TokenType.IDENTIFIER && nextTokenTypeIs(TokenType.EQUAL)) {
+            val ident = consume(TokenType.IDENTIFIER)
+            consume(TokenType.EQUAL)
+            val rhs = expression()
+            return AssignExpr(ident, rhs)
+        }
+        return expression()
+    }
+
     fun expression(): Expr {
         return booleanOp()
     }
@@ -302,23 +312,31 @@ open class ExprParser(val tokens: List<Tok>) {
         return expr
     }
 
+    fun previous() = tokens[current - 1]
+
     // matches against tbe single token and then advances
     private fun primary(): Expr {
-        return when (tokens[current].type) {
-            TokenType.NUMBER -> LiteralExpr(token = tokens[current])
-            TokenType.STRING -> LiteralExpr(token = tokens[current])
-            TokenType.IDENTIFIER -> VariableExpr(token = tokens[current])
-            TokenType.TRUE -> LiteralExpr(token = tokens[current])
-            TokenType.False -> LiteralExpr(token = tokens[current])
-            else -> throw InvalidToken("could not recognize ${tokens[current]} at line ${tokens[current].line}")
-        }.also { advance() }
+        advance()
+        return when (previous().type) {
+            TokenType.NUMBER -> LiteralExpr(token = previous())
+            TokenType.STRING -> LiteralExpr(token = previous())
+            TokenType.IDENTIFIER -> VariableExpr(token = previous())
+            TokenType.TRUE -> LiteralExpr(token = previous())
+            TokenType.False -> LiteralExpr(token = previous())
+            TokenType.THIS -> {
+                consume(TokenType.DOT)
+                val expr = expression()
+                return ThisExpr(expr)
+            }
+            else -> throw InvalidToken("could not recognize ${previous()} at line ${tokens[current - 2].line}")
+        }
     }
 
     fun advance(): Tok = tokens[current].also { current += 1 }
 
     fun consume(tokType: TokenType): Tok {
         if (allTokensConsumed()) {
-            throw RuntimeException("expecting  $tokType after ${tokens[current - 1].lexeme}")
+            throw RuntimeException("expecting  $tokType after ${previous().lexeme}")
         }
         if (tokens[current].type != tokType) {
             throw RuntimeException("expecting $tokType, found ${tokens[current].type} instead at line ${tokens[current].line}")

@@ -155,7 +155,6 @@ class Environment(
             throw java.lang.RuntimeException("ambiguous");
         }
         fields[name] = valWrapper
-
         identifierToValue[name] = valWrapper
 
         // define(name, valWrapper, VariableStatus.VAR, type = VarType.CLASS_FIELD)

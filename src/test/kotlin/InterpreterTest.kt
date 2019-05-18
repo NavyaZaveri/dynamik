@@ -376,7 +376,7 @@ class InterpreterTest {
 
     @Test
     fun testVarNameAmbiguity() {
-        val stmts = ("class Foo(value) { fn modify(_value) { this.value =_value;} }" +
+        val stmts = ("class Foo(value) \n { fn modify(bar) { this.value = bar;} }" +
                 "val f = Foo(10);" +
                 "f.modify(20);" +
                 "f.value; ").tokenize().parseStmts()

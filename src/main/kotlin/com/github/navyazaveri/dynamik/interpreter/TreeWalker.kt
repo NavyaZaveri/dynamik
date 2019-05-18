@@ -20,6 +20,15 @@ import kotlinx.coroutines.sync.withLock
  * A tree-walking interpreter that visits the AST using methods defined in [ExpressionVisitor] and [StatementVisitor].
  */
 class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    override fun visitAssignExpr(assignExpr: AssignExpr): Any {
+        env.assign(assignExpr.tok.lexeme, evaluate(assignExpr.expr))
+        return Any()
+    }
+
+    override fun visitThisExpr(thisExpr: ThisExpr): Any {
+        return evaluate(thisExpr.expr)
+    }
+
     override fun visitThisStmt(thisStmt: ThisStmt): Any {
         if (thisStmt.stmt is ExprStmt) {
             val exprStmt = thisStmt.stmt

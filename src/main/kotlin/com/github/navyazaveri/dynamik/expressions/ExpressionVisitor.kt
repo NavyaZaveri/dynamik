@@ -7,4 +7,7 @@ interface ExpressionVisitor<T> {
     fun visitVariableExpr(variableExpr: VariableExpr): T
     fun visitCallExpression(callExpr: CallExpr, par: Boolean = false): T
     fun visitClazzExpression(instanceExpr: InstanceExpr): T
+    fun visitThisExpr(thisExpr: ThisExpr): T
+    fun visitAssignExpr(assignExpr: AssignExpr): T
+
 }

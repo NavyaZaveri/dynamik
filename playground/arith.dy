@@ -1,8 +1,9 @@
-class Foo(x) {
-    fn bar(x) {
-        print(x);
-       }
+class Foo(x, y) {
+    fn bar() {
+        this.x =  this.x+100;
+      }
 }
 
-val f = Foo(10);
-f.bar(2);
+val f = Foo(10,20);
+f.bar();
+print f.x;
