@@ -34,7 +34,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.VAL -> return valStmt()
             TokenType.IDENTIFIER -> {
                 if (nextTokenTypeIs(TokenType.EQUAL)) return assignStmt()
-                if (nextTokenTypeIs(TokenType.DOT)) return instanceStmt()
+                if (nextTokenTypeIs(TokenType.DOT)) return exprStmt()
                 return exprStmt()
             }
             TokenType.While -> return whileStatement()
@@ -220,8 +220,8 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
     }
 
     private fun exprStmt(): Stmt {
-        return ExprStmt(expression())
-            .also { consumeIfPresent(TokenType.SEMICOLON) }
+        return ExprStmt(expression()
+            .also { consumeIfPresent(TokenType.SEMICOLON) })
     }
 
     private fun varStmt(): Stmt {
@@ -283,11 +283,11 @@ open class ExprParser(val tokens: List<Tok>) {
     }
 
     fun booleanOp(): Expr {
-        val left = equality()
+        var left = equality()
         while (match(TokenType.AND_AND)) {
             val op = consume(TokenType.AND_AND)
             val right = equality()
-            val left = BinaryExpr(left, op, right)
+            left = BinaryExpr(left, op, right)
         }
         return left
     }
@@ -440,12 +440,23 @@ open class ExprParser(val tokens: List<Tok>) {
         return lookAhead().filter { it.type == t }.isPresent
     }
 
+
+    // . -> call | instance | primary
     private fun instance(): Expr {
         if (!allTokensConsumed() && match(TokenType.IDENTIFIER) && nextTokenTypeIs(TokenType.DOT)) {
             val className = consume(TokenType.IDENTIFIER).lexeme
             consume(TokenType.DOT)
-            val expr = expression()
-            return InstanceExpr(className, expr)
+            try {
+                val expr = call()
+                return InstanceExpr(className, expr)
+            } catch (e: Exception) {
+                try {
+                    val expr = instance()
+                    return InstanceExpr(className, expr)
+                } catch (e: Exception) {
+                    throw java.lang.RuntimeException("wtf");
+                }
+            }
         }
         return primary()
     }

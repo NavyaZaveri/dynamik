@@ -430,6 +430,16 @@ class InterpreterTest {
         val actual = repl.eval(stmts)
         val expected = 21.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
+    }
+
+    @Test
+    fun testBinaryWithClasses() {
+        val stmts = ("class Data(x,y) {fn get_x() { return this.x;} fn get_y() { return this.y;} }" +
+                "val d = Data(10,20);" +
+                "d.get_x()+d.get_y();").tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 30.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
 
     }
 }
