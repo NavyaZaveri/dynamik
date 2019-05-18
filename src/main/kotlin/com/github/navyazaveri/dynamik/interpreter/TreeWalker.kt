@@ -5,9 +5,9 @@ import com.github.navyazaveri.dynamik.errors.UnexpectedType
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
 import com.github.navyazaveri.dynamik.scanner.TokenType
-import com.github.navyazaveri.dynamik.stdlib.DynamikList
-import com.github.navyazaveri.dynamik.stdlib.DynamikMap
 import com.github.navyazaveri.dynamik.stdlib.clockCallable
+import com.github.navyazaveri.dynamik.stdlib.containers.DynamikList
+import com.github.navyazaveri.dynamik.stdlib.containers.DynamikMap
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

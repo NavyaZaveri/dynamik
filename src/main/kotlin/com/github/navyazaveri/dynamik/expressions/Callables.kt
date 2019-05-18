@@ -3,7 +3,7 @@ package com.github.navyazaveri.dynamik.expressions
 import com.github.navyazaveri.dynamik.errors.InvalidArgSize
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
-import com.github.navyazaveri.dynamik.stdlib.Builtin
+import com.github.navyazaveri.dynamik.stdlib.containers.Builtin
 
 typealias FuncName = String
 typealias Arg = Any

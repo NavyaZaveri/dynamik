@@ -1,9 +1,10 @@
-package com.github.navyazaveri.dynamik.stdlib
+package com.github.navyazaveri.dynamik.stdlib.containers
 
 import com.github.navyazaveri.dynamik.expressions.Arg
 import com.github.navyazaveri.dynamik.expressions.DynamikClass
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
+import com.github.navyazaveri.dynamik.stdlib.NativeCallable
 
 
 interface Builtin
