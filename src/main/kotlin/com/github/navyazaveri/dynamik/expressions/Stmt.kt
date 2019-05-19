@@ -91,6 +91,13 @@ class ThisStmt(val stmt: Stmt) : Stmt() {
     }
 }
 
+class ChainedStmt(val x: Stmt, val y: Stmt) : Stmt() {
+    override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
+        return visitor.visitChainedStmt(this)
+    }
+
+}
+
 
 class ClassStmt(
     val name: String,

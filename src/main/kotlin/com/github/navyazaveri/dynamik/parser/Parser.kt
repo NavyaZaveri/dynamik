@@ -20,6 +20,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return stmts
     }
 
+
     private fun instanceStmt(): InstanceStmt {
         val name = consume(TokenType.IDENTIFIER).lexeme
         consume(TokenType.DOT)
@@ -35,6 +36,8 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.IDENTIFIER -> {
                 if (nextTokenTypeIs(TokenType.EQUAL)) return assignStmt()
                 if (nextTokenTypeIs(TokenType.DOT)) {
+                    // 1     2    3     1    2  3
+                    //IDENT.METHOD() || IDENT.ATTRIBUTE
                     if (lookAhead(3).filter { it.type == TokenType.LEFT_PAREN }.isPresent) {
                         return exprStmt()
                     }
@@ -111,6 +114,9 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return SkipStmt()
     }
 
+    /**
+     * Throws all tokens present in the given line
+     */
     private fun singleLineComment(): SkipStmt {
         val currentLine = tokens[current].line
         consume(TokenType.SLASH)
@@ -121,6 +127,10 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return SkipStmt()
     }
 
+
+    /**
+     *
+     */
     private fun assertStmt(): AssertStmt {
         consume(TokenType.ASSERT)
         consume(TokenType.LEFT_PAREN)
@@ -239,6 +249,9 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             .also { consume(TokenType.SEMICOLON) }
     }
 
+    /**
+     * Capture a function declaration, its parameters, and its body
+     */
     private fun fnStmt(): FnStmt {
         val memoized = consumeIfPresent(TokenType.Memo)
         consume(TokenType.FN)
@@ -256,6 +269,9 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return FnStmt(name, params, body, memoized)
     }
 
+    /**
+     * Captures a non-reassignable declaration
+     */
     private fun valStmt(): ValStmt {
         consume(TokenType.VAL)
         val name = consume(TokenType.IDENTIFIER)
@@ -350,6 +366,9 @@ open class ExprParser(val tokens: List<Tok>) {
 
     fun advance(): Tok = tokens[current].also { current += 1 }
 
+    /**
+     * @returns a [Token] and in
+     */
     fun consume(tokType: TokenType): Tok {
         if (allTokensConsumed()) {
             throw RuntimeException("expecting  $tokType after ${previous().lexeme}")
@@ -362,9 +381,16 @@ open class ExprParser(val tokens: List<Tok>) {
 
     fun allTokensConsumed(): Boolean = current >= tokens.size
 
+    /**
+     * Checks if the current token is any of the given [tokenTypes]
+     */
     fun match(vararg tokenTypes: TokenType): Boolean =
         tokenTypes.any { !allTokensConsumed() && it == tokens[current].type }
 
+    /**
+     * Captures addition and subtraction
+     * Add ->  Mul (('+'| '-')  Mul)*
+     */
     private fun addition(): Expr {
         var expr = multiplication()
         while (match(TokenType.PLUS, TokenType.MINUS)) {
@@ -375,6 +401,10 @@ open class ExprParser(val tokens: List<Tok>) {
         return expr
     }
 
+    /*
+    ** Captures multiplication and division.
+    * Mul -> Mul ('*' Unary) *
+     */
     private fun multiplication(): Expr {
         var expr = unary()
         while (match(TokenType.STAR, TokenType.SLASH)) {

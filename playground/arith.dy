@@ -1,13 +1,18 @@
-class Foo(x, y) {
-    fn bar(l) {
-        this.x =  this.x+100;
-        this.woo();
-      }
-    fn woo() {
-        print("woot woot");
-    }
+class Data(x, y) {
+    fn get_x() { return this.x;}
+    fn get_y() { return this.y;}
 }
 
-val f = Foo(10,20);
-f.bar(9);
-print f.x;
+val d = Data(10,20);
+print(d.get_x() + d.get_y());
+
+class Thing(data) {
+    fn blah() {
+        print(data.get_x() + data.get_y());
+     }
+}
+
+val t = Thing(d);
+t.blah();
+t.data.x = 100;
+t.blah();
