@@ -83,11 +83,10 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
 
 }
 
-/*
-A special type of functions that caches the results of a functions
-against its inputs. Should be used ONLY for pure functions. As such,
-the language does not allow class methods to be memoizable.
-*/
+/**
+ * A special type of function that caches the output
+ *against its inputs. Can be used ONLY for functions, and not class methods.
+ */
 class MemoizedFunction(val func: FnStmt) : DynamikFunction<Any> {
     var hits = 0
 
@@ -111,7 +110,8 @@ class BuiltinCallable(val b: Builtin, val methodName: String, val arity: Int) : 
 
 
     /**
-     * Uses reflection to invoke the builtin method.*/
+     * Uses reflection to invoke the builtin method.
+     * */
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): Any {
         val argTypes = (0 until arity).map { Any::class.java }.toTypedArray()
         return b::class.java.getMethod(methodName, *argTypes).invoke(b, *arguments.toTypedArray())

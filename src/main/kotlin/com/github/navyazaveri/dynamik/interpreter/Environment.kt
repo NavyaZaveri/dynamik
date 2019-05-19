@@ -101,7 +101,7 @@ class Environment(
         if (name.inCurrentScope()) {
             return identifierToValue[name]!!.value
         }
-        if (name.inGlobalScope()) {
+        if (name.inGlobalScope() && globalAccess) {
             return globals[name]!!.value
         }
 
@@ -177,6 +177,7 @@ class Environment(
     }
 
     companion object {
+        var globalAccess: Boolean = true
         val globals = mutableMapOf<String, ValueWrapper<Any>>()
         fun addGlobal(name: String, value: Any) {
             globals[name] = ValueWrapper(value, VariableStatus.VAL)

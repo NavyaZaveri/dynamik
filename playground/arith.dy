@@ -1,5 +1,6 @@
+@global val hello = "hello";
 class Data(x, y) {
-    fn get_x() { return this.x;}
+    fn get_x() {  return this.x;}
     fn get_y() { return this.y;}
 }
 

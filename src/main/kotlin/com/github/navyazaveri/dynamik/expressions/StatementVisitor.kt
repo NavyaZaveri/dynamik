@@ -2,7 +2,7 @@ package com.github.navyazaveri.dynamik.expressions
 
 
 /**
- * A collection of methods a Dynamik Interpreter must implement
+ * A collection of methods a Dynamik Interpreter must implement.
  *  @param T The type of the value returned by the Interpreter.
  */
 interface StatementVisitor<T> {

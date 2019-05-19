@@ -31,7 +31,8 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     }
 
     override fun visitThisExpr(thisExpr: ThisExpr): Any {
-        return evaluate(thisExpr.expr)
+        Environment.globalAccess = false
+        return evaluate(thisExpr.expr).also { Environment.globalAccess = true }
     }
 
     override fun visitThisStmt(thisStmt: ThisStmt): Any {
@@ -104,7 +105,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 
     override fun visitGlobalStmt(globalStmt: GlobalStmt): Any {
         val globalValue = evaluate(globalStmt.value)
-        env.define(globalStmt.name.lexeme, globalValue, VariableStatus.VAL)
+  //      env.define(globalStmt.name.lexeme, globalValue, VariableStatus.VAL)
         Environment.addGlobal(globalStmt.name.lexeme, globalValue)
         return Any()
     }
