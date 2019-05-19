@@ -34,7 +34,12 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.VAL -> return valStmt()
             TokenType.IDENTIFIER -> {
                 if (nextTokenTypeIs(TokenType.EQUAL)) return assignStmt()
-                if (nextTokenTypeIs(TokenType.DOT)) return exprStmt()
+                if (nextTokenTypeIs(TokenType.DOT)) {
+                    if (lookAhead(3).filter { it.type == TokenType.LEFT_PAREN }.isPresent) {
+                        return exprStmt()
+                    }
+                    return instanceStmt()
+                }
                 return exprStmt()
             }
             TokenType.While -> return whileStatement()
@@ -268,6 +273,17 @@ open class ExprParser(val tokens: List<Tok>) {
         return assignExpr()
     }
 
+    fun assignAble(index: Int): Boolean {
+        return !allTokensConsumed() && (tokens[index].type == TokenType.IDENTIFIER)
+                || (tokens[index].type == TokenType.DOT && assignAble(index + 1))
+    }
+
+    fun consumeAssignable() {
+        if (tokens[current].type == TokenType.IDENTIFIER) {
+
+        }
+    }
+
     fun assignExpr(): Expr {
         if (tokens[current].type == TokenType.IDENTIFIER && nextTokenTypeIs(TokenType.EQUAL)) {
             val ident = consume(TokenType.IDENTIFIER)
@@ -418,9 +434,9 @@ open class ExprParser(val tokens: List<Tok>) {
         return args
     }
 
-    private fun lookAhead(): Optional<Tok> {
-        if (current + 1 < tokens.size) {
-            return Optional.of(tokens[current + 1])
+    fun lookAhead(inc: Int = 1): Optional<Tok> {
+        if (current + inc < tokens.size) {
+            return Optional.of(tokens[current + inc])
         }
         return Optional.empty()
     }
@@ -451,10 +467,11 @@ open class ExprParser(val tokens: List<Tok>) {
                 return InstanceExpr(className, expr)
             } catch (e: Exception) {
                 try {
-                    val expr = instance()
+                    val expr = expression()
                     return InstanceExpr(className, expr)
                 } catch (e: Exception) {
-                    throw java.lang.RuntimeException("wtf");
+                    val expr = expression()
+                    return InstanceExpr(className, expr)
                 }
             }
         }
