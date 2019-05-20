@@ -17,5 +17,4 @@ var i = 0;
 while (i<10) {
     print d2.get_x() + d2.get_y();
     i = i +1;
-
 }

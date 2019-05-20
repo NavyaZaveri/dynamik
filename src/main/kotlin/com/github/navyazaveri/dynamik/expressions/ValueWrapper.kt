@@ -9,6 +9,7 @@ enum class VariableStatus {
     VAR
 }
 
+
 enum class VarType {
     CLASS,
     FN,
