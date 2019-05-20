@@ -129,7 +129,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 
 
     /**
-     *
+     * Captures as assert statement, for eg: ```assert(x==1)```;
      */
     private fun assertStmt(): AssertStmt {
         consume(TokenType.ASSERT)
@@ -346,7 +346,9 @@ open class ExprParser(val tokens: List<Tok>) {
 
     fun previous() = tokens[current - 1]
 
-    // matches against tbe single token and then advances
+    /**
+     * [primary] matches against a single token, then advances the current token pointer .
+     */
     private fun primary(): Expr {
         advance()
         return when (previous().type) {
@@ -367,8 +369,9 @@ open class ExprParser(val tokens: List<Tok>) {
     fun advance(): Tok = tokens[current].also { current += 1 }
 
     /**
-     * @returns a [Token] and in
+     * @returns a [Token] and advances the current token pointer
      */
+
     fun consume(tokType: TokenType): Tok {
         if (allTokensConsumed()) {
             throw RuntimeException("expecting  $tokType after ${previous().lexeme}")
@@ -402,9 +405,9 @@ open class ExprParser(val tokens: List<Tok>) {
     }
 
     /*
-    ** Captures multiplication and division.
-    * Mul -> Mul ('*' Unary) *
-     */
+     ** Captures multiplication and division.
+     * Mul -> Mul ('*' Unary) *
+    */
     private fun multiplication(): Expr {
         var expr = unary()
         while (match(TokenType.STAR, TokenType.SLASH)) {

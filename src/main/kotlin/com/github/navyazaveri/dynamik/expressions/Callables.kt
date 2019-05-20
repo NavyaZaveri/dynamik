@@ -84,8 +84,8 @@ class DefaultFunction(val func: FnStmt) : DynamikFunction<Any> {
 }
 
 /**
- * A special type of function that caches the output
- *against its inputs. Can be used ONLY for functions, and not class methods.
+ * A special type of function that caches its output
+ * against its inputs(s). Cannot be used as a  class method. .
  */
 class MemoizedFunction(val func: FnStmt) : DynamikFunction<Any> {
     var hits = 0

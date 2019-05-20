@@ -442,5 +442,9 @@ class InterpreterTest {
         assert(actual == expected) { "actual = $actual, expected = $expected" }
 
     }
+
+    @Test
+    fun testGlobalScopeLeak() {
+    }
 }
 

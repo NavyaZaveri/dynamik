@@ -1,19 +1,21 @@
 @global val hello = "hello";
 class Data(x, y) {
-    fn get_x() {  return this.x;}
+    fn get_x() {  return this.x+1;}
+    fn get_y() { return this.y;}
+}
+val d = Data(10,20);
+print d.get_x() + d.get_y() + d.get_x();
+
+class Data2(x, y) {
+    fn get_x() {  return this.x+1;}
     fn get_y() { return this.y;}
 }
 
-val d = Data(10,20);
-print(d.get_x() + d.get_y());
 
-class Thing(data) {
-    fn blah() {
-        print(data.get_x() + data.get_y());
-     }
+var i = 0;
+    var d2 = Data2(10,20);
+while (i<10) {
+    print d2.get_x() + d2.get_y();
+    i = i +1;
+
 }
-
-val t = Thing(d);
-t.blah();
-t.data.x = 100;
-t.blah();

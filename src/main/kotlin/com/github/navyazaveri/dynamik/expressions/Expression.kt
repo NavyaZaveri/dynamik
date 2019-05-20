@@ -7,12 +7,20 @@ abstract class Expr {
     abstract fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T
 }
 
+
+/**
+ * [CallExpr] captures function and instance invocations
+ */
 class CallExpr(val funcName: String, val args: List<Expr>) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitCallExpression(this)
     }
 }
 
+
+/**
+ * [BinaryExpr] captures arithmetic expression
+ */
 class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitBinaryExpression(this)
@@ -30,8 +38,11 @@ class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
     }
 }
 
-class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
 
+/**
+ *
+ */
+class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitUnaryExpression(this)
     }
@@ -55,7 +66,7 @@ class VariableExpr(val token: Tok) : Expr() {
 
 class ThisExpr(val expr: Expr) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
-        return visitor.visitThisExpr(this);
+        return visitor.visitThisExpr(this)
     }
 }
 

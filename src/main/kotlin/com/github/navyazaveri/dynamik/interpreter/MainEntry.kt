@@ -17,7 +17,7 @@ class CommandLineParser : CliktCommand() {
                 val code = File(file).readText()
                 try {
                     Repl().eval(code)
-                } catch (e: Exception) {
+                } catch (e: Throwable) {
                     println(e.message)
                 }
             }

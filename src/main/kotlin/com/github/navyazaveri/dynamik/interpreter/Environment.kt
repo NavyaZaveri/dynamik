@@ -17,12 +17,18 @@ class Environment(
     val identifierToValue: MutableMap<String, ValueWrapper<Any>> = mutableMapOf(),
     val name: String = ""
 ) {
-    val fields = mutableMapOf<String, ValueWrapper<Any>>()
-    val classes = mutableMapOf<String, ValueWrapper<DynamikClass<out DynamikInstance>>>()
-    val functions = mutableMapOf<String, ValueWrapper<DynamikFunction<out Any>>>()
+    val fields: MutableMap<String, ValueWrapper<Any>> by lazy {
+        mutableMapOf<String, ValueWrapper<Any>>()
+    }
+    val classes: MutableMap<String, ValueWrapper<DynamikClass<out DynamikInstance>>> by lazy {
+        mutableMapOf<String, ValueWrapper<DynamikClass<out DynamikInstance>>>()
+    }
+    val functions: MutableMap<String, ValueWrapper<DynamikFunction<out Any>>> by lazy {
+        mutableMapOf<String, ValueWrapper<DynamikFunction<out Any>>>()
+    }
     var outer = mutableMapOf<String, ValueWrapper<Any>>()
 
-    fun String.inGlobalScope(): Boolean {
+    private fun String.inGlobalScope(): Boolean {
         return globals.containsKey(this)
     }
 
@@ -31,7 +37,7 @@ class Environment(
         this.classes.putAll(new.classes)
     }
 
-    fun String.inCurrentScope(): Boolean {
+    private fun String.inCurrentScope(): Boolean {
         return identifierToValue.containsKey(this)
     }
 
@@ -47,7 +53,7 @@ class Environment(
         }
 
         if (name in identifierToValue && identifierToValue[name]!!.type == VarType.CLASS_FIELD) {
-            throw java.lang.RuntimeException("ambiguous");
+            throw java.lang.RuntimeException("ambiguous")
         }
 
         identifierToValue[name] = valWrapper
@@ -87,7 +93,6 @@ class Environment(
         if (status(name) == VariableStatus.VAL) {
             throw ValError(name)
         }
-        println("assigingin");
         identifierToValue[name]!!.value = value
     }
 
@@ -115,7 +120,7 @@ class Environment(
         if (name in fields) {
             return fields[name]!!.value
         }
-        throw RuntimeException("no such field");
+        throw RuntimeException("$name does not exist as a field in the current scope")
     }
 
     fun setField(name: String, value: Any) {
@@ -123,7 +128,7 @@ class Environment(
         if (name in fields) {
             fields[name]!!.value = value
         } else {
-            throw java.lang.RuntimeException("no such field");
+            throw java.lang.RuntimeException("$name does not exist")
         }
     }
 
@@ -152,7 +157,7 @@ class Environment(
             throw ValError(name)
         }
         if (name in identifierToValue && identifierToValue[name]!!.type == VarType.CLASS_FIELD) {
-            throw java.lang.RuntimeException("ambiguous");
+            throw java.lang.RuntimeException("ambiguous")
         }
         fields[name] = valWrapper
         identifierToValue[name] = valWrapper

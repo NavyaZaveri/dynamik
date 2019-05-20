@@ -36,16 +36,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     }
 
     override fun visitThisStmt(thisStmt: ThisStmt): Any {
-        if (thisStmt.stmt is ExprStmt) {
-            val exprStmt = thisStmt.stmt
-            return evaluate(exprStmt.expr)
-        }
-        if (thisStmt.stmt is AssignStmt) {
-            val field = env.getField(thisStmt.stmt.token.lexeme)
-            val value = thisStmt.stmt.expr.evaluateBy(this)
-            env.setField(thisStmt.stmt.token.lexeme, value)
-        }
-        return Any()
+        return evaluate(thisStmt.stmt)
     }
 
     val jobs = mutableListOf<Job>()
@@ -105,7 +96,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 
     override fun visitGlobalStmt(globalStmt: GlobalStmt): Any {
         val globalValue = evaluate(globalStmt.value)
-  //      env.define(globalStmt.name.lexeme, globalValue, VariableStatus.VAL)
+        //      env.define(globalStmt.name.lexeme, globalValue, VariableStatus.VAL)
         Environment.addGlobal(globalStmt.name.lexeme, globalValue)
         return Any()
     }

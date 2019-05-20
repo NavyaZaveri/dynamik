@@ -87,7 +87,7 @@ class InstanceStmt(val name: String, val stmt: Stmt) : Stmt() {
 
 class ThisStmt(val stmt: Stmt) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
-        return visitor.visitThisStmt(this);
+        return visitor.visitThisStmt(this)
     }
 }
 

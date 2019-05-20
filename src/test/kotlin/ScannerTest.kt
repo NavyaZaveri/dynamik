@@ -33,7 +33,7 @@ class ScannerTest {
 
     @Test
     fun testBoundaryMatching() {
-        val toks = "val thing = value".tokenize();
+        val toks = "val thing = value".tokenize()
         assertTrue(toks[toks.size - 1].type == TokenType.IDENTIFIER)
     }
 
@@ -47,7 +47,7 @@ class ScannerTest {
     fun testInvalidValDeclaration() {
         var invalid = false
         try {
-            val toks = "fn hello(){val, x = 20};".tokenize().parseStmts()
+            "fn hello(){val, x = 20};".tokenize().parseStmts()
         } catch (r: Exception) {
             invalid = true
         }

@@ -83,6 +83,6 @@ test {
 }
 
 // Trigger dokka task when building
-assemble.dependsOn(dokka)
+//assemble.dependsOn(dokka)
 
 
