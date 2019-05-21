@@ -16,7 +16,7 @@ class AssignStmt(val token: Tok, val expr: Expr) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitAssignStmt(this)
 }
 
-class WhileStmt(val expr: Expr, val stmts: List<Stmt>) : Stmt() {
+class WhileStmt(val condition: Expr, val stmts: List<Stmt>) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T = visitor.visitWhileStatement(this)
 }
 

@@ -78,6 +78,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         return Any()
     }
 
+
     fun clear() {
         env.clear()
     }
@@ -185,10 +186,10 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     }
 
     override fun visitWhileStatement(whileStmt: WhileStmt) {
-        var condition = evaluate(whileStmt.expr) as Boolean
+        var condition = evaluate(whileStmt.condition) as Boolean
         while (condition) {
             whileStmt.stmts.forEach { evaluate(it) }
-            condition = evaluate(whileStmt.expr) as Boolean
+            condition = evaluate(whileStmt.condition) as Boolean
         }
     }
 

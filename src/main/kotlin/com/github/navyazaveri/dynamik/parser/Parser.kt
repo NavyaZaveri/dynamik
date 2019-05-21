@@ -371,7 +371,6 @@ open class ExprParser(val tokens: List<Tok>) {
     /**
      * @returns a [Token] and advances the current token pointer
      */
-
     fun consume(tokType: TokenType): Tok {
         if (allTokensConsumed()) {
             throw RuntimeException("expecting  $tokType after ${previous().lexeme}")

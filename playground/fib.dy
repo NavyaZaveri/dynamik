@@ -1,3 +1,6 @@
+
+//the @memo wrapper caches the output of fib against its input and uses it
+//when needed
 @memo
 fn fib(n) {
     if (n<2) { return n;}

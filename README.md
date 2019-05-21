@@ -12,24 +12,36 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 - [x] Functions 
 - [x] Comments
 - [x] Memoization builtin
-
 - [x] Collections (list, map)
-
 - [ ] Importing file scopes
-
 - [ ] Read/Write to files 
-
 - [x] Classes 
-
 - [ ] Builtin timer
-
 - [x] Repl
 
 
 ### How to Run 
 
+```
+./gradlew build 
+java -jar build/libs/dynamik-1.0-SNAPSHOT-all.jar --file=<filename>
+```
 
 ### Examples 
+
+```
+
+//the @memo wrapper caches the output of fib against its input and uses it 
+//when needed
+@memo
+fn fib(n) {
+    if (n<2) { return n;}
+    return fib(n-1) + fib(n-2);
+}
+
+val res = fib(100);
+print(res);
+```
 
 
 
