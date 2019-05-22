@@ -67,10 +67,6 @@ class Math {
         return x;
      }
 }
-
-
-
-
 val math = Math();
 val plus_one = math.abs(-1);
 print(plus_one);
@@ -83,9 +79,10 @@ print(plus_one);
 val stuff = list();
 stuff.add("foo");
 stuff.add(100);
-for (var i =0;i<stuff.len();i = i+1) {
+for (var i=0; i<stuff.len(); i = i+1) {
     print(stuff.get(i));
 }
+
 ```
 
 

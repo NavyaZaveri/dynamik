@@ -285,16 +285,17 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 open class ExprParser(val tokens: List<Tok>) {
     var current = 0
 
-    fun concatExpr(): Expr {
+    fun concat(): Expr {
         if (tokens[current].type == TokenType.IDENTIFIER && nextTokenTypeIs(TokenType.PLUS_PLUS)) {
-            val toks = mutableListOf<Tok>()
-            consume(TokenType.IDENTIFIER)
+            val exprContainers = mutableListOf<Expr>()
+            val c = call()
+            exprContainers.add(c)
             while (!match(TokenType.SEMICOLON)) {
                 consume(TokenType.PLUS_PLUS)
-                val tok = consume(TokenType.IDENTIFIER)
-                toks.add(tok)
+                val c = call()
+                exprContainers.add(c)
             }
-            return ConcatExpr(toks)
+            return ConcatExpr(exprContainers)
         }
 
         return addition()
@@ -350,7 +351,7 @@ open class ExprParser(val tokens: List<Tok>) {
     }
 
     private fun comparison(): Expr {
-        var expr = concatExpr()
+        var expr = concat()
         while (match(TokenType.LESS_EQUAL, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.GREATER)) {
             val operand = advance()
             val right = comparison()
