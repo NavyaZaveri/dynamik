@@ -359,8 +359,8 @@ class InterpreterTest {
     fun testListEquality() {
         val stmts = "val a = list(); a.add(1); val b=list(); val c = list(); b.add(1); a  ==  b && a!=c;".tokenize()
             .parseStmts()
-        val expected = repl.eval(stmts)
-        val actual = true
+        val actual = repl.eval(stmts)
+        val expected = true
         assert(actual == expected) { "actual = $actual, expected = $expected" }
     }
 
@@ -439,6 +439,16 @@ class InterpreterTest {
                 "d.get_x()+d.get_y();").tokenize().parseStmts()
         val actual = repl.eval(stmts)
         val expected = 30.0
+        assert(actual == expected) { "actual = $actual, expected = $expected" }
+
+    }
+
+    @Test
+    fun testListConcat() {
+        val stmts = " val a = list(); a.add(1);  val b  = list(); b.add(2); val c = a++b; c.get(0);".tokenize()
+            .parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = 2.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
 
     }

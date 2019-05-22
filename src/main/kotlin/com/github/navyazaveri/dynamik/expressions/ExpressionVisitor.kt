@@ -14,4 +14,6 @@ interface ExpressionVisitor<T> {
     fun visitClazzExpression(instanceExpr: InstanceExpr): T
     fun visitThisExpr(thisExpr: ThisExpr): T
     fun visitAssignExpr(assignExpr: AssignExpr): T
+    fun visitConcatExpr(concatExpr: ConcatExpr): T
+
 }

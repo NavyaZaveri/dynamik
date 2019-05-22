@@ -97,3 +97,10 @@ class InstanceExpr(val clazzName: String, val expr: Expr) : Expr() {
     }
 }
 
+class ConcatExpr(val containers: List<Tok>) : Expr() {
+    override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
+        return visitor.visitConcatExpr(this);
+    }
+
+}
+

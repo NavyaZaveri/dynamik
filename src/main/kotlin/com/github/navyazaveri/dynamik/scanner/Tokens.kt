@@ -25,7 +25,10 @@ enum class TokenType(val regex: Regex) {
     GREATER_EQUAL(">=".toRegex()),
     STAR("\\*".toRegex()),
     DOT("\\.".toRegex()),
+    PLUS_PLUS("\\+\\+".toRegex()),
+
     PLUS("\\+".toRegex()),
+
     MINUS("-".toRegex()),
     GREATER(">".toRegex()),
     LESS("<".toRegex()),
@@ -58,7 +61,6 @@ enum class TokenType(val regex: Regex) {
 
 
     IDENTIFIER("\\w+".toRegex()),
-
     EOF("[\r\n]+".toRegex()),
 
 }

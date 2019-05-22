@@ -8,6 +8,7 @@ import com.github.navyazaveri.dynamik.scanner.TokenType
 import com.github.navyazaveri.dynamik.stdlib.clockCallable
 import com.github.navyazaveri.dynamik.stdlib.containers.DynamikList
 import com.github.navyazaveri.dynamik.stdlib.containers.DynamikMap
+import com.github.navyazaveri.dynamik.stdlib.containers.ListInstance
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -20,6 +21,11 @@ import kotlinx.coroutines.sync.withLock
  * A tree-walking interpreter that visits the AST nodes using methods defined in [ExpressionVisitor] and [StatementVisitor].
  */
 class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>, StatementVisitor<Any> {
+    override fun visitConcatExpr(concatExpr: ConcatExpr): Any {
+        val subLists = concatExpr.containers.map { env.get(it.lexeme) as ListInstance }
+        return subLists.fold(ListInstance()) { list, acc -> acc.concat(list) }
+    }
+
     override fun visitChainedStmt(chainedStmt: ChainedStmt): Any {
         evaluate(chainedStmt.x)
         return evaluate(chainedStmt.y)
@@ -278,6 +284,12 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
             TokenType.LESS_EQUAL -> return (left as Double) <= (right as Double)
             TokenType.GREATER -> return (left as Double) > (right as Double)
             TokenType.GREATER_EQUAL -> return (left as Double) >= (right as Double)
+            TokenType.PLUS_PLUS -> {
+                if (left is ListInstance && right is ListInstance) {
+                    return left.concat(right)
+                }
+                throw java.lang.RuntimeException("cannot concat")
+            }
             else -> throw UnexpectedType("${expr.operand.type}  not recognized at line ${expr.operand.line}")
         }
         throw RuntimeException("unreachable")
