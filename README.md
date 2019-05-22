@@ -28,7 +28,7 @@ java -jar build/libs/dynamik-1.0-SNAPSHOT-all.jar --file=<filename>
 ### Examples 
 
 
-##### Fibonacci 
+#### Fibonacci 
 ```
 //the @memo wrapper caches the output of fib against its input and uses it 
 //when needed
@@ -45,7 +45,7 @@ print(res);
 
 
 
-##### Variable Bindings 
+#### Variable Bindings 
 ```
 
 //create a "final" variable 
@@ -60,7 +60,7 @@ foo = 2; //works
 ```
 
 
-##### Classes 
+#### Classes 
 ```
 class Math {
     fn abs(x) { 
