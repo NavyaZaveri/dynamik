@@ -1,6 +1,7 @@
-fn add(x, y) { return x+y;}
-
-val  x = 20;
-val y = 100;
-val res = add(x,y);
-assert(res == 121);
+val stuff = list();
+stuff.add("foo");
+stuff.add("bar");
+var i = 0;
+for (var i =0;i<stuff.len();i = i+1) {
+    print(stuff.get(i));
+}

@@ -1,3 +1,5 @@
+import java.util.*
+
 fun main(args: Array<String>) {
 
     val m = mutableMapOf<String, Int>()
@@ -12,4 +14,10 @@ fun main(args: Array<String>) {
         20
     }
     val raw = foo
+}
+
+class Solution {
+    fun searchMatrix(matrix: Array<IntArray>, target: Int): Boolean {
+        return matrix.any { Arrays.binarySearch(it, target) >= 0 }
+    }
 }

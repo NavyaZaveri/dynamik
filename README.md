@@ -5,7 +5,7 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 
 ### Features
 
-- [x] Expressions with Strings and Integers (implicitly converted to Doubles for simplicity) 
+- [x] Expressions with Strings and Integers. (At present the result of operations with Integers are implicitly converted to Doubles)
 - [x] (Im)mutable variable bindings with val/var
 - [x] If/Else statements
 - [x] For/While loops
@@ -40,6 +40,44 @@ fn fib(n) {
 val res = fib(100);
 print(res);
 ```
+
+
+```
+
+//create a "final" variable 
+val hello = "world";
+
+//can't do this (throws a ValError) 
+//hello = "world";
+```
+
+```
+class Math {
+    fn abs(x) { if (x<0) { return -x}
+    return x;
+    }
+}
+
+val math = Math();
+val plus_one = math.abs(-1);
+print(plus_one);
+```
+
+```
+val stuff = list();
+stuff.add("foo");
+stuff.add("bar");
+var i = 0;
+for (var i =0;i<stuff.len();i = i+1) {
+    print(stuff.get(i));
+}
+```
+
+
+
+
+
+
 
 
 
