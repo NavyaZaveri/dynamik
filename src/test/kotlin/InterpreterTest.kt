@@ -456,5 +456,15 @@ class InterpreterTest {
     @Test
     fun testGlobalScopeLeak() {
     }
+
+    @Test
+    fun testValError() {
+        val stmts = "val foo  = 10; print fox".tokenize().parseStmts()
+        try {
+            repl.eval(stmts)
+        } catch (v: VariableNotInScope) {
+            assert("foo" in v.message!!) { "val error handling done wrong" }
+        }
+    }
 }
 

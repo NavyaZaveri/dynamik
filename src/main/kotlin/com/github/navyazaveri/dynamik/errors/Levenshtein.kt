@@ -32,5 +32,5 @@ fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
         cost = newCost
         newCost = swap
     }
-    return cost[lhsLength].also { println(it) }
+    return cost[lhsLength]
 }
