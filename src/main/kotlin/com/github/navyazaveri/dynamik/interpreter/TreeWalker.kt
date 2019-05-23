@@ -23,7 +23,7 @@ import kotlinx.coroutines.sync.withLock
 class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitConcatExpr(concatExpr: ConcatExpr): Any {
         val subLists = concatExpr.containers.map { evaluate(it) as ListInstance }
-        return subLists.fold(ListInstance()) { list, acc -> acc.concat(list) }
+        return subLists.fold(ListInstance()) { acc, list -> acc.concat(list) }
     }
 
     override fun visitChainedStmt(chainedStmt: ChainedStmt): Any {

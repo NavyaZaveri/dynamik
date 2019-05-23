@@ -445,10 +445,10 @@ class InterpreterTest {
 
     @Test
     fun testListConcat() {
-        val stmts = " val a = list(); a.add(1);  val b  = list(); b.add(2); val c = a++b++list(); c.get(0);".tokenize()
+        val stmts = " val a = list(); a.add(1);  val b  = list(100); b.add(2); val c = a++b++list(); print (c); c.get(0);".tokenize()
             .parseStmts()
         val actual = repl.eval(stmts)
-        val expected = 2.0
+        val expected = 1.0
         assert(actual == expected) { "actual = $actual, expected = $expected" }
 
     }

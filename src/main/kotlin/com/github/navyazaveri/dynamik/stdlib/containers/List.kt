@@ -14,7 +14,7 @@ interface Builtin
 
 class DynamikList : DynamikClass<ListInstance> {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): ListInstance {
-        return ListInstance()
+        return ListInstance(arguments)
     }
 }
 
