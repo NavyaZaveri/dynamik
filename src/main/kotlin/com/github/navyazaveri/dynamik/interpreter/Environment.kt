@@ -6,11 +6,15 @@ import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
 
 
+typealias Class = DynamikClass<out DynamikInstance>
+typealias Func = DynamikFunction<out Any>
+
+
 /**
- *An environment instance held by the interpreter
- *@property name name of the environment
- *@property identifierToValue captures the value of a given variable
- *@Constructor Creates an environment
+ * An environment instance held by the interpreter
+ * @property name name of the environment
+ * @property identifierToValue captures the value of a given variable
+ * @Constructor Creates an environment
  */
 
 class Environment(
@@ -20,11 +24,11 @@ class Environment(
     val fields: MutableMap<String, ValueWrapper<Any>> by lazy {
         mutableMapOf<String, ValueWrapper<Any>>()
     }
-    val classes: MutableMap<String, ValueWrapper<DynamikClass<out DynamikInstance>>> by lazy {
-        mutableMapOf<String, ValueWrapper<DynamikClass<out DynamikInstance>>>()
+    val classes: MutableMap<String, ValueWrapper<Class>> by lazy {
+        mutableMapOf<String, ValueWrapper<Class>>()
     }
-    val functions: MutableMap<String, ValueWrapper<DynamikFunction<out Any>>> by lazy {
-        mutableMapOf<String, ValueWrapper<DynamikFunction<out Any>>>()
+    val functions: MutableMap<String, ValueWrapper<Func>> by lazy {
+        mutableMapOf<String, ValueWrapper<Func>>()
     }
     var outer = mutableMapOf<String, ValueWrapper<Any>>()
 
@@ -142,6 +146,7 @@ class Environment(
         }
         if (name in classes) {
             return classes[name]!!.value
+
         }
         throw CallableDoesNotExist(name, this.identifierToValue.keys)
     }

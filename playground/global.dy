@@ -1,10 +1,2 @@
-class Math {
-    fn abs(x) {
-    if (x<0) { return -x}
-    return x;
-    }
-}
-
-val math = Math();
-val plus_one = math.abs(-1);
-print(plus_one);
+val x = "hello";
+print xy;

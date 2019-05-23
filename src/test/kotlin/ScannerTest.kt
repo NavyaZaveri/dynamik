@@ -53,4 +53,11 @@ class ScannerTest {
         }
         assert(invalid)
     }
+
+    @Test
+    fun testDoublePlusExtradction() {
+        val toks = " val c = x++x".tokenize()
+        assert(TokenType.PLUS_PLUS in toks.map { it.type })
+    }
+
 }

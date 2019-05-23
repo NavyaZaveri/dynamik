@@ -26,6 +26,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         return subLists.fold(ListInstance()) { acc, list -> acc.concat(list) }
     }
 
+
     override fun visitChainedStmt(chainedStmt: ChainedStmt): Any {
         evaluate(chainedStmt.x)
         return evaluate(chainedStmt.y)
@@ -48,7 +49,6 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     val jobs = mutableListOf<Job>()
 
     init {
-        //define global builtins (TODO: make this static?)
         env.defineClass("list", DynamikList(), global = true)
         env.defineClass("map", DynamikMap(), global = true)
         env.defineFunction("clock", clockCallable(), global = true)
@@ -77,10 +77,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 
     override fun visitClassStmt(classStmt: ClassStmt): Any {
 
-        // instead define against DefaultClass, with an invokes method
-        // that bundles it all up and returns a dynamik instance
-        val parmas = classStmt.fields.map { it }
-        env.defineClass(classStmt.name, DefaultClass(classStmt.name, classStmt.methods, parmas))
+        env.defineClass(classStmt.name, DefaultClass(classStmt.name, classStmt.methods, classStmt.fields))
         return Any()
     }
 
@@ -221,7 +218,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         } catch (v: VariableNotInScope) { //if it doesn't exist in the current, look into outer scope.
             return env.outer[variableExpr.token.lexeme]?.value ?: throw VariableNotInScope(
                 variableExpr.token.lexeme,
-                setOf()
+                env.identifierToValue.keys
             )
         }
     }

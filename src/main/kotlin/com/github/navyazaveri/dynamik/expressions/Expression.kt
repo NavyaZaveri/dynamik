@@ -18,9 +18,6 @@ class CallExpr(val funcName: String, val args: List<Expr>) : Expr() {
 }
 
 
-/**
- * [BinaryExpr] captures arithmetic expression
- */
 class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitBinaryExpression(this)
@@ -38,10 +35,6 @@ class BinaryExpr(val left: Expr, val operand: Tok, val right: Expr) : Expr() {
     }
 }
 
-
-/**
- *
- */
 class UnaryExpr(val token: Tok, val left: Expr) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitUnaryExpression(this)
@@ -99,7 +92,7 @@ class InstanceExpr(val clazzName: String, val expr: Expr) : Expr() {
 
 class ConcatExpr(val containers: List<Expr>) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
-        return visitor.visitConcatExpr(this);
+        return visitor.visitConcatExpr(this)
     }
 
 }

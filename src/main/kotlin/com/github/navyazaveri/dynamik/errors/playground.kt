@@ -1,7 +1,23 @@
+
+import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import java.util.*
 
-fun main(args: Array<String>) {
 
+interface Generic<T> {
+
+}
+
+class Concrete_A : Generic<Int> {}
+class Concrete_B : Generic<String> {}
+class Concrete_c : Generic<String> {}
+
+fun foo(thing: List<Any>) {
+    thing.map { it as Generic<*> }
+}
+
+
+fun main(args: Array<String>) {
+    throw VariableNotInScope("x", setOf("list"))
 }
 
 class Solution {

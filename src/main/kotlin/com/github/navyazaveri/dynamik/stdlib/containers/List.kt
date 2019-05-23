@@ -11,6 +11,11 @@ import kotlin.streams.toList
 
 interface Builtin
 
+interface Concatable<T> {
+    fun concat(other: T): T
+    fun inner(): T
+}
+
 
 class DynamikList : DynamikClass<ListInstance> {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): ListInstance {
@@ -19,7 +24,18 @@ class DynamikList : DynamikClass<ListInstance> {
 }
 
 
-class ListInstance(elements: List<Any> = listOf()) : ContainerInstance() {
+class ListInstance(elements: List<Any> = listOf()) : ContainerInstance(), Concatable<ListInstance> {
+
+    override fun concat(other: ListInstance): ListInstance {
+        val concat = Stream.concat(this._list.stream(), other._list.stream()).toList()
+        return ListInstance(concat)
+    }
+
+    override fun inner(): ListInstance {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
     override fun toHash(): Int {
         return _list.hashCode()
     }
@@ -51,10 +67,6 @@ class ListInstance(elements: List<Any> = listOf()) : ContainerInstance() {
     }
 
 
-    fun concat(other: ListInstance): ListInstance {
-        val concat = Stream.concat(this._list.stream(), other._list.stream()).toList()
-        return ListInstance(concat)
-    }
 }
 
 

@@ -5,7 +5,7 @@ package com.github.navyazaveri.dynamik.errors
  * Tries to guess the mistyped variable/method based on [levenshtein] distance.
  */
 fun closestMatch(name: String, candidates: Set<String>): String {
-    return candidates.minBy { levenshtein(it, name) } ?: "...hmm there doesn't seem to be any methods in scope."
+    return candidates.minBy { levenshtein(it, name) } ?: "None"
 }
 
 fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
@@ -32,6 +32,5 @@ fun levenshtein(lhs: CharSequence, rhs: CharSequence): Int {
         cost = newCost
         newCost = swap
     }
-
-    return cost[lhsLength]
+    return cost[lhsLength].also { println(it) }
 }
