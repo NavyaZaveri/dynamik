@@ -262,6 +262,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
     }
 
     override
+
     fun visitBinaryExpression(expr: BinaryExpr): Any {
         val left = evaluate(expr.left)
         val right = evaluate(expr.right)

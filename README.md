@@ -76,12 +76,15 @@ print(plus_one);
 
 #### Containers 
 ```
-val stuff = list();
-stuff.add("foo");
-stuff.add(100);
-for (var i=0; i<stuff.len(); i = i+1) {
-    print(stuff.get(i));
+//initialzie a list with two values
+val my_list  = list(0);
+for (var i=1;i<=10;i = i+1) {
+    my_list.add(i);
 }
+
+val my_map = map();
+my_map.insert("hello", "world");
+assert(my_map.get("hello") == "world");
 
 ```
 
