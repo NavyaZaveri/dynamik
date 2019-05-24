@@ -95,14 +95,13 @@ class ChainedStmt(val x: Stmt, val y: Stmt) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitChainedStmt(this)
     }
-
 }
 
 
 class ClassStmt(
     val name: String,
-    val methods: List<FnStmt> = mutableListOf(),
-    val fields: List<String> = mutableListOf()
+    val methods: List<FnStmt> = listOf(),
+    val fields: List<String> = listOf()
 ) : Stmt() {
     override fun <T> evaluateBy(visitor: StatementVisitor<T>): T {
         return visitor.visitClassStmt(this)

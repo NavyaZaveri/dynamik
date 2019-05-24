@@ -1,7 +1,8 @@
-package com.github.navyazaveri.dynamik.interpreter
+package com.github.navyazaveri.dynamik.expressions
 
 import com.github.navyazaveri.dynamik.errors.InvalidConstructorArgSize
-import com.github.navyazaveri.dynamik.expressions.*
+import com.github.navyazaveri.dynamik.interpreter.Environment
+import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 
 
 class DefaultClass(val name: String, val functions: List<FnStmt>, val params: List<String>) :
@@ -10,7 +11,12 @@ class DefaultClass(val name: String, val functions: List<FnStmt>, val params: Li
         if (params.size != arguments.size) {
             throw InvalidConstructorArgSize(fname = name, expected = params.size, actual = arguments.size)
         }
-        return DefaultInstance(name, functions, params.zip(arguments).toMap(), interpreter = interpreter)
+        return DefaultInstance(
+            name,
+            functions,
+            params.zip(arguments).toMap(),
+            interpreter = interpreter
+        )
     }
 
     override fun toString(): String {

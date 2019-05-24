@@ -285,6 +285,9 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
 open class ExprParser(val tokens: List<Tok>) {
     var current = 0
 
+    fun filterNext(filter: () -> Boolean, target: Char) {
+    }
+
     fun concat(): Expr {
         if (tokens[current].type == TokenType.IDENTIFIER && nextTokenTypeIs(TokenType.PLUS_PLUS)) {
             val exprContainers = mutableListOf<Expr>()

@@ -77,7 +77,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 
     override fun visitClassStmt(classStmt: ClassStmt): Any {
 
-        env.defineClass(classStmt.name, DefaultClass(classStmt.name, classStmt.methods, classStmt.fields))
+        env.defineClass(classStmt.name,
+            DefaultClass(classStmt.name, classStmt.methods, classStmt.fields)
+        )
         return Any()
     }
 
