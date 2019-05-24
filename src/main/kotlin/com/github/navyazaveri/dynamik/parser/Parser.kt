@@ -2,11 +2,8 @@ package com.github.navyazaveri.dynamik.parser
 
 import com.github.navyazaveri.dynamik.errors.InvalidToken
 import com.github.navyazaveri.dynamik.expressions.*
-import com.github.navyazaveri.dynamik.interpreter.TreeWalker
-import com.github.navyazaveri.dynamik.interpreter.evaluateAllBy
 import com.github.navyazaveri.dynamik.scanner.Tok
 import com.github.navyazaveri.dynamik.scanner.TokenType
-import com.github.navyazaveri.dynamik.scanner.tokenize
 import java.util.*
 
 
@@ -538,14 +535,3 @@ fun List<Tok>.parseExpr(): Expr {
     return ExprParser(this).parse()
 }
 
-fun main(args: Array<String>) {
-
-
-    ("class Math(x) { fn hello() { print  1;} fn bar() { this.hello(); this.x = 100;} }" +
-            "val m = Math(20);"
-            + "m.bar();" +
-            "print m.x;"
-            ).tokenize()
-        .parseStmts()
-        .evaluateAllBy(TreeWalker())
-}

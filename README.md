@@ -22,14 +22,20 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 
 ```
 ./gradlew build 
+
+//to execute a file 
 java -jar build/libs/dynamik-1.0-SNAPSHOT-all.jar --file=<filename>
+
+//to start repl 
+java -jar build/libs/dynamik-1.0-SNAPSHOT-all.jar --repl
+
 ```
 
 ### Examples 
 
 #### Fibonacci 
 ```
-//the @memo wrapper caches the output of fib against its input and uses it 
+//the @memo annotation caches the output of fib against its input and uses it 
 //when needed
 @memo
 fn fib(n) {
