@@ -94,6 +94,5 @@ class ConcatExpr(val containers: List<Expr>) : Expr() {
     override fun <T> evaluateBy(visitor: ExpressionVisitor<T>): T {
         return visitor.visitConcatExpr(this)
     }
-
 }
 

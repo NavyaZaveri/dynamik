@@ -37,7 +37,7 @@ java -jar build/libs/dynamik-1.0-SNAPSHOT-all.jar --repl
 ```
 //the @memo annotation caches the output of fib against its input and uses it 
 //when needed
-@memo
+@memo  
 fn fib(n) {
     if (n<2) { return n;}
     return fib(n-1) + fib(n-2);
@@ -82,8 +82,8 @@ print(plus_one);
 
 #### Containers 
 ```
-//initialzie a list with two values
-val my_list  = list(0);
+//initialzie a list with one value. 
+val my_list  = list(0); 
 for (var i=1;i<=10;i = i+1) {
     my_list.add(i);
 }
@@ -93,9 +93,6 @@ my_map.insert("hello", "world");
 assert(my_map.get("hello") == "world");
 
 ```
-
-
-
 
 
 

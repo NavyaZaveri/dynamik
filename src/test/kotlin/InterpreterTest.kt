@@ -20,8 +20,9 @@ class InterpreterTest {
 
     @After
     fun tearDown() {
-        repl.clear()
+         repl.clear()
     }
+
 
     @Test
     fun testArithmetic() {

@@ -6,28 +6,11 @@ var i = 0;
 
 class Item(size){
     fn printAll(){
-       var i = 0;
-           while (i<size) {
-            print(l.get(i));
-            i = i+1;
-        }
-
-    }
-
-    fn test(){
-        var d=3;
-        return l.get(3-d);
-    }
+}
 }
 val m = list();
 m.add(1);
 m.add(2);
-val it = Item(2);
-it.printAll();
-print(it.test());
-/*
-print(m.len());
-*/
-print(m.contains(1));
 print(m);
-
+m.clear();
+print(m);

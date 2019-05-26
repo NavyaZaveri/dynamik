@@ -15,12 +15,12 @@ class DynamikMap : DynamikClass<MapInstance> {
 
 class MapInstance : ContainerInstance() {
 
-
     val _map = java.util.HashMap<Any, Any>()
 
     override fun equals(other: Any?): Boolean {
         return (other is MapInstance) && this._map == other._map
     }
+
 
     init {
         env.defineFunction("clear", NativeCallable("map.clear", 0) { _map.clear() })

@@ -18,7 +18,7 @@ import kotlinx.coroutines.sync.withLock
 
 
 /**
- * A tree-walking interpreter that visits the AST nodes using methods defined in [ExpressionVisitor] and [StatementVisitor].
+ * A tree-walking interpreter that visits AST nodes using methods defined in [ExpressionVisitor] and [StatementVisitor].
  */
 class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>, StatementVisitor<Any> {
     override fun visitConcatExpr(concatExpr: ConcatExpr): Any {
@@ -77,7 +77,8 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 
     override fun visitClassStmt(classStmt: ClassStmt): Any {
 
-        env.defineClass(classStmt.name,
+        env.defineClass(
+            classStmt.name,
             DefaultClass(classStmt.name, classStmt.methods, classStmt.fields)
         )
         return Any()
@@ -166,7 +167,7 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
             return callable.invoke(args, newInterpreter)
         }
 
-        // Invokes the function with a new environment. .
+        // Invokes the function with a new environment.
         // The original environment is preserved  and assigned to `env` when the function ends.
 
         return callable.invoke(args, this).also { this.env = mainEnv }
@@ -276,9 +277,10 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
             TokenType.STAR -> return left as Double * right as Double
             TokenType.EQUAL_EQUAL -> return left == right
             TokenType.AND_AND -> {
-                if (isType<Boolean>(left, right, throwException = true))
-                    return left as Boolean && right as Boolean
+                if (left as Boolean && right as Boolean)
+                    return left && right
             }
+
             TokenType.BANG_EQUAL -> return left != right
             TokenType.LESS -> return (left as Double) < (right as Double)
             TokenType.LESS_EQUAL -> return (left as Double) <= (right as Double)

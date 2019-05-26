@@ -18,6 +18,6 @@ class Data2(x, y) {
 var i = 0;
 var d2 = Data2(10,20);
 while (i<10) {
-    print d2.get_x() + d2.get_y();
+    print (d2.get_x() + d2.get_y());
        i = i +1;
 }

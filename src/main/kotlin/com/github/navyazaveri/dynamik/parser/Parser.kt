@@ -55,7 +55,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
             TokenType.SLASH -> {
                 if (nextTokenTypeIs(TokenType.STAR)) return multiLineComment()
                 if (nextTokenTypeIs(TokenType.SLASH)) return singleLineComment()
-                throw InvalidToken("${tokens[current].lexeme} cannot be placed after ${previous().lexeme}")
+                throw InvalidToken("${tokens[current].lexeme} cannot be placed after ${previous().lexeme} on line ${tokens[current].line}")
             }
             TokenType.PAR_WITH_LOCK -> return parLockStmt()
             TokenType.CLASS -> return classStmt()

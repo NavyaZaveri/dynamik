@@ -12,6 +12,7 @@ class CommandLineParser : CliktCommand() {
     override fun run() {
         if (repl) {
             Repl.run()
+
         } else {
             if (file != null) {
                 val code = File(file).readText()

@@ -149,8 +149,8 @@ class Environment(
 
         }
         throw CallableDoesNotExist(name, this.identifierToValue.keys)
-    }
 
+    }
 
     /**
      * @throws VariableNotInScope
@@ -167,7 +167,7 @@ class Environment(
         fields[name] = valWrapper
         identifierToValue[name] = valWrapper
 
-        // define(name, valWrapper, VariableStatus.VAR, type = VarType.CLASS_FIELD)
+        // define(name  , valWrapper, VariableStatus.VAR, type = VarType.CLASS_FIELD)
     }
 
     fun defineClass(name: String, value: DynamikClass<out DynamikInstance>, global: Boolean = false) {

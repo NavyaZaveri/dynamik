@@ -1,9 +1,7 @@
 package com.github.navyazaveri.dynamik.stdlib.containers
 
-import com.github.navyazaveri.dynamik.expressions.BuiltinCallable
 import com.github.navyazaveri.dynamik.expressions.DynamikInstance
 import com.github.navyazaveri.dynamik.stdlib.NativeCallable
-
 
 interface Container : Builtin {
     override fun toString(): String
@@ -27,8 +25,5 @@ abstract class DynmaikContainer<T : Collection<Any>> : DynamikInstance() {
  *
  */
 abstract class ContainerInstance : Container, DynamikInstance() {
-    init {
-        env.defineFunction("toString", BuiltinCallable(this, "toString", 0))
-        env.defineFunction("toHash", BuiltinCallable(this, "toHash", 0))
-    }
+
 }

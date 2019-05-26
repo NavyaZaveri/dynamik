@@ -11,11 +11,6 @@ import kotlin.streams.toList
 
 interface Builtin
 
-interface Concatable<T> {
-    fun concat(other: T): T
-    fun inner(): T
-}
-
 
 class DynamikList : DynamikClass<ListInstance> {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): ListInstance {
@@ -24,17 +19,12 @@ class DynamikList : DynamikClass<ListInstance> {
 }
 
 
-class ListInstance(elements: List<Any> = listOf()) : ContainerInstance(), Concatable<ListInstance> {
+class ListInstance(elements: List<Any> = listOf()) : ContainerInstance() {
 
-    override fun concat(other: ListInstance): ListInstance {
+    fun concat(other: ListInstance): ListInstance {
         val concat = Stream.concat(this._list.stream(), other._list.stream()).toList()
         return ListInstance(concat)
     }
-
-    override fun inner(): ListInstance {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
 
     override fun toHash(): Int {
         return _list.hashCode()
@@ -60,6 +50,7 @@ class ListInstance(elements: List<Any> = listOf()) : ContainerInstance(), Concat
         env.defineFunction("get", NativeCallable("list.get", 1) { _list[(it[0] as Double).toInt()] })
         env.defineFunction("contains", NativeCallable("list.contains", 1) { _list.contains(it[0]) })
         env.defineFunction("len", NativeCallable("list.len", 0) { _list.size.toDouble() })
+        env.defineFunction("clear", NativeCallable("list.clear", 0) { _list.clear() })
     }
 
     fun contains(thing: Any): Boolean {
