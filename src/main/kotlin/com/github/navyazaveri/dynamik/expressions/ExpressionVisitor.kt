@@ -15,5 +15,4 @@ interface ExpressionVisitor<T> {
     fun visitThisExpr(thisExpr: ThisExpr): T
     fun visitAssignExpr(assignExpr: AssignExpr): T
     fun visitConcatExpr(concatExpr: ConcatExpr): T
-
 }

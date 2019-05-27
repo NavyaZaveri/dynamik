@@ -31,7 +31,7 @@ class Repl {
             while (true) {
                 print(">>")
                 try {
-                    readLine()!!.also { repl.eval(it) }
+                    readLine()!!.also { println(repl.eval(it)) }
                 } catch (r: Exception) {
                     println(r.message)
                 }

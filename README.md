@@ -80,7 +80,7 @@ print(plus_one);
 
 
 
-#### Containers 
+#### Collections
 ```
 //initialzie a list with one value. 
 val my_list  = list(0); 

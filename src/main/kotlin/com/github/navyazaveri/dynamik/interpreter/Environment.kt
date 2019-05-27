@@ -62,7 +62,7 @@ class Environment(
         }
 
         if (name in identifierToValue && identifierToValue[name]!!.type == VarType.CLASS_FIELD) {
-            throw java.lang.RuntimeException("ambiguous")
+            throw java.lang.RuntimeException("ambiguous variable name")
         }
 
         identifierToValue[name] = valWrapper
