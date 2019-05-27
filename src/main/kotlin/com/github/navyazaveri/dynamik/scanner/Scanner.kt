@@ -7,10 +7,11 @@ import com.github.navyazaveri.dynamik.errors.InvalidToken
 
 class Scanner {
     fun tokenize(sourceCode: String): List<Tok> =
-        tokenizer.tokenize(sourceCode).filter { !it.type.ignored }.map { wrapToNativeToken(it) }.toList()
+        tokenizer.tokenize(sourceCode).filter { !it.type.ignored }.map { toNativeToken(it) }.toList()
 
     companion object {
         private val tokenizer = buildTokenizer()
+        private val stringToTokType = TokenType.values().map { Pair(it.toString(), it) }.toMap()
         private fun buildTokenizer(): DefaultTokenizer {
             val tokens = TokenType.values().map {
                 Token(it.toString(), patternString = it.regex.toString(), ignored = it == TokenType.WHITESPACE)
@@ -19,22 +20,19 @@ class Scanner {
         }
     }
 
-    private fun wrapToNativeToken(tokenMatch: TokenMatch): Tok {
-        for (nativeTokType in TokenType.values()) {
-            if (tokenMatch.type.name == nativeTokType.toString()) {
-                return when (nativeTokType) {
-                    TokenType.NUMBER -> Tok(nativeTokType, tokenMatch.text, tokenMatch.text.toDouble(), tokenMatch.row)
-                    TokenType.STRING -> Tok(
-                        nativeTokType,
-                        tokenMatch.text,
-                        tokenMatch.text.substring(1, tokenMatch.text.length - 1),
-                        tokenMatch.row
-                    )
-                    TokenType.TRUE -> Tok(nativeTokType, tokenMatch.text, true)
-                    TokenType.False -> Tok(nativeTokType, tokenMatch.text, false, tokenMatch.row)
-                    else -> Tok(nativeTokType, tokenMatch.text, tokenMatch.text, tokenMatch.row)
-                }
-            }
+    private fun convert(match: TokenMatch, type: TokenType): Tok {
+        return when (type) {
+            TokenType.NUMBER -> Tok(type, match.text, match.text.toDouble(), match.row)
+            TokenType.STRING -> Tok(type, match.text, match.text.substring(1, match.text.length - 1), match.row)
+            TokenType.TRUE -> Tok(type, match.text, true)
+            TokenType.False -> Tok(type, match.text, false, match.row)
+            else -> Tok(type, match.text, match.text, match.row)
+        }
+    }
+
+    private fun toNativeToken(tokenMatch: TokenMatch): Tok {
+        if (tokenMatch.type.name in stringToTokType) {
+            return convert(tokenMatch, stringToTokType[tokenMatch.type.name]!!)
         }
         throw InvalidToken("${tokenMatch.text} is not a valid token at line ${tokenMatch.row}")
     }
