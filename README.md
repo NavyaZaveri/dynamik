@@ -67,15 +67,16 @@ foo = 2; //works
 
 #### Classes
 ```
-class Math {
-    fn abs(x) { 
-        if (x<0) { return -x; }
-        return x;
-     }
+class Animal(name) {
+    fn change_name(new_name) {
+        this.name = new_name;
+    }
 }
-val math = Math();
-val plus_one = math.abs(-1);
-print(plus_one);
+
+val dog = Animal("foo");
+dog.change_name("bar");
+print(dog.name);
+
 ```
 
 
