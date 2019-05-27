@@ -18,6 +18,8 @@ interface Callable<T : Any> {
 }
 
 
+
+
 //marker traits to distinguish between functions and classes
 interface DynamikFunction<T : Any> : Callable<T>
 

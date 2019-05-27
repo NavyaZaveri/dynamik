@@ -45,6 +45,11 @@ class Environment(
         return identifierToValue.containsKey(this)
     }
 
+    fun has(v: String): Boolean {
+        return classes.containsKey(v) || globals.containsKey(v) || fields.containsKey(v) || functions.containsKey(v)
+                || outer.containsKey(v)
+    }
+
 
     /**
      * Assigns [value] to [name]
@@ -113,6 +118,9 @@ class Environment(
         if (name.inGlobalScope() && globalAccess) {
             return globals[name]!!.value
         }
+        if (name in outer) {
+            return outer[name]!!.value
+        }
 
         val allExistingVars = identifierToValue.keys + globals.keys
 
@@ -122,7 +130,7 @@ class Environment(
     fun getField(name: String): Any {
         val fields = identifierToValue.filter { it.value.type == VarType.CLASS_FIELD }
         if (name in fields) {
-            return fields[name]!!.value
+            return fields.getValue(name).value
         }
         throw RuntimeException("$name does not exist as a field in the current scope")
     }
@@ -130,7 +138,7 @@ class Environment(
     fun setField(name: String, value: Any) {
         val fields = identifierToValue.filter { it.value.type == VarType.CLASS_FIELD }
         if (name in fields) {
-            fields[name]!!.value = value
+            fields.getValue(name).value = value
         } else {
             throw java.lang.RuntimeException("$name does not exist")
         }

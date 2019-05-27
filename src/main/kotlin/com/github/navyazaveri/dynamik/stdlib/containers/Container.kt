@@ -1,23 +1,12 @@
 package com.github.navyazaveri.dynamik.stdlib.containers
 
 import com.github.navyazaveri.dynamik.expressions.DynamikInstance
-import com.github.navyazaveri.dynamik.stdlib.NativeCallable
 
 
 interface Container : Builtin {
     override fun toString(): String
     fun toHash(): Int
+    override fun equals(other: Any?): Boolean
 }
 
-abstract class DynmaikContainer<T : Collection<Any>> : DynamikInstance() {
-    abstract val nativeContainer: T
-
-    init {
-        env.defineFunction("size", NativeCallable("size", 0) { nativeContainer.size })
-        env.defineFunction("toString", NativeCallable("toString", 0) { nativeContainer.toString() })
-        env.defineFunction("toHash", NativeCallable("toHash", 0) { nativeContainer.hashCode() })
-    }
-}
-
-abstract class ContainerInstance : Container, DynamikInstance() {
-}
+abstract class ContainerInstance : Container, DynamikInstance()

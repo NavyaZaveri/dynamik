@@ -89,8 +89,8 @@ for (var i=1;i<=10;i = i+1) {
 }
 
 val my_map = map();
-my_map.insert("hello", "world");
-assert(my_map.get("hello") == "world");
+my_map.insert("hello", my_list.get(1));
+assert(my_map.get("hello") == 1);
 
 ```
 

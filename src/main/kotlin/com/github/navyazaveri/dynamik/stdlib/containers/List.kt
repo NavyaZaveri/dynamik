@@ -48,7 +48,7 @@ class ListInstance(elements: List<Any> = listOf()) : ContainerInstance() {
         _list.addAll(elements)
         env.defineFunction("add", NativeCallable("list.add", 1) { _list.add(it[0]) })
         env.defineFunction("get", NativeCallable("list.get", 1) { _list[(it[0] as Double).toInt()] })
-        env.defineFunction("contains", NativeCallable("list.contains", 1) { _list.contains(it[0]) })
+        env.defineFunction("contains    ", NativeCallable("list.contains", 1) { _list.contains(it[0]) })
         env.defineFunction("len", NativeCallable("list.len", 0) { _list.size.toDouble() })
         env.defineFunction("clear", NativeCallable("list.clear", 0) { _list.clear() })
     }
@@ -56,8 +56,6 @@ class ListInstance(elements: List<Any> = listOf()) : ContainerInstance() {
     fun contains(thing: Any): Boolean {
         return _list.contains(thing)
     }
-
-
 }
 
 
