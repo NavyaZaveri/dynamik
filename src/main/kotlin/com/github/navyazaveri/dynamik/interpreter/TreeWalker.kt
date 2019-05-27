@@ -299,9 +299,9 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 
     override fun visitUnaryExpression(expr: UnaryExpr): Any {
         val l = evaluate(expr.left)
-        when (expr.token.type) {
-            TokenType.MINUS -> return -(l as Double)
-            TokenType.BANG -> return !(l as Boolean)
+        return when (expr.token.type) {
+            TokenType.MINUS -> -(l as Double)
+            TokenType.BANG -> !(l as Boolean)
             else -> throw UnexpectedType("could not evaluate ${expr.token.type} for unary $l at line ${expr.token.line}")
         }
     }

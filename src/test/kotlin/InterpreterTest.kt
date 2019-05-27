@@ -20,7 +20,7 @@ class InterpreterTest {
 
     @After
     fun tearDown() {
-         repl.clear()
+        repl.clear()
     }
 
 
