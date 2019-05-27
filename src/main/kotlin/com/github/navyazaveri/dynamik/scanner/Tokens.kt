@@ -13,7 +13,6 @@ enum class TokenType(val regex: Regex) {
 
 
     NUMBER("\\d+".toRegex()),
-
     WHITESPACE("\\s+".toRegex()),
 
     // Operators
@@ -26,9 +25,7 @@ enum class TokenType(val regex: Regex) {
     STAR("\\*".toRegex()),
     DOT("\\.".toRegex()),
     PLUS_PLUS("\\+\\+".toRegex()),
-
     PLUS("\\+".toRegex()),
-
     MINUS("-".toRegex()),
     GREATER(">".toRegex()),
     LESS("<".toRegex()),

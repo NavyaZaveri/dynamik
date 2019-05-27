@@ -43,9 +43,3 @@ class Scanner {
 fun String.tokenize(): List<Tok> {
     return Scanner().tokenize(this)
 }
-
-fun main(args: Array<String>) {
-    val s = Scanner()
-    val toks = s.tokenize("X==\"hello\" ")
-    toks.forEach { println(it) }
-}

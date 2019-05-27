@@ -467,5 +467,14 @@ class InterpreterTest {
             assert("foo" in v.message!!) { "val error handling done wrong" }
         }
     }
+
+    @Test
+    fun testListOps() {
+        val stmts =
+            "val lst = list(); val foo = list(20); lst.add(foo.get(0)); lst.contains(20);".tokenize().parseStmts()
+        val actual = repl.eval(stmts)
+        val expected = true
+        assert(actual == expected) { "list.contains() not working" }
+    }
 }
 

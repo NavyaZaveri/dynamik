@@ -4,9 +4,7 @@ import com.github.navyazaveri.dynamik.errors.AssertionErr
 import com.github.navyazaveri.dynamik.errors.UnexpectedType
 import com.github.navyazaveri.dynamik.errors.VariableNotInScope
 import com.github.navyazaveri.dynamik.expressions.*
-import com.github.navyazaveri.dynamik.parser.parseStmts
 import com.github.navyazaveri.dynamik.scanner.TokenType
-import com.github.navyazaveri.dynamik.scanner.tokenize
 import com.github.navyazaveri.dynamik.stdlib.clockCallable
 import com.github.navyazaveri.dynamik.stdlib.containers.DynamikList
 import com.github.navyazaveri.dynamik.stdlib.containers.DynamikMap
@@ -313,9 +311,4 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
 
 fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>) {
     this.forEach { it.evaluateBy(visitor) }
-}
-
-fun main() {
-    "val my_list = list(0); val my_map = map(); my_map.insert(0, my_list.get(0));".tokenize().parseStmts()
-        .evaluateAllBy(TreeWalker())
 }
