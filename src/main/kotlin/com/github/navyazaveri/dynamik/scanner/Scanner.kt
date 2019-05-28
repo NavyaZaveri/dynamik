@@ -6,19 +6,19 @@ import com.github.h0tk3y.betterParse.lexer.TokenMatch
 import com.github.navyazaveri.dynamik.errors.InvalidToken
 
 class Scanner {
+    private val stringToTokType = TokenType.values().map { Pair(it.toString(), it) }.toMap()
+    private val tokenizer = buildTokenizer()
+
     fun tokenize(sourceCode: String): List<Tok> =
         tokenizer.tokenize(sourceCode).filter { !it.type.ignored }.map { toNativeToken(it) }.toList()
 
-    companion object {
-        private val tokenizer = buildTokenizer()
-        private val stringToTokType = TokenType.values().map { Pair(it.toString(), it) }.toMap()
-        private fun buildTokenizer(): DefaultTokenizer {
-            val tokens = TokenType.values().map {
-                Token(it.toString(), patternString = it.regex.toString(), ignored = it == TokenType.WHITESPACE)
-            }
-            return DefaultTokenizer(tokens)
+    private fun buildTokenizer(): DefaultTokenizer {
+        val tokens = TokenType.values().map {
+            Token(it.toString(), patternString = it.regex.toString(), ignored = it == TokenType.WHITESPACE)
         }
+        return DefaultTokenizer(tokens)
     }
+
 
     private fun convert(match: TokenMatch, type: TokenType): Tok {
         return when (type) {

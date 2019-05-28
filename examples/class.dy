@@ -8,4 +8,5 @@ val c = 10;
 
 val my_map = map();
 my_map.insert("hello", my_list.get(1));
+print my_map;
 assert(my_map.get("hello") == 1);
