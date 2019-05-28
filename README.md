@@ -96,8 +96,8 @@ assert(my_map.get("hello") == 1);
 ```
 
 
-#### Stability Caveats
-This is still a work-in-progress, and I will probably port the recursive descent parser to one that uses parser combinators. 
+##### Stability Caveats
+This is still a work-in-progress, with a few known edge-case bugs in the parser implementation. As such, after fixing those, I will probably port the recursive descent parser to one that uses parser combinators. 
 
 
 
