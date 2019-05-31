@@ -1,10 +1,8 @@
-
-//initialzie a list with one value.
+//initialize a list with one value.
 val my_list  = list(0);
 for (var i=1;i<=10;i = i+1) {
     my_list.add(i);
 }
-val c = 10;
 
 val my_map = map();
 my_map.insert("hello", my_list.get(1));

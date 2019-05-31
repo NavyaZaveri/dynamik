@@ -1,2 +1,7 @@
-val x = "hello";
-print xy;
+@global val x = 10;
+
+ fn foo() {
+    print(x);
+}
+
+foo();
