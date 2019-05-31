@@ -1,6 +1,6 @@
 @global val x = 10;
 
- fn foo() {
+fn foo() {
     print(x);
 }
 
