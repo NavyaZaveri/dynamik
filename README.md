@@ -21,15 +21,18 @@ Dynamik is a toy, dynamically-typed language, written in Kotlin.
 ### How to Run 
 
 ```
+git clone  https://github.com/NavyaZaveri/dynamik
 ./gradlew build 
-
-//to execute a file 
-java -jar build/libs/dynamik-1.0-SNAPSHOT-all.jar --file=<filename>
-
-//to start repl 
-java -jar build/libs/dynamik-1.0-SNAPSHOT-all.jar --repl
-
 ```
+##### To execute a file
+``` 
+java -jar build/libs/dynamik-1.0-SNAPSHOT-all.jar --file=<filename>
+```
+##### To start repl 
+```
+java -jar build/libs/dynamik-1.0-SNAPSHOT-all.jar --repl
+```
+
 
 ### Examples 
 

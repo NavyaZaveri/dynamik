@@ -43,7 +43,7 @@ class DefaultInstance(
         }
 
         //set fields
-        fields.forEach { t, u -> env.defineField(t, u) }
+        fields.forEach { (t, u) -> env.defineField(t, u) }
 
         //put outer classes in scope
         interpreter.env.classes().forEach { t, u -> env.defineClass(t, u.value) }
