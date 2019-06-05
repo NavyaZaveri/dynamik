@@ -26,11 +26,11 @@ class InterpreterTest {
 
     @Test
     fun testArithmetic() {
-
         val actual = "3+(5+6)*6".tokenize().parseExpr().evaluateBy(TreeWalker())
         val expected = 69.0
         assert(actual == expected) { "actual = $actual, expected=$expected" }
     }
+
 
     @Test
     fun testArithmeticWithTrickyBrackets() {

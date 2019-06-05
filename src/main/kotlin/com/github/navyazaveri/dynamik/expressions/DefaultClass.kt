@@ -4,7 +4,6 @@ import com.github.navyazaveri.dynamik.errors.InvalidConstructorArgSize
 import com.github.navyazaveri.dynamik.interpreter.Environment
 import com.github.navyazaveri.dynamik.interpreter.TreeWalker
 
-
 class DefaultClass(val name: String, val functions: List<FnStmt>, val params: List<String>) :
     DynamikClass<DefaultInstance> {
     override fun invoke(arguments: List<Arg>, interpreter: TreeWalker, env: Environment): DefaultInstance {

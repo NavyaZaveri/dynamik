@@ -25,6 +25,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return InstanceStmt(name, behavior)
     }
 
+    @Throws(InvalidToken::class)
     private fun stmt(): Stmt {
         when (tokens[current].type) {
             TokenType.PRINT -> return printStmt()
@@ -400,7 +401,7 @@ open class ExprParser(val tokens: List<Tok>) {
     fun allTokensConsumed(): Boolean = current >= tokens.size
 
     /**
-     * Checks if the current token is any of the given [tokenTypes]
+     * Checks if the current token's type is any of the given [tokenTypes]
      */
     fun match(vararg tokenTypes: TokenType): Boolean =
         tokenTypes.any { !allTokensConsumed() && it == tokens[current].type }

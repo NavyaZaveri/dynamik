@@ -21,7 +21,6 @@ class MapInstance : ContainerInstance() {
         return (other is MapInstance) && this._map == other._map
     }
 
-
     init {
         env.defineFunction("clear", NativeCallable("map.clear", 0) { _map.clear() })
         env.defineFunction("insert", NativeCallable("map.insert", 2) { _map[it[0]] = it[1] })

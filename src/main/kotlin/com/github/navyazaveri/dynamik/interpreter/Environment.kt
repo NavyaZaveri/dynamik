@@ -55,6 +55,7 @@ class Environment(
      * Assigns [value] to [name]
      * @throws ValError when variable h as been previously defined with <code> val </code>
      */
+    @Throws(ValError::class, java.lang.RuntimeException::class)
     fun define(name: String, value: Any, status: VariableStatus, type: VarType = VarType.IDENT) {
         val valWrapper = ValueWrapper(status = status, value = value, type = type)
         if (name in identifierToValue && (identifierToValue[name]!!.status == VariableStatus.VAL)) {
@@ -95,6 +96,7 @@ class Environment(
         return classes
     }
 
+    @Throws(ValError::class)
     fun assign(name: String, value: Any) {
         if (!name.inCurrentScope()) {
             throw VariableNotInScope(name, this.identifierToValue.keys)
