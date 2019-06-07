@@ -15,7 +15,7 @@ class DynamikMap : DynamikClass<MapInstance> {
 
 class MapInstance : ContainerInstance() {
 
-    val _map = java.util.HashMap<Any, Any>()
+    private val _map = java.util.HashMap<Any, Any>()
 
     override fun equals(other: Any?): Boolean {
         return (other is MapInstance) && this._map == other._map

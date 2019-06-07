@@ -264,8 +264,8 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
         throw UnexpectedType("${Pair(left, right)} need to be either Doubles or Strings")
     }
 
+    @Throws(UnexpectedType::class)
     override
-
     fun visitBinaryExpression(expr: BinaryExpr): Any {
         val left = evaluate(expr.left)
         val right = evaluate(expr.right)

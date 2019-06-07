@@ -151,6 +151,7 @@ class StmtParser(tokens: List<Tok>) : ExprParser(tokens) {
         return WaitStmt().also { consume(TokenType.SEMICOLON) }
     }
 
+    @Throws(RuntimeException::class)
     private fun parStmt(): Stmt {
         consume(TokenType.Par)
         val callExpr = call()
