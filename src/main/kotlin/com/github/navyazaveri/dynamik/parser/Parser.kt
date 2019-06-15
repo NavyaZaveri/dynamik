@@ -294,12 +294,11 @@ open class ExprParser(val tokens: List<Tok>) {
             exprContainers.add(c)
             while (!match(TokenType.SEMICOLON)) {
                 consume(TokenType.PLUS_PLUS)
-                val c = call()
-                exprContainers.add(c)
+                val next_container = call()
+                exprContainers.add(next_container)
             }
             return ConcatExpr(exprContainers)
         }
-
         return addition()
     }
 

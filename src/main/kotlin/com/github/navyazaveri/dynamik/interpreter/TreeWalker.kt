@@ -290,25 +290,28 @@ class TreeWalker(var env: Environment = Environment()) : ExpressionVisitor<Any>,
                 if (left is ListInstance && right is ListInstance) {
                     return left.concat(right)
                 }
-                throw java.lang.RuntimeException("cannot concat")
+                throw UnexpectedType("cannot concat $left and $right. Can only concat lists")
             }
             else -> throw UnexpectedType("${expr.operand.type}  not recognized at line ${expr.operand.line}")
         }
         throw RuntimeException("unreachable")
     }
 
+
     override fun visitUnaryExpression(expr: UnaryExpr): Any {
-        val l = evaluate(expr.left)
+        val result = evaluate(expr.left)
         return when (expr.token.type) {
-            TokenType.MINUS -> -(l as Double)
-            TokenType.BANG -> !(l as Boolean)
-            else -> throw UnexpectedType("could not evaluate ${expr.token.type} for unary $l at line ${expr.token.line}")
+            TokenType.MINUS -> -(result as Double)
+            TokenType.BANG -> !(result as Boolean)
+            else -> throw UnexpectedType("could not evaluate ${expr.token.type} for unary $result at line ${expr.token.line}")
         }
     }
 
     override fun visitLiteralExpression(expr: LiteralExpr): Any = expr.token.literal
 }
 
-fun List<Stmt>.evaluateAllBy(visitor: StatementVisitor<*>) {
+fun <T> List<Stmt>.evaluateAllBy(visitor: StatementVisitor<T>) {
     this.forEach { it.evaluateBy(visitor) }
 }
+
+
